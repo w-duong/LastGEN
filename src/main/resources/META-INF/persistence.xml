@@ -1,0 +1,44 @@
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/persistence" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd" version="2.0">
+	<persistence-unit name="LastGEN_PU" transaction-type="RESOURCE_LOCAL">
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+
+		<!--
+
+		// CLASS LIST HERE //
+
+		<class>csulb.cecs323.model.{whatever class you want here}</class>
+		<class>csulb.cecs323.model.{whatever class you want here}</class>
+
+
+		-->
+		<class>csulb.cecs323.model.DrugClass</class>
+
+
+		<properties>
+
+            <!-- Derby Embedded Driver -->
+			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:derby:C:/Users/admin/Desktop/testing/LastGEN_DB;create=true" />
+			<property name="javax.persistence.jdbc.user" value="app" />
+			<property name="javax.persistence.jdbc.password" value="app" />
+
+			<!--  EclipseLink properties  -->
+			<property name="eclipselink.target-database" value="Derby"/>
+
+			<!-- EclipseLink should create the database schema automatically -->
+			     <!-- to drop the tables and create them:  drop-and-create-tables -->
+			     <!-- to create the tables:  create-tables -->
+			     <!-- to do nothing (use what's in the DBMS):  none -->
+			<!-- See: https://www.eclipse.org/eclipselink/documentation/2.5/jpa/extensions/p_ddl_generation.htm#BABHEJJI -->
+			<property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
+
+			<!-- SEE: https://www.eclipse.org/eclipselink/documentation/2.5/jpa/extensions/p_ddl_generation_output_mode.htm -->
+			<!-- <property name="eclipselink.ddl-generation.output-mode" value="database" /> -->
+
+			<!-- Change property value to OFF or WARNING to disable and minimize logging. -->
+			<property name="eclipselink.logging.level" value="FINE"/>
+
+		</properties>
+
+	</persistence-unit>
+</persistence>
