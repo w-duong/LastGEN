@@ -3,25 +3,25 @@ package csulb.cecs323.model;
 import javax.persistence.*;
 
 @Entity
-@Table (name = "brand_names"
-        uniqueConstraints = @UniqueConstraint (columnNames = {"name", "maker"})        
-)
+@Table (name = "brand_names")
 public class BrandName
 {
-    @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private long bid
-    
-    private String name;
-    private String maker;
+    @EmbeddedId
+    private BrandName_PK brand_CPK;
     
     // ASSOCIATION(S)
     @ManyToOne
     private Drug generic;
     
     // CONSTRUCTORS
+    public BrandName () {}
+    public BrandName (Drug generic, String name)
+    {
+        brand_CPK = new BrandName_PK (generic, name);
+    }
     
     // ACCESSORS
+    public String getName () { return brand_CPK.getName (); }
     
     // MUTATORS
     

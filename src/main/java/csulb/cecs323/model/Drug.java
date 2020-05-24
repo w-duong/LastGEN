@@ -51,6 +51,18 @@ public class Drug
     // MUTATORS
     public void setChemicalName (String chemical_name) { this.chemical_name = chemical_name; }
     public void setDescription (String description) { this.description = description; }
+    public void setDrugSchedule (DEA_Class schedule)
+    {
+        if (this.schedule == null)
+            this.schedule = schedule;
+            
+        if (schedule.getDrugs () == null)
+            schedule.addDrug (this);
+            
+        if (! schedule.getDrugs().contains (this))
+            schedule.addDrug (this);
+    }
     
     // MISCELLANEOUS
+    
 }
