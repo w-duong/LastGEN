@@ -20,6 +20,10 @@ public class DrugClass
     @ManyToMany
     @JoinTable (name = "class_parent_children")
     private List<DrugClass> subclass;
+    
+    @ManyToMany
+    @JoinTable (name = "class_drug_tree")
+    private List<Drug> drugs;
 
     @ManyToMany (mappedBy = "subclass")
     private List<DrugClass> superclass;
@@ -50,6 +54,7 @@ public class DrugClass
     public String getName () { return this.name; }
     public List<DrugClass> getSubclasses () { return this.subclass; }
     public List<DrugClass> getSuperclasses () { return this.superclass; }
+    
     public List<ClassClassIX> getInterxAsBase () { return this.interxAsBase; }
     public List<ClassClassIX> getInterxAsOffender () { return this.interxAsOffender; }
 

@@ -4,18 +4,18 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Embeddable
-public class ClassClassIX_PK implements Serializable
+public class DrugDrugIX_PK implements Serializable
 {
     private long base;
     private long offender;
     private String description;
 
     // CONSTRUCTORS
-    public ClassClassIX_PK () {}
-    public ClassClassIX_PK (DrugClass base, DrugClass offender, String description)
+    public DrugDrugIX_PK () {}
+    public DrugDrugIX_PK (Drug base, Drug offender, String description)
     {
-        this.base = base.getCID();
-        this.offender = offender.getCID();
+        this.base = base.getDID();
+        this.offender = offender.getDID();
         this.description = description;
     }
     
@@ -26,9 +26,9 @@ public class ClassClassIX_PK implements Serializable
     @Override
     public boolean equals (Object other)
     {
-        if (other instanceof ClassClassIX_PK)
+        if (other instanceof DrugDrugIX_PK)
         {
-            ClassClassIX_PK second = (ClassClassIX_PK) other;
+            DrugDrugIX_PK second = (DrugDrugIX_PK) other;
 
             return (this.base == second.base) && (offender == second.offender) && (this.description.equals (description));
         }
