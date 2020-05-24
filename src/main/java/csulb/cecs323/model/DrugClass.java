@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table (name = "drug_classes")
+@Table (name = "drug_classes",
+        uniqueConstraints = @UniqueConstraint (columnNames = {"abbr", "name"})
+)
 public class DrugClass
 {
     @Id
@@ -21,6 +23,12 @@ public class DrugClass
 
     @ManyToMany (mappedBy = "subclass")
     private List<DrugClass> superclass;
+
+    @OneToMany (mappedBy = "base")
+    private List<ClassClassIX> interxAsBase;
+
+    @OneToMany (mappedBy = "offender")
+    private List<ClassClassIX> interxAsOffender;
 
     // CONSTRUCTORS
     public DrugClass () { }
@@ -74,4 +82,3 @@ public class DrugClass
     }
 }
 
-// testing feature branch
