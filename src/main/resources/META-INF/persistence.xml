@@ -12,7 +12,8 @@
 
 		-->
 		<class>csulb.cecs323.model.DrugClass</class>
-
+		<class>csulb.cecs323.model.ClassClassIX</class>
+		<class>csulb.cecs323.model.ClassClassIX_PK</class>
 
 		<properties>
 

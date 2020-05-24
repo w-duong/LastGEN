@@ -12,6 +12,7 @@
 
 package csulb.cecs323.app;
 
+import csulb.cecs323.model.ClassClassIX;
 import csulb.cecs323.model.DrugClass;
 
 import javax.persistence.EntityManager;
@@ -61,11 +62,19 @@ public class LastGENApp
    public void loadInitialData ()
    {
       DrugClass antiINF = new DrugClass ("ATIF", "Anti-Infective");
-      DrugClass quinolone = new DrugClass ("QUIN", "Quinolones");
+      DrugClass macrolide = new DrugClass ("MACR", "Macrolides");
+      DrugClass metabolics = new DrugClass ("META", "Metabolic Agents");
+      DrugClass statin = new DrugClass ("STNS", "Statins");
 
-      antiINF.addSubclass(quinolone);
+      metabolics.addSubclass(statin);
+      antiINF.addSubclass(macrolide);
 
+      ClassClassIX statinMacrolide = new ClassClassIX (statin, macrolide, "Macrolide 3A4 inhibition, check Statin.", 2);
+
+      entityManager.persist (statinMacrolide);
       entityManager.persist (antiINF);
-      entityManager.persist (quinolone);
+      entityManager.persist (macrolide);
+      entityManager.persist (statin);
+      entityManager.persist (metabolics);
    }
 }

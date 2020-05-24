@@ -8,7 +8,7 @@ public class ClassClassIX
 {
     @EmbeddedId
     private ClassClassIX_PK interaction_CPK;
-    private int severityLevel;
+    private int severityLevel = -1;
 
     // ASSOCIATION(S)
     @ManyToOne
@@ -24,6 +24,7 @@ public class ClassClassIX
     public ClassClassIX (DrugClass base, DrugClass offender, String describe, int severityLevel)
     {
         interaction_CPK = new ClassClassIX_PK(base, offender, describe);
+        registerInteraction(base, offender);
         setSeverityLevel(severityLevel);
     }
 
@@ -39,4 +40,20 @@ public class ClassClassIX
     public void setOffender (DrugClass offender) { this.offender = offender; }
 
     // MISCELLANEOUS
+    public void registerInteraction (DrugClass object, DrugClass precipitate)
+    {
+        if (this.base == null)
+            this.base = object;
+        if (this.offender == null)
+            this.offender = precipitate;
+
+        if ((this.base == object && this.offender == precipitate) && (severityLevel == -1))
+        {
+            if (object.getInterxAsBase() == null)
+                object.addInterxAsBase(this);
+
+            if (precipitate.getInterxAsOffender() == null)
+                precipitate.addInterxAsOffender(this);
+        }
+    }
 }

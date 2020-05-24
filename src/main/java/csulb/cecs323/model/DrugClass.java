@@ -24,10 +24,10 @@ public class DrugClass
     @ManyToMany (mappedBy = "subclass")
     private List<DrugClass> superclass;
 
-    @OneToMany (mappedBy = "base")
+    @OneToMany (mappedBy = "base", cascade = CascadeType.PERSIST)
     private List<ClassClassIX> interxAsBase;
 
-    @OneToMany (mappedBy = "offender")
+    @OneToMany (mappedBy = "offender", cascade = CascadeType.PERSIST)
     private List<ClassClassIX> interxAsOffender;
 
     // CONSTRUCTORS
@@ -50,6 +50,8 @@ public class DrugClass
     public String getName () { return this.name; }
     public List<DrugClass> getSubclasses () { return this.subclass; }
     public List<DrugClass> getSuperclasses () { return this.superclass; }
+    public List<ClassClassIX> getInterxAsBase () { return this.interxAsBase; }
+    public List<ClassClassIX> getInterxAsOffender () { return this.interxAsOffender; }
 
     // MUTATORS
     public void setCID (long cid) { this.cid = cid; }
@@ -79,6 +81,22 @@ public class DrugClass
 
         if ((parent.getSubclasses() == null) || (! parent.getSubclasses().contains (this)))
             parent.addSubclass(this);
+    }
+
+    public void addInterxAsBase (ClassClassIX interaction)
+    {
+        if (this.interxAsBase == null)
+            interxAsBase = new ArrayList<>();
+
+        interxAsBase.add (interaction);
+    }
+
+    public void addInterxAsOffender (ClassClassIX interaction)
+    {
+        if (this.interxAsOffender == null)
+            interxAsOffender = new ArrayList<>();
+
+        interxAsOffender.add (interaction);
     }
 }
 
