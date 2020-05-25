@@ -64,5 +64,30 @@ public class Drug
     }
     
     // MISCELLANEOUS
-    
+    public void addBrandName (String name)
+    {
+        if (this.brand_names == null)
+            this.brand_names = new ArrayList<>();
+
+        BrandName newLabel = new BrandName(this, name);
+
+        if (! this.brand_names.contains(newLabel))
+            this.brand_names.add (newLabel);
+    }
+
+    public void addInterxAsBase (DrugDrugIX interaction)
+    {
+        if (this.interxAsBase == null)
+            interxAsBase = new ArrayList<>();
+
+        interxAsBase.add (interaction);
+    }
+
+    public void addInterxAsOffender (DrugDrugIX interaction)
+    {
+        if (this.interxAsOffender == null)
+            interxAsOffender = new ArrayList<>();
+
+        interxAsOffender.add (interaction);
+    }
 }

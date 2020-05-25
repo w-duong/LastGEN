@@ -14,6 +14,12 @@
 		<class>csulb.cecs323.model.DrugClass</class>
 		<class>csulb.cecs323.model.ClassClassIX</class>
 		<class>csulb.cecs323.model.ClassClassIX_PK</class>
+		<class>csulb.cecs323.model.Drug</class>
+		<class>csulb.cecs323.model.DrugDrugIX</class>
+		<class>csulb.cecs323.model.DrugDrugIX_PK</class>
+		<class>csulb.cecs323.model.BrandName</class>
+		<class>csulb.cecs323.model.BrandName_PK</class>
+		<class>csulb.cecs323.model.DEA_Class</class>
 
 		<properties>
 
