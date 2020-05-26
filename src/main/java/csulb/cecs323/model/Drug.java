@@ -38,13 +38,21 @@ public class Drug
         setChemicalName (chemical_name);
         setDescription (description);
     }
+    public Drug (String chemical_name, String brand_name, String description, DrugClass parent_class)
+    {
+        setChemicalName(chemical_name);
+        addBrandName(brand_name);
+        setDescription(description);
+        addDrugClass(parent_class);
+
+    }
     
     // ACCESSORS
     public long getDID () { return this.did; }
     public DEA_Class getDrugSchedule () { return this.schedule; }
     public List<BrandName> getBrandNames () { return this.brand_names; }
     public List<DrugClass> getDrugClass () { return this.classes; }
-    
+
     public List<DrugDrugIX> getInterxAsBase () { return this.interxAsBase; }
     public List<DrugDrugIX> getInterxAsOffender () { return this.interxAsOffender; }
     
@@ -53,13 +61,19 @@ public class Drug
     public void setDescription (String description) { this.description = description; }
     public void setDrugSchedule (DEA_Class schedule)
     {
+        //<-- TO DO: changing a schedule of drug will require DELETE QUERY of "drug_schedules" table -->//
+        DEA_Class temp = null;
+
         if (this.schedule == null)
             this.schedule = schedule;
-            
-        if (schedule.getDrugs () == null)
-            schedule.addDrug (this);
-            
-        if (! schedule.getDrugs().contains (this))
+        else
+        {
+            temp = this.schedule;
+            temp.getDrugs().remove (this);
+            this.schedule = schedule;
+        }
+
+        if ((schedule.getDrugs () == null) || (! schedule.getDrugs().contains (this)))
             schedule.addDrug (this);
     }
     
@@ -89,5 +103,17 @@ public class Drug
             interxAsOffender = new ArrayList<>();
 
         interxAsOffender.add (interaction);
+    }
+
+    public void addDrugClass (DrugClass parent)
+    {
+        if (this.classes == null)
+            this.classes = new ArrayList<>();
+
+        if (! this.classes.contains (parent))
+            this.classes.add (parent);
+
+        if ((parent.getDrugs() == null) || (! parent.getDrugs().contains (this)))
+            parent.addDrug(this);
     }
 }

@@ -52,9 +52,10 @@ public class DrugClass
     public long getCID () { return this.cid; }
     public String getAbbreviation () { return this.abbr; }
     public String getName () { return this.name; }
+
+    public List<Drug> getDrugs () { return this.drugs; }
     public List<DrugClass> getSubclasses () { return this.subclass; }
     public List<DrugClass> getSuperclasses () { return this.superclass; }
-    
     public List<ClassClassIX> getInterxAsBase () { return this.interxAsBase; }
     public List<ClassClassIX> getInterxAsOffender () { return this.interxAsOffender; }
 
@@ -102,6 +103,18 @@ public class DrugClass
             interxAsOffender = new ArrayList<>();
 
         interxAsOffender.add (interaction);
+    }
+
+    public void addDrug (Drug drug)
+    {
+        if (this.drugs == null)
+            this.drugs = new ArrayList<>();
+
+        if (! this.drugs.contains (drug))
+            this.drugs.add (drug);
+
+        if ((drug.getDrugClass() == null) || (! drug.getDrugClass().contains (this)))
+            drug.addDrugClass (this);
     }
 }
 
