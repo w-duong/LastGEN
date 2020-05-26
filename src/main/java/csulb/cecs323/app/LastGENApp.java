@@ -17,10 +17,8 @@ import csulb.cecs323.model.DEA_Class;
 import csulb.cecs323.model.Drug;
 import csulb.cecs323.model.DrugClass;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.*;
+import java.util.List;
 import java.util.logging.Logger;
 
 import java.util.HashMap;
@@ -63,6 +61,26 @@ public class LastGENApp
       tx.commit();
       LOGGER.fine("End of Transaction");
 
+      lastGEN.randomQuery();
+   }
+
+   public void randomQuery ()
+   {
+      List<DEA_Class> deaClassList = entityManager.createNamedQuery(DEA_Class.FIND_ALL, DEA_Class.class).getResultList();
+
+      for (DEA_Class result : deaClassList)
+      {
+         System.out.println (result);
+
+         TypedQuery query = entityManager.createNamedQuery(DEA_Class.SCHEDULE_OF_DRUGS, Drug.class);
+         query.setParameter("drugSchedule", result.getSymbol());
+         List<Drug> drugList = query.getResultList();
+
+         for (Drug inList : drugList)
+            System.out.println (inList);
+      }
+
+      System.out.println ("FINISHED QUERY");
    }
 
    public void loadInitialData ()
@@ -73,6 +91,8 @@ public class LastGENApp
 
          entityManager.persist (temp);
       }
+
+      entityManager.flush();
 
       DrugClass antiINF = new DrugClass ("ATIF", "Anti-Infective");
       DrugClass macrolide = new DrugClass ("MACR", "Macrolides");
@@ -113,6 +133,7 @@ public class LastGENApp
       INITIAL_DEA_SCHEDULE.put (II, "High abuse potential with severe psychological/physiological dependence.");
       INITIAL_DEA_SCHEDULE.put (III, "Moderate to low abuse potential and development of dependence.");
       INITIAL_DEA_SCHEDULE.put (IV, "Low potential for abuse and low risk of dependence.");
+      INITIAL_DEA_SCHEDULE.put (V, "Low potential for abuse/dependence -- limited quantities of specific narcotics.");
       INITIAL_DEA_SCHEDULE.put (F, "Substances used for therapy requiring prescription. No potential for abuse.");
       INITIAL_DEA_SCHEDULE.put (OTC, "Substances available for purchase without prescription. No FDA approvals necessary.");
    }

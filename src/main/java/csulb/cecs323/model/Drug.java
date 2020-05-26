@@ -116,4 +116,11 @@ public class Drug
         if ((parent.getDrugs() == null) || (! parent.getDrugs().contains (this)))
             parent.addDrug(this);
     }
+
+    @Override
+    public String toString ()
+    {
+        return (String.format ("Chemical: %-15s\tBrand: %-10s\tSchedule: %-3s",
+                                chemical_name, brand_names.toString(), schedule.getSchedule()) );
+    }
 }
