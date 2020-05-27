@@ -23,10 +23,15 @@ public class BrandName
     }
     
     // ACCESSORS
-    public String getName () { return brand_CPK.getName (); }
+    public String getInfo ()
+    {
+        return (String.format ("CHEMICAL: %-20s\tLabel: %-15s", generic.getChemical_name(), this.toString()) );
+    }
     
     // MUTATORS
     public void setName (String name) { this.brand_CPK.setName(name); }
     
     // MISCELLANEOUS
+    @Override
+    public String toString () { return brand_CPK.getName (); }
 }

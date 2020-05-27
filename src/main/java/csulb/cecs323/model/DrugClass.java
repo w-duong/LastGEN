@@ -116,5 +116,15 @@ public class DrugClass
         if ((drug.getDrugClass() == null) || (! drug.getDrugClass().contains (this)))
             drug.addDrugClass (this);
     }
+
+    public void removeDrug (Drug drug)
+    {
+        if ((! (this.drugs == null)) && (this.drugs.contains (drug)))
+        {
+            this.drugs.remove (drug);
+
+            drug.removeDrugClass (this);
+        }
+    }
 }
 

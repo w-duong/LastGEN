@@ -49,6 +49,8 @@ public class Drug
     
     // ACCESSORS
     public long getDID () { return this.did; }
+    public String getChemical_name () { return this.chemical_name; }
+    public String getDescription () { return this.description; }
     public DEA_Class getDrugSchedule () { return this.schedule; }
     public List<BrandName> getBrandNames () { return this.brand_names; }
     public List<DrugClass> getDrugClass () { return this.classes; }
@@ -61,7 +63,6 @@ public class Drug
     public void setDescription (String description) { this.description = description; }
     public void setDrugSchedule (DEA_Class schedule)
     {
-        //<-- TO DO: changing a schedule of drug will require DELETE QUERY of "drug_schedules" table -->//
         DEA_Class temp = null;
 
         if (this.schedule == null)
@@ -115,6 +116,16 @@ public class Drug
 
         if ((parent.getDrugs() == null) || (! parent.getDrugs().contains (this)))
             parent.addDrug(this);
+    }
+
+    public void removeDrugClass (DrugClass parent)
+    {
+        if ((! (this.classes == null)) && (this.classes.contains (parent)))
+        {
+            this.classes.remove (parent);
+
+            parent.removeDrug (this);
+        }
     }
 
     @Override

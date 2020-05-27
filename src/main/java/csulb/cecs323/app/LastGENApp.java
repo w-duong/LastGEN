@@ -101,8 +101,8 @@ public class LastGENApp
 
       Drug zocor = new Drug ("simvastatin", "Zocor", "Cholesterol medication, CYP3A4 metabolite.", statin);
       DEA_Class temp1 = new DEA_Class(DEA_Class.DEA.F, INITIAL_DEA_SCHEDULE.get(F));
-      DEA_Class temp2 = new DEA_Class(DEA_Class.DEA.OTC, INITIAL_DEA_SCHEDULE.get(OTC));
       zocor.setDrugSchedule(temp1);
+      zocor.addBrandName("FloLipid");
 
       metabolics.addSubclass(statin);
       antiINF.addSubclass(macrolide);
@@ -115,11 +115,6 @@ public class LastGENApp
       entityManager.persist (statin);
       entityManager.persist (metabolics);
       entityManager.persist (zocor);
-
-      zocor.setDrugSchedule(temp2);
-
-      //<-- TO DO: verify this works! -->//
-      entityManager.persist(zocor);
    }
 
    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,6 +124,7 @@ public class LastGENApp
    {
       INITIAL_DEA_SCHEDULE = new HashMap<>();
 
+      INITIAL_DEA_SCHEDULE.put (INV, "Substances still in R&D or clinical trial phase -- awaiting approvals.");
       INITIAL_DEA_SCHEDULE.put (I, "Substances with no accepted medical use. High abuse potential.");
       INITIAL_DEA_SCHEDULE.put (II, "High abuse potential with severe psychological/physiological dependence.");
       INITIAL_DEA_SCHEDULE.put (III, "Moderate to low abuse potential and development of dependence.");

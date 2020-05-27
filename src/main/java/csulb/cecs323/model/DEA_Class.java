@@ -17,7 +17,7 @@ public class DEA_Class
     public static final String FIND_ALL = "DEA_Class.findAll";
     public static final String SCHEDULE_OF_DRUGS = "DEA_Class.scheduleOfDrugs";
 
-    public static enum DEA {RX, I, II, III, IV, V, F, OTC}
+    public static enum DEA {RX, INV, I, II, III, IV, V, F, OTC}
 
     @Id
     private DEA symbol;
