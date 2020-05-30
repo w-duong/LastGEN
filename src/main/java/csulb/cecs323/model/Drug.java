@@ -14,6 +14,12 @@ public class Drug
 
     private String chemical_name;
     private String description;
+    private String clinical_pharmacology;
+    private String dosage;
+
+    //<--TO DO: more attributes --> //
+    // -contraindication ?
+    // -side-effects ?
 
     // ASSOCIATION(S)
     @ManyToOne
@@ -44,13 +50,14 @@ public class Drug
         addBrandName(brand_name);
         setDescription(description);
         addDrugClass(parent_class);
-
     }
     
     // ACCESSORS
     public long getDID () { return this.did; }
     public String getChemical_name () { return this.chemical_name; }
     public String getDescription () { return this.description; }
+    public String getPharmacology () { return this.clinical_pharmacology; }
+    public String getDosage () { return this.dosage; }
     public DEA_Class getDrugSchedule () { return this.schedule; }
     public List<BrandName> getBrandNames () { return this.brand_names; }
     public List<DrugClass> getDrugClass () { return this.classes; }
@@ -61,6 +68,8 @@ public class Drug
     // MUTATORS
     public void setChemicalName (String chemical_name) { this.chemical_name = chemical_name; }
     public void setDescription (String description) { this.description = description; }
+    public void setPharmacology (String pharmacology) { this.clinical_pharmacology = pharmacology; }
+    public void setDosage (String dosageGuide) { this.dosage = dosageGuide; }
     public void setDrugSchedule (DEA_Class schedule)
     {
         DEA_Class temp = null;
