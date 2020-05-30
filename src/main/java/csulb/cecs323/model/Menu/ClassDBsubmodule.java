@@ -8,7 +8,7 @@ public class ClassDBsubmodule
 
     public void addClass ()
     {
-        int userChoice, classCount;
+        int userChoice = 0, classCount = 0;
         String tempAbbr = "AAAA", tempName = "DEFAULT";
 
         do
