@@ -8,8 +8,19 @@ import java.util.List;
 @Table (name = "drug_classes",
         uniqueConstraints = @UniqueConstraint (columnNames = {"abbr", "name"})
 )
+@NamedQueries({
+        @NamedQuery (name = DrugClass.LIST_OF_SUPERS,
+                     query = "SELECT dc1 FROM DrugClass dc1 INNER JOIN dc1.superclass dc2 WHERE dc1.name = :className"),
+        @NamedQuery (name = DrugClass.LIST_OF_SUBS,
+                     query = "SELECT dc1 FROM DrugClass dc1 INNER JOIN dc1.subclass dc2 WHERE dc1.name = :className")
+})
 public class DrugClass
 {
+    // QUERY STRING(S)
+    public static final String LIST_OF_SUPERS = "DrugClass.listOfSupers";
+    public static final String LIST_OF_SUBS = "DrugClass.listOfSubs";
+    public static final String LIST_OF_DRUGS = "DrugClass.listOfDrugs";
+
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private long cid;

@@ -6,8 +6,15 @@ import java.util.ArrayList;
 
 @Entity
 @Table (name = "drugs")
+@NamedQueries({
+        @NamedQuery (name = Drug.FIND_ALL_BY_NAME,
+                     query = "SELECT d FROM Drug d WHERE d.chemical_name LIKE CONCAT ('%', :searchString, '%')" )
+})
 public class Drug
 {
+    // QUERY STRING(S)
+    public static final String FIND_ALL_BY_NAME = "Drug.findAllByName";
+
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private long did;

@@ -1,10 +1,15 @@
 package csulb.cecs323.model.Menu;
 
+import javax.persistence.EntityManager;
 import java.util.Scanner;
 
 public class DrugDBMenu
 {
     private static final Scanner cin = new Scanner (System.in);
+    private EntityManager entityManager;
+
+    public DrugDBMenu (EntityManager entityManager) { this.entityManager = entityManager; }
+
 
     public int display ()
     {
@@ -39,7 +44,7 @@ public class DrugDBMenu
             switch (userChoice)
             {
                 case 1:
-                    ClassDBsubmodule submodule = new ClassDBsubmodule();
+                    ClassDBsubmodule submodule = new ClassDBsubmodule(entityManager);
                     submodule.addClass();
                     break;
 
