@@ -8,7 +8,7 @@ import java.util.ArrayList;
 @Table (name = "drugs")
 @NamedQueries({
         @NamedQuery (name = Drug.FIND_ALL_BY_NAME,
-                     query = "SELECT d FROM Drug d WHERE d.chemical_name LIKE CONCAT ('%', :searchString, '%')" )
+                     query = "SELECT d FROM Drug d WHERE LOWER (d.chemical_name) LIKE LOWER (CONCAT ('%', :searchString, '%'))" )
 })
 public class Drug
 {

@@ -89,8 +89,14 @@ public class ClassDBsubmodule
                     System.out.print ("\nEnter Drug Class Abbreviation > ");
                     tempAbbr = cin.nextLine ();
                     break;
+                case 3:
+                    addSuperSubToClass(workingCopy, true, tempSupers);
+                    break;
+                case 4:
+                    addSuperSubToClass(workingCopy, false, tempSubs);
+                    break;
                 case 5:
-                    tempDrugs = addDrugToClass(workingCopy);
+                    addDrugToClass(workingCopy, tempDrugs);
                     break;
             }
         }
@@ -99,10 +105,9 @@ public class ClassDBsubmodule
         // <--TO DO: persist 'workingCopy' here after user confirmation --> //
     }
 
-    public ArrayList<Drug> addDrugToClass (DrugClass workingCopy)
+    public void addDrugToClass (DrugClass workingCopy, ArrayList<Drug> drugsToAttach)
     {
         int options = 1;
-        ArrayList<Drug> drugsToAttach = new ArrayList<>();
 
         System.out.print ("\nSEARCH FOR DRUG BY NAME. ENTER QUERY (any substring) > ");
         String searchString = cin.nextLine ();
@@ -130,11 +135,52 @@ public class ClassDBsubmodule
 
             int temp = Integer.parseInt(selection) - 1;
 
-            workingCopy.addDrug (results.get(temp));
-            drugsToAttach.add (results.get(temp));
+            if (! drugsToAttach.contains (results.get(temp)))
+            {
+                workingCopy.addDrug (results.get(temp));
+                drugsToAttach.add (results.get(temp));
+            }
+        }
+    }
+
+    public void addSuperSubToClass (DrugClass workingCopy, boolean isSuper, ArrayList<DrugClass> classesToAttach)
+    {
+        int options = 1;
+
+        System.out.print ("\nSEARCH FOR CLASS BY NAME. ENTER QUERY (any substring) > ");
+        String searchString = cin.nextLine ();
+
+        TypedQuery query = entityManager.createNamedQuery(DrugClass.FIND_ALL, DrugClass.class).setParameter("searchString", searchString);
+        List<DrugClass> results = query.getResultList();
+
+        System.out.println ("\nSELECT OPTIONS FROM FOLLOWING LIST: ");
+        for (DrugClass drugClass : results)
+        {
+            System.out.println (String.format ("<%4d>\t%-45s", options, drugClass.getName()) );
+
+            options++;
         }
 
-        return drugsToAttach;
+        System.out.print ("\nINPUT SELECTION(S). SELECT MULTIPLE BY SEPARATING WITH SPACE(S) > ");
+        String [] userChoices = cin.nextLine ().split (" ");
+
+        for (String option : userChoices)
+        {
+            if (option.equals ("") || option == null)
+                continue;
+
+            int temp = Integer.parseInt(option) - 1;
+
+            if (! classesToAttach.contains (results.get(temp)))
+            {
+                if (isSuper)
+                    workingCopy.addSuperclass (results.get(temp));
+                else
+                    workingCopy.addSubclass(results.get(temp));
+
+                classesToAttach.add (results.get(temp));
+            }
+        }
     }
 
 }
