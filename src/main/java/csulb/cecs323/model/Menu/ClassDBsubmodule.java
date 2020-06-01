@@ -38,36 +38,36 @@ public class ClassDBsubmodule
                         "**                                             -- LastGEN --                                          **\n" +
                         "**                                  **   DRUG DATABASE MAINTENANCE   **                               **\n" +
                         "**                                                                                                    **\n" +
-        String.format  ("**                                   CURRENT DRUG CLASS COUNT : %-5d                             **\n", classCount) +
+        String.format  ("**                                   CURRENT DRUG CLASS COUNT : %-5d                                 **\n", classCount) +
                         "**                                                                                                    **\n" +
-                        "**                                                                         -- PENDING VALUES --       **\n" +
+                        "**                                                                    -- PENDING VALUES --            **\n" +
                         "**                                                                                                    **\n" +
         String.format  ("**  < 1 > Enter Drug Class Name                   > %-50s**\n", tempName.substring(0, maxSize)) +
-        String.format  ("**  < 2 > Enter Drug Class Abbreviation           > %-5s                                         **\n", tempAbbr) +
+        String.format  ("**  < 2 > Enter Drug Class Abbreviation           > %-5s                                             **\n", tempAbbr) +
         String.format  ("**  < 3 > Add Parent Class                        > %-50s**\n", "-- CURRENT LIST --"));
                             for (DrugClass drugClass : tempSupers)
                             {
-                                int endIDX = (drugClass.getName().length() > 45) ? 45 : drugClass.getName().length();
+                                int endIDX = (drugClass.getName().length() > 40) ? 40 : drugClass.getName().length();
 
-                                System.out.println (String.format ("**%-50s%-50s**", "", drugClass.getName().substring (0, endIDX)) );
+                                System.out.println (String.format ("**%-52s%-48s**", "", drugClass.getName().substring (0, endIDX)) );
                             }
             System.out.print
                     (
         String.format  ("**  < 4 > Add Child Class                         > %-50s**\n", "-- CURRENT LIST --"));
                             for (DrugClass drugClass : tempSubs)
                             {
-                                int endIDX = (drugClass.getName().length() > 45) ? 45 : drugClass.getName().length();
+                                int endIDX = (drugClass.getName().length() > 40) ? 40 : drugClass.getName().length();
 
-                                System.out.println (String.format ("**%-50s%-50s**", "", drugClass.getName().substring (0, endIDX)) );
+                                System.out.println (String.format ("**%-52s%-48s**", "", drugClass.getName().substring (0, endIDX)) );
                             }
             System.out.print
                     (
         String.format  ("**  < 5 > Add a DRUG to this Class                > %-50s**\n", "-- CURRENT LIST --"));
                             for (Drug drug : tempDrugs)
                             {
-                                int endIDX = (drug.getChemical_name().length() > 45) ? 45 : drug.getChemical_name().length();
+                                int endIDX = (drug.getChemical_name().length() > 40) ? 40 : drug.getChemical_name().length();
 
-                                System.out.println (String.format ("**%-50s%-50s**", "", drug.getChemical_name().substring (0, endIDX)) );
+                                System.out.println (String.format ("**%-52s%-48s**", "", drug.getChemical_name().substring (0, endIDX)) );
                             }
             System.out.print
                     (
@@ -95,6 +95,8 @@ public class ClassDBsubmodule
             }
         }
         while (userChoice != 6);
+
+        // <--TO DO: persist 'workingCopy' here after user confirmation --> //
     }
 
     public ArrayList<Drug> addDrugToClass (DrugClass workingCopy)
@@ -126,7 +128,7 @@ public class ClassDBsubmodule
             if (selection.equals ("") || selection == null)
                 continue;
 
-            int temp = Integer.parseInt(selection);
+            int temp = Integer.parseInt(selection) - 1;
 
             workingCopy.addDrug (results.get(temp));
             drugsToAttach.add (results.get(temp));

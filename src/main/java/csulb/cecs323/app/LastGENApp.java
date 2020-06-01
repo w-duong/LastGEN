@@ -16,6 +16,7 @@ import csulb.cecs323.model.ClassClassIX;
 import csulb.cecs323.model.DEA_Class;
 import csulb.cecs323.model.Drug;
 import csulb.cecs323.model.DrugClass;
+import csulb.cecs323.model.Menu.ClassDBsubmodule;
 
 import javax.persistence.*;
 import java.util.List;
@@ -61,7 +62,8 @@ public class LastGENApp
       tx.commit();
       LOGGER.fine("End of Transaction");
 
-      lastGEN.randomQuery();
+      ClassDBsubmodule testModule = new ClassDBsubmodule(lastGEN.entityManager);
+      testModule.addClass();
    }
 
    public void randomQuery ()
