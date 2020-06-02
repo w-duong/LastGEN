@@ -18,64 +18,12 @@ public class ClassDBsubmodule
 
     public void addClass ()
     {
-        int userChoice = 0, classCount = 0, maxSize = 1;
-        String tempAbbr = "AAAA", tempName = "DEFAULT";
-
-        ArrayList<DrugClass> tempSupers = new ArrayList<>();
-        ArrayList<DrugClass> tempSubs = new ArrayList<>();
-        ArrayList<Drug> tempDrugs = new ArrayList<>();
-
-        DrugClass workingCopy = new DrugClass (tempAbbr, tempName);
+        int userChoice = 0;
+        DrugClass workingCopy = new DrugClass ("AAAA", "DEFAULT");
 
         do
         {
-            maxSize = (tempName.length() > 45) ? 45 : tempName.length ();
-
-            System.out.println("\n\n\n\n\n\n\n\n\n\n");
-            System.out.print
-                    (   "********************************************************************************************************\n" +
-                        "**                                                                                                    **\n" +
-                        "**                                             -- LastGEN --                                          **\n" +
-                        "**                                  **   DRUG DATABASE MAINTENANCE   **                               **\n" +
-                        "**                                                                                                    **\n" +
-        String.format  ("**                                   CURRENT DRUG CLASS COUNT : %-5d                                 **\n", classCount) +
-                        "**                                                                                                    **\n" +
-                        "**                                                                    -- PENDING VALUES --            **\n" +
-                        "**                                                                                                    **\n" +
-        String.format  ("**  < 1 > Enter Drug Class Name                   > %-50s**\n", tempName.substring(0, maxSize)) +
-        String.format  ("**  < 2 > Enter Drug Class Abbreviation           > %-5s                                             **\n", tempAbbr) +
-        String.format  ("**  < 3 > Add Parent Class                        > %-50s**\n", "-- CURRENT LIST --"));
-                            for (DrugClass drugClass : tempSupers)
-                            {
-                                int endIDX = (drugClass.getName().length() > 40) ? 40 : drugClass.getName().length();
-
-                                System.out.println (String.format ("**%-52s%-48s**", "", drugClass.getName().substring (0, endIDX)) );
-                            }
-            System.out.print
-                    (
-        String.format  ("**  < 4 > Add Child Class                         > %-50s**\n", "-- CURRENT LIST --"));
-                            for (DrugClass drugClass : tempSubs)
-                            {
-                                int endIDX = (drugClass.getName().length() > 40) ? 40 : drugClass.getName().length();
-
-                                System.out.println (String.format ("**%-52s%-48s**", "", drugClass.getName().substring (0, endIDX)) );
-                            }
-            System.out.print
-                    (
-        String.format  ("**  < 5 > Add a DRUG to this Class                > %-50s**\n", "-- CURRENT LIST --"));
-                            for (Drug drug : tempDrugs)
-                            {
-                                int endIDX = (drug.getChemical_name().length() > 40) ? 40 : drug.getChemical_name().length();
-
-                                System.out.println (String.format ("**%-52s%-48s**", "", drug.getChemical_name().substring (0, endIDX)) );
-                            }
-            System.out.print
-                    (
-                        "**  < 6 > Return to previous menu                                                                     **\n" +
-                        "**                                                                                                    **\n" +
-                        "********************************************************************************************************\n" +
-                        "                                          CHOICE (0 - 6): "
-                    );
+            displayObject(workingCopy);
 
             userChoice = Integer.parseInt(cin.nextLine());
 
@@ -83,20 +31,20 @@ public class ClassDBsubmodule
             {
                 case 1:
                     System.out.print ("\nEnter Drug Class Name > ");
-                    tempName = cin.nextLine ();
+                    workingCopy.setName (cin.nextLine());
                     break;
                 case 2:
                     System.out.print ("\nEnter Drug Class Abbreviation > ");
-                    tempAbbr = cin.nextLine ();
+                    workingCopy.setAbbreviation(cin.nextLine());
                     break;
                 case 3:
-                    addSuperSubToClass(workingCopy, true, tempSupers);
+                    addSuperSubToClass(workingCopy, true);
                     break;
                 case 4:
-                    addSuperSubToClass(workingCopy, false, tempSubs);
+                    addSuperSubToClass(workingCopy, false);
                     break;
                 case 5:
-                    addDrugToClass(workingCopy, tempDrugs);
+                    addDrugToClass(workingCopy);
                     break;
             }
         }
@@ -105,7 +53,59 @@ public class ClassDBsubmodule
         // <--TO DO: persist 'workingCopy' here after user confirmation --> //
     }
 
-    public void addDrugToClass (DrugClass workingCopy, ArrayList<Drug> drugsToAttach)
+    public void displayObject (DrugClass workingCopy)
+    {
+        int classCount = 0;
+        int maxSize = (workingCopy.getName().length() > 45) ? 45 : workingCopy.getName().length ();
+
+        System.out.println("\n\n\n\n\n\n\n\n\n\n");
+        System.out.print
+                (       "********************************************************************************************************\n" +
+                        "**                                                                                                    **\n" +
+                        "**                                             -- LastGEN --                                          **\n" +
+                        "**                                  **   DRUG DATABASE MAINTENANCE   **                               **\n" +
+                        "**                                                                                                    **\n" +
+        String.format  ("**                                   CURRENT DRUG CLASS COUNT : %-5d                                 **\n", classCount) +
+                        "**                                                                                                    **\n" +
+                        "**                                                                    -- PENDING VALUES --            **\n" +
+                        "**                                                                                                    **\n" +
+        String.format  ("**  < 1 > Enter Drug Class Name                   > %-50s**\n", workingCopy.getName().substring(0, maxSize)) +
+        String.format  ("**  < 2 > Enter Drug Class Abbreviation           > %-5s                                             **\n", workingCopy.getAbbreviation()) +
+        String.format  ("**  < 3 > Add Parent Class                        > %-50s**\n", "-- CURRENT LIST --"));
+            for (DrugClass drugClass : workingCopy.getSuperclasses())
+            {
+                int endIDX = (drugClass.getName().length() > 40) ? 40 : drugClass.getName().length();
+
+                System.out.println (String.format ("**%-52s%-48s**", "", drugClass.getName().substring (0, endIDX)) );
+            }
+        System.out.print
+                (
+        String.format  ("**  < 4 > Add Child Class                         > %-50s**\n", "-- CURRENT LIST --"));
+            for (DrugClass drugClass : workingCopy.getSubclasses())
+            {
+                int endIDX = (drugClass.getName().length() > 40) ? 40 : drugClass.getName().length();
+
+                System.out.println (String.format ("**%-52s%-48s**", "", drugClass.getName().substring (0, endIDX)) );
+            }
+        System.out.print
+                (
+        String.format  ("**  < 5 > Add a DRUG to this Class                > %-50s**\n", "-- CURRENT LIST --"));
+            for (Drug drug : workingCopy.getDrugs())
+            {
+                int endIDX = (drug.getChemical_name().length() > 40) ? 40 : drug.getChemical_name().length();
+
+                System.out.println (String.format ("**%-52s%-48s**", "", drug.getChemical_name().substring (0, endIDX)) );
+            }
+        System.out.print
+                (
+                        "**  < 6 > Return to previous menu                                                                     **\n" +
+                        "**                                                                                                    **\n" +
+                        "********************************************************************************************************\n" +
+                        "                                          CHOICE (0 - 6): "
+                );
+    }
+
+    public void addDrugToClass (DrugClass workingCopy)
     {
         int options = 1;
 
@@ -135,15 +135,14 @@ public class ClassDBsubmodule
 
             int temp = Integer.parseInt(selection) - 1;
 
-            if (! drugsToAttach.contains (results.get(temp)))
+            if (! workingCopy.getDrugs().contains (results.get(temp)))
             {
                 workingCopy.addDrug (results.get(temp));
-                drugsToAttach.add (results.get(temp));
             }
         }
     }
 
-    public void addSuperSubToClass (DrugClass workingCopy, boolean isSuper, ArrayList<DrugClass> classesToAttach)
+    public void addSuperSubToClass (DrugClass workingCopy, boolean isSuper)
     {
         int options = 1;
 
@@ -171,15 +170,12 @@ public class ClassDBsubmodule
 
             int temp = Integer.parseInt(option) - 1;
 
-            if (! classesToAttach.contains (results.get(temp)))
-            {
-                if (isSuper)
-                    workingCopy.addSuperclass (results.get(temp));
-                else
-                    workingCopy.addSubclass(results.get(temp));
+            //<-- TO DO: add check to ensure 'workingCopy' does not have a superclass AND subclass that are the same-->//
 
-                classesToAttach.add (results.get(temp));
-            }
+            if ((isSuper) && (! workingCopy.getSuperclasses().contains (results.get(temp))))
+                workingCopy.addSuperclass(results.get(temp));
+            else if (! workingCopy.getSubclasses().contains(results.get(temp)))
+                workingCopy.addSubclass(results.get(temp));
         }
     }
 

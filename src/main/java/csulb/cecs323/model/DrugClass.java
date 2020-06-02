@@ -1,6 +1,7 @@
 package csulb.cecs323.model;
 
 import javax.persistence.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +55,10 @@ public class DrugClass
     {
         setAbbreviation(abbreviation);
         setName(name);
+
+        this.drugs = new ArrayList<>();
+        this.subclass = new ArrayList<>();
+        this.superclass = new ArrayList<>();
     }
     public DrugClass (DrugClass copy)
     {
