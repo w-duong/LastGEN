@@ -62,9 +62,17 @@ public class DrugClass
     }
     public DrugClass (DrugClass copy)
     {
-        setCID(copy.getCID());
         setAbbreviation(copy.getAbbreviation());
         setName(copy.getName());
+        
+        for (Drugs drug : copy.getDrugs())
+            this.addDrug (drug);
+            
+        for (DrugClass parent : copy.getSuperclasses())
+            this.addSuperclass (parent);
+            
+        for (DrugClass child : copy.getSubclasses())
+            this.addSubclass (child);
     }
 
     // ACCESSORS
@@ -82,6 +90,7 @@ public class DrugClass
     public void setCID (long cid) { this.cid = cid; }
     public void setAbbreviation (String abbr) { this.abbr = abbr; }
     public void setName (String name) { this.name = name; }
+    public void setDrugs (ArrayList<Drugs> drugs) { this.drugs = drugs; }
 
     // MISCELLANEOUS
     public void addSubclass (DrugClass child)
