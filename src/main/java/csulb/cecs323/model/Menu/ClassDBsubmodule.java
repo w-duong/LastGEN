@@ -145,38 +145,17 @@ public class ClassDBsubmodule
 
     public void addSuperSubToClass (DrugClass workingCopy, boolean isSuper)
     {
-        int options = 1;
+        QueryDB query = new QueryDB(entityManager);
+        List<DrugClass> results = query.forDrugClass_getSelections(true);
 
-        System.out.print ("\nSEARCH FOR CLASS BY NAME. ENTER QUERY (any substring) > ");
-        String searchString = cin.nextLine ();
-
-        TypedQuery query = entityManager.createNamedQuery(DrugClass.FIND_ALL_BY_NAME, DrugClass.class).setParameter("searchString", searchString);
-        List<DrugClass> results = query.getResultList();
-
-        System.out.println ("\nSELECT OPTIONS FROM FOLLOWING LIST: ");
-        for (DrugClass drugClass : results)
+        for (DrugClass entry : results)
         {
-            System.out.println (String.format ("<%4d>\t%-45s", options, drugClass.getName()) );
-
-            options++;
-        }
-
-        System.out.print ("\nINPUT SELECTION(S). SELECT MULTIPLE BY SEPARATING WITH SPACE(S) > ");
-        String [] userChoices = cin.nextLine ().split (" ");
-
-        for (String option : userChoices)
-        {
-            if (option.equals ("") || option == null)
-                continue;
-
-            int temp = Integer.parseInt(option) - 1;
-
             //<-- TO DO: add check to ensure 'workingCopy' does not have a superclass AND subclass that are the same-->//
 
-            if ((isSuper) && (! workingCopy.getSuperclasses().contains (results.get(temp))))
-                workingCopy.addSuperclass(results.get(temp));
-            else if (! workingCopy.getSubclasses().contains(results.get(temp)))
-                workingCopy.addSubclass(results.get(temp));
+            if ((isSuper) && (! workingCopy.getSuperclasses().contains (entry)))
+                workingCopy.addSuperclass(entry);
+            else if (! workingCopy.getSubclasses().contains(entry))
+                workingCopy.addSubclass(entry);
         }
     }
 
