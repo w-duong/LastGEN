@@ -10,10 +10,11 @@ public class DrugDBMenu
 
     public DrugDBMenu (EntityManager entityManager) { this.entityManager = entityManager; }
 
-
     public int display ()
     {
         int userChoice;
+        ClassDBsubmodule submodule = new ClassDBsubmodule(entityManager);
+        QueryDB query = new QueryDB(entityManager);
 
         do
         {
@@ -44,8 +45,29 @@ public class DrugDBMenu
             switch (userChoice)
             {
                 case 1:
-                    ClassDBsubmodule submodule = new ClassDBsubmodule(entityManager);
-                    submodule.addClass();
+                    System.out.print ("\nStart with NEW DRUG template or use pre-existing DRUG? Enter choice (0 = NEW, 1 = Existing) >");
+                    
+                    //<-- TO DO: user input validation -->//
+                    
+                    if (Integer.parseInt (cin.nextLine()) == 0)
+                    {
+                        DrugClass workingCopy = new DrugClass ("AAAA", "DEFAULT");
+                        
+                        submodule.addEditClass(workingCopy);
+                    }
+                    else
+                    {   
+                        ArrayList<DrugClass> results = query.forDrugClass_getSelections (false);
+                        
+                        DrugClass workingCopy = new DrugClass (results.get(1));
+                        
+                        submodule.addEditClass(workingCopy);
+                    }
+                    break;
+                case 2:
+                    ArrayList<DrugClass> results = query.forDrugClass_getSelections (false);
+                    
+                    submodule.addEditClass(results.get(1));
                     break;
 
             }
@@ -54,7 +76,5 @@ public class DrugDBMenu
 
         return (userChoice == 7) ? 0 : 1;
     }
-
-
-
+    
 }

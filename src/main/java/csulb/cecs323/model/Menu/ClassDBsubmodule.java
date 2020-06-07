@@ -16,10 +16,9 @@ public class ClassDBsubmodule
 
     public ClassDBsubmodule (EntityManager entityManager) { this.entityManager = entityManager; }
 
-    public void addClass ()
+    public void addEditClass (DrugClass workingCopy)
     {
         int userChoice = 0;
-        DrugClass workingCopy = new DrugClass ("AAAA", "DEFAULT");
 
         //<-- TO DO: functionality to add/edit drugs using a copy constructor -->//
 
