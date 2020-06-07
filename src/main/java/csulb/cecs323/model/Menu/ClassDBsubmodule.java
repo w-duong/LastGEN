@@ -21,6 +21,8 @@ public class ClassDBsubmodule
         int userChoice = 0;
         DrugClass workingCopy = new DrugClass ("AAAA", "DEFAULT");
 
+        //<-- TO DO: functionality to add/edit drugs using a copy constructor -->//
+
         do
         {
             displayObject(workingCopy);
@@ -149,7 +151,7 @@ public class ClassDBsubmodule
         System.out.print ("\nSEARCH FOR CLASS BY NAME. ENTER QUERY (any substring) > ");
         String searchString = cin.nextLine ();
 
-        TypedQuery query = entityManager.createNamedQuery(DrugClass.FIND_ALL, DrugClass.class).setParameter("searchString", searchString);
+        TypedQuery query = entityManager.createNamedQuery(DrugClass.FIND_ALL_BY_NAME, DrugClass.class).setParameter("searchString", searchString);
         List<DrugClass> results = query.getResultList();
 
         System.out.println ("\nSELECT OPTIONS FROM FOLLOWING LIST: ");

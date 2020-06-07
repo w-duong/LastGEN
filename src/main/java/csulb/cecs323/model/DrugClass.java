@@ -10,7 +10,7 @@ import java.util.List;
         uniqueConstraints = @UniqueConstraint (columnNames = {"abbr", "name"})
 )
 @NamedQueries({
-        @NamedQuery (name = DrugClass.FIND_ALL,
+        @NamedQuery (name = DrugClass.FIND_ALL_BY_NAME,
                      query = "SELECT dc FROM DrugClass dc WHERE LOWER (dc.name) LIKE LOWER (CONCAT ('%',:searchString,'%') )"),
         @NamedQuery (name = DrugClass.LIST_OF_SUPERS,
                      query = "SELECT dc1 FROM DrugClass dc1 INNER JOIN dc1.superclass dc2 WHERE dc1.name = :className"),
@@ -20,7 +20,7 @@ import java.util.List;
 public class DrugClass
 {
     // QUERY STRING(S)
-    public static final String FIND_ALL = "DrugClass.findAll";
+    public static final String FIND_ALL_BY_NAME = "DrugClass.findAll";
     public static final String LIST_OF_SUPERS = "DrugClass.listOfSupers";
     public static final String LIST_OF_SUBS = "DrugClass.listOfSubs";
     public static final String LIST_OF_DRUGS = "DrugClass.listOfDrugs";
