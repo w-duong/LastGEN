@@ -1,3 +1,7 @@
+package csulb.cecs323.model.Menu;
+
+import csulb.cecs323.model.DrugClass;
+
 import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
@@ -6,6 +10,7 @@ import javax.persistence.*;
 public class QueryDB
 {
     private EntityManager entityManager;
+    private static Scanner cin = new Scanner (System.in);
     
     public QueryDB (EntityManager entityManager) { this.entityManager = entityManager; }
 

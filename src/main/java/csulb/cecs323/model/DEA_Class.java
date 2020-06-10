@@ -20,6 +20,8 @@ public class DEA_Class
     public static enum DEA {RX, INV, I, II, III, IV, V, F, OTC}
 
     @Id
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    private long dea_id;
     private DEA symbol;
     private String description;
 

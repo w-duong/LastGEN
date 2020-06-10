@@ -17,6 +17,7 @@ import csulb.cecs323.model.DEA_Class;
 import csulb.cecs323.model.Drug;
 import csulb.cecs323.model.DrugClass;
 import csulb.cecs323.model.Menu.ClassDBsubmodule;
+import csulb.cecs323.model.Menu.DrugDBMenu;
 
 import javax.persistence.*;
 import java.util.List;
@@ -62,8 +63,9 @@ public class LastGENApp
       tx.commit();
       LOGGER.fine("End of Transaction");
 
-      ClassDBsubmodule testModule = new ClassDBsubmodule(lastGEN.entityManager);
-      testModule.addClass();
+      DrugDBMenu testModule = new DrugDBMenu(lastGEN.entityManager);
+      testModule.display();
+      //lastGEN.testDelete();
    }
 
    public void randomQuery ()
@@ -117,6 +119,23 @@ public class LastGENApp
       entityManager.persist (statin);
       entityManager.persist (metabolics);
       entityManager.persist (zocor);
+   }
+
+   public void testDelete ()
+   {
+      entityManager.getTransaction().begin();
+
+      DrugClass aceInh = new DrugClass ("ACEI", "ACE-Inhibitors");
+      entityManager.persist (aceInh);
+
+      entityManager.getTransaction().commit();
+      ////////// test delete /////////////
+      entityManager.getTransaction().begin();
+
+      Query deleteQuery = entityManager.createQuery("DELETE FROM DrugClass dc WHERE dc = :toDelete");
+      int deletedCount = deleteQuery.setParameter("toDelete", aceInh).executeUpdate();
+
+      entityManager.getTransaction().commit();
    }
 
    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
