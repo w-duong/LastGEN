@@ -60,8 +60,8 @@ public class DrugDBMenu
                         submodule.addEditClass(workingCopy);
                     }
                     else
-                    {   
-                        classResults = query.forDrugClass_getSelections (false);
+                    {
+                        classResults = query.genericSelections_isMultiple(false, new DrugClass ());
 
                         //<-- TO DO: handle if no results -->//
                         
@@ -71,12 +71,12 @@ public class DrugDBMenu
                     }
                     break;
                 case 2:
-                    classResults = query.forDrugClass_getSelections (false);
+                    classResults = query.genericSelections_isMultiple(false, new DrugClass());
                     
                     submodule.addEditClass(classResults.get(0));
                     break;
                 case 3:
-                    classResults = query.forDrugClass_getSelections(false);
+                    classResults = query.genericSelections_isMultiple(false, new DrugClass());
 
                     entityManager.getTransaction().begin();
 
