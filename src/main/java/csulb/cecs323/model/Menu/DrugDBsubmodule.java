@@ -1,5 +1,6 @@
 package csulb.cecs323.model.Menu;
 
+import csulb.cecs323.model.BrandName;
 import csulb.cecs323.model.Drug;
 import csulb.cecs323.model.DrugClass;
 
@@ -45,8 +46,45 @@ public class DrugDBsubmodule
         return paragraph;
     }
 
+    public void addEditDrug (Drug workingCopy)
+    {
+        int userChoice = 0;
+
+        do
+        {
+            displayObject(workingCopy);
+
+            userChoice = Integer.parseInt(cin.nextLine());
+
+            switch (userChoice)
+            {
+                case 1:
+                    System.out.print ("\nEnter Drug Name > ");
+                    workingCopy.setChemicalName (cin.nextLine());
+                    break;
+                case 2:
+                    System.out.print ("\nEnter Drug Description > ");
+                    //<-- TO DO: implement mini text editor for this option -->//
+                    break;
+                case 3:
+                    //<-- TO DO: implement mini text editor for this option -->//
+                    break;
+                case 4:
+                    addSuperSubToClass(workingCopy, false);
+                    break;
+                case 5:
+                    addDrugToClass(workingCopy);
+                    break;
+            }
+        }
+        while (userChoice != 7);
+
+        // <--TO DO: persist 'workingCopy' here after user confirmation --> //
+    }
+
     public void displayObject (Drug workingCopy)
     {
+        //<-- TO DO: add 'drugCount' functionality -->//
         int drugCount = 0;
         int maxSize = (workingCopy.getChemical_name().length() > 45) ? 45 : workingCopy.getChemical_name().length ();
         ArrayList<String> paragraph_describe = paragraphSplitter(workingCopy.getDescription(), 42, 50);
@@ -72,6 +110,28 @@ public class DrugDBsubmodule
                 for (String line : paragraph_clinical)
                     System.out.print ( String.format ("**%-49s>%-50s**", "", line) );
         System.out.print (
-        String.format  ("**  < 4 > Enter Drug Dosage(s)                      > %-50s**\n", workingCopy.getDosage()));
+        String.format  ("**  < 4 > Add Drug Dosage(s)                        > %-50s**\n", workingCopy.getDosage()) +
+        String.format  ("**  < 5 > Add Parent Class                          > %-50s**\n", "-- CURRENT LIST --"));
+            for (DrugClass drugClass : workingCopy.getDrugClass())
+            {
+                int endIDX = (drugClass.getName().length() > 40) ? 40 : drugClass.getName().length();
 
+                System.out.println (String.format ("**%-52s%-48s**", "", drugClass.getName().substring (0, endIDX)) );
+            }
+        System.out.print
+                (
+        String.format  ("**  < 6 > Add a Brand Name                          > %-50s**\n", "-- CURRENT LIST --"));
+            for (BrandName brand : workingCopy.getBrandNames())
+            {
+                int endIDX = (brand.toString().length() > 40) ? 40 : brand.toString().length();
+
+                System.out.println (String.format ("**%-52s%-48s**", "", brand.toString().substring (0, endIDX)) );
+            }
+        System.out.print
+                (
+                        "**  < 7 > Return to previous menu                                                                     **\n" +
+                        "**                                                                                                    **\n" +
+                        "********************************************************************************************************\n" +
+                        "                                          CHOICE (0 - 7): "
+                );
     }

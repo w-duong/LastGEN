@@ -20,8 +20,6 @@ public class ClassDBsubmodule
     {
         int userChoice = 0;
 
-        //<-- TO DO: functionality to add/edit drugs using a copy constructor -->//
-
         do
         {
             displayObject(workingCopy);
@@ -56,6 +54,7 @@ public class ClassDBsubmodule
 
     public void displayObject (DrugClass workingCopy)
     {
+        //<-- TO DO: add 'classCount' functionality -->//
         int classCount = 0;
         int maxSize = (workingCopy.getName().length() > 45) ? 45 : workingCopy.getName().length ();
 
