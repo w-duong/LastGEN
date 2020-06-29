@@ -20,8 +20,6 @@ public class ClassDBsubmodule
     {
         int userChoice = 0;
 
-        //<-- TO DO: functionality to add/edit drugs using a copy constructor -->//
-
         do
         {
             displayObject(workingCopy);
@@ -56,6 +54,7 @@ public class ClassDBsubmodule
 
     public void displayObject (DrugClass workingCopy)
     {
+        //<-- TO DO: add 'classCount' functionality -->//
         int classCount = 0;
         int maxSize = (workingCopy.getName().length() > 45) ? 45 : workingCopy.getName().length ();
 
@@ -108,45 +107,18 @@ public class ClassDBsubmodule
 
     public void addDrugToClass (DrugClass workingCopy)
     {
-        int options = 1;
+        QueryDB query = new QueryDB(entityManager);
+        List<Drug> results = query.genericSelections_isMultiple(true, new Drug());
 
-        System.out.print ("\nSEARCH FOR DRUG BY NAME. ENTER QUERY (any substring) > ");
-        String searchString = cin.nextLine ();
-
-        TypedQuery query = entityManager.createNamedQuery(Drug.FIND_ALL_BY_NAME, Drug.class).setParameter("searchString", searchString);
-        List<Drug> results = query.getResultList();
-
-        System.out.println ("\nSELECT OPTIONS FROM FOLLOWING LIST: ");
-        for (Drug drug : results)
-        {
-            int endIDX = (drug.getChemical_name().length() > 45) ? 45 : drug.getChemical_name().length();
-
-            System.out.println (String.format ("<%4d>\t%-45s", options, drug.getChemical_name().substring(0, endIDX)) );
-
-            options++;
-        }
-
-        System.out.print ("\nINPUT SELECTION(S). SELECT MULTIPLE BY SEPARATING WITH SPACE(S) > ");
-        String [] userChoices = cin.nextLine ().split (" ");
-
-        for (String selection : userChoices)
-        {
-            if (selection.equals ("") || selection == null)
-                continue;
-
-            int temp = Integer.parseInt(selection) - 1;
-
-            if (! workingCopy.getDrugs().contains (results.get(temp)))
-            {
-                workingCopy.addDrug (results.get(temp));
-            }
-        }
+        for (Drug entry : results)
+            if (! workingCopy.getDrugs().contains(entry))
+                workingCopy.addDrug(entry);
     }
 
     public void addSuperSubToClass (DrugClass workingCopy, boolean isSuper)
     {
         QueryDB query = new QueryDB(entityManager);
-        List<DrugClass> results = query.forDrugClass_getSelections(true);
+        List<DrugClass> results = query.genericSelections_isMultiple(true, new DrugClass());
 
         for (DrugClass entry : results)
         {

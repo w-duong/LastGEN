@@ -29,7 +29,7 @@ public class Drug
     // -side-effects ?
 
     // ASSOCIATION(S)
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.PERSIST)
     private DEA_Class schedule;
     
     @OneToMany (mappedBy = "generic", cascade = CascadeType.PERSIST)

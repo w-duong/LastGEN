@@ -43,10 +43,10 @@ public class DrugClass
     @ManyToMany (mappedBy = "subclass")
     private List<DrugClass> superclass;
 
-    @OneToMany (mappedBy = "base", cascade = CascadeType.PERSIST)
+    @OneToMany (mappedBy = "base", cascade = CascadeType.ALL)
     private List<ClassClassIX> interxAsBase;
 
-    @OneToMany (mappedBy = "offender", cascade = CascadeType.PERSIST)
+    @OneToMany (mappedBy = "offender", cascade = CascadeType.ALL)
     private List<ClassClassIX> interxAsOffender;
 
     // CONSTRUCTORS
@@ -64,15 +64,24 @@ public class DrugClass
     {
         setAbbreviation(copy.getAbbreviation());
         setName(copy.getName());
-        
-        for (Drugs drug : copy.getDrugs())
-            this.addDrug (drug);
-            
-        for (DrugClass parent : copy.getSuperclasses())
-            this.addSuperclass (parent);
-            
-        for (DrugClass child : copy.getSubclasses())
-            this.addSubclass (child);
+
+        if (copy.getDrugs().size() == 0)
+            this.drugs = new ArrayList<>();
+        else
+            for (Drug drug : copy.getDrugs())
+                this.addDrug(drug);
+
+        if (copy.getSuperclasses().size() == 0)
+            this.superclass = new ArrayList<>();
+        else
+            for (DrugClass parent : copy.getSuperclasses())
+                this.addSuperclass(parent);
+
+        if (copy.getSubclasses().size() == 0)
+            this.subclass = new ArrayList<>();
+        else
+            for (DrugClass child : copy.getSubclasses())
+                this.addSubclass(child);
     }
 
     // ACCESSORS
@@ -90,7 +99,7 @@ public class DrugClass
     public void setCID (long cid) { this.cid = cid; }
     public void setAbbreviation (String abbr) { this.abbr = abbr; }
     public void setName (String name) { this.name = name; }
-    public void setDrugs (ArrayList<Drugs> drugs) { this.drugs = drugs; }
+    public void setDrugs (ArrayList<Drug> drugs) { this.drugs = drugs; }
 
     // MISCELLANEOUS
     public void addSubclass (DrugClass child)
@@ -105,6 +114,16 @@ public class DrugClass
             child.addSuperclass (this);
     }
 
+    public void removeSubclass (DrugClass child)
+    {
+        if (this.subclass.contains (child))
+        {
+            this.subclass.remove (child);
+
+            child.removeSuperclass(this);
+        }
+    }
+
     public void addSuperclass (DrugClass parent)
     {
         if (this.superclass == null)
@@ -115,6 +134,16 @@ public class DrugClass
 
         if ((parent.getSubclasses() == null) || (! parent.getSubclasses().contains (this)))
             parent.addSubclass(this);
+    }
+
+    public void removeSuperclass (DrugClass parent)
+    {
+        if (this.superclass.contains (parent))
+        {
+            this.superclass.remove (parent);
+
+            parent.removeSubclass (this);
+        }
     }
 
     public void addInterxAsBase (ClassClassIX interaction)

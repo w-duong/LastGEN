@@ -1,6 +1,9 @@
 package csulb.cecs323.model.Menu;
 
-import javax.persistence.EntityManager;
+import csulb.cecs323.model.DrugClass;
+
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class DrugDBMenu
@@ -15,6 +18,7 @@ public class DrugDBMenu
         int userChoice;
         ClassDBsubmodule submodule = new ClassDBsubmodule(entityManager);
         QueryDB query = new QueryDB(entityManager);
+        ArrayList<DrugClass> classResults;
 
         do
         {
@@ -56,20 +60,30 @@ public class DrugDBMenu
                         submodule.addEditClass(workingCopy);
                     }
                     else
-                    {   
-                        ArrayList<DrugClass> results = query.forDrugClass_getSelections (false);
+                    {
+                        classResults = query.genericSelections_isMultiple(false, new DrugClass ());
+
+                        //<-- TO DO: handle if no results -->//
                         
-                        DrugClass workingCopy = new DrugClass (results.get(1));
+                        DrugClass workingCopy = new DrugClass (classResults.get(0));
                         
                         submodule.addEditClass(workingCopy);
                     }
                     break;
                 case 2:
-                    ArrayList<DrugClass> results = query.forDrugClass_getSelections (false);
+                    classResults = query.genericSelections_isMultiple(false, new DrugClass());
                     
-                    submodule.addEditClass(results.get(1));
+                    submodule.addEditClass(classResults.get(0));
                     break;
+                case 3:
+                    classResults = query.genericSelections_isMultiple(false, new DrugClass());
 
+                    entityManager.getTransaction().begin();
+
+                    Query deleteQuery = entityManager.createQuery("DELETE FROM DrugClass dc WHERE dc = :toDelete");
+                    int deletedCount = deleteQuery.setParameter("toDelete", classResults.get(0)).executeUpdate();
+
+                    entityManager.getTransaction().commit();
             }
         }
         while (userChoice != 7);
