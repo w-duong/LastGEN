@@ -46,6 +46,49 @@ public class DrugDBsubmodule
         return paragraph;
     }
 
+    public static String paragraphEditor (String longstring)
+    {
+        String buffer = null;
+        ArrayList<String> toAdd = new ArrayList<>();
+        String [] results = null;
+        int choice = 0;
+
+        if (longstring.length() != 0)
+        {
+            results = longstring.split("\n");
+
+            // display for user to select line to edit
+            for (int i = 0; i < results.length; ++i)
+                System.out.println (String.format ("Line%3d : %s", i + 1, results[i]) );
+
+            // prompt user for input
+            System.out.print ("\nINPUT PASSAGE TO EDIT: ");
+            choice = Integer.parseInt (cin.nextLine()) - 1;
+        }
+        else
+            results = new String [1];
+
+        System.out.println ("\nINPUT NEW PASSAGE (ENTER 'QQQ' TO FINISH: ");
+
+        // continue "buffer"ing into list 'toAdd' until finished editing
+        while (!(buffer = cin.nextLine()).equals ("QQQ"))
+            toAdd.add (buffer);
+
+        // reset 'buffer' for final time, then incrementally add from 'toAdd'
+        buffer = "";
+        for (int i = 0; i < toAdd.size(); ++i)
+        {
+            if (i == toAdd.size() - 1)
+                buffer += toAdd.get(i);
+            else
+                buffer += toAdd.get(i) + "\n";
+        }
+
+        results[choice] = buffer;
+
+        return String.join ("\n", results);
+    }
+
     public void addEditDrug (Drug workingCopy)
     {
         int userChoice = 0;
@@ -63,11 +106,10 @@ public class DrugDBsubmodule
                     workingCopy.setChemicalName (cin.nextLine());
                     break;
                 case 2:
-                    System.out.print ("\nEnter Drug Description > ");
-                    //<-- TO DO: implement mini text editor for this option -->//
+                    workingCopy.setDescription(paragraphEditor(workingCopy.getDescription()));
                     break;
                 case 3:
-                    //<-- TO DO: implement mini text editor for this option -->//
+                    workingCopy.setPharmacology(paragraphEditor(workingCopy.getPharmacology()));
                     break;
                 case 4:
                     addSuperSubToClass(workingCopy, false);
