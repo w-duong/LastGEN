@@ -58,7 +58,7 @@ public class Drug
         setDescription(description);
         addDrugClass(parent_class);
     }
-    
+
     // ACCESSORS
     public long getDID () { return this.did; }
     public String getChemical_name () { return this.chemical_name; }

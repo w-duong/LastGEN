@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layout.DrugClassNEW">
+   <children>
+      <VBox layoutX="6.0" layoutY="4.0" prefHeight="590.0" prefWidth="387.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+         <children>
+            <Label alignment="CENTER" prefHeight="37.0" prefWidth="387.0" text="Drug Class" textAlignment="CENTER" textFill="#f50000">
+               <font>
+                  <Font name="System Bold Italic" size="20.0" />
+               </font>
+            </Label>
+            <Label text="Class Name">
+               <VBox.margin>
+                  <Insets top="90.0" />
+               </VBox.margin>
+            </Label>
+            <TextField>
+               <VBox.margin>
+                  <Insets bottom="30.0" />
+               </VBox.margin>
+            </TextField>
+            <Label text="Class Abbreviation" />
+            <TextField>
+               <VBox.margin>
+                  <Insets bottom="30.0" />
+               </VBox.margin>
+            </TextField>
+            <Label text="Class Parent(s)" />
+            <TextField>
+               <VBox.margin>
+                  <Insets bottom="30.0" />
+               </VBox.margin>
+            </TextField>
+            <Label text="Class Child(ren)" />
+            <TextField>
+               <VBox.margin>
+                  <Insets bottom="30.0" />
+               </VBox.margin>
+            </TextField>
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="387.0" text="Add Drugs..." />
+         </children></VBox>
+      <VBox layoutX="670.0" layoutY="200.0" prefHeight="590.0" prefWidth="387.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+         <children>
+            <Label text="Parent" />
+            <ListView prefHeight="125.0" prefWidth="387.0" />
+            <Label text="Drug List" />
+            <ListView prefHeight="330.0" prefWidth="387.0" />
+            <Label text="Children" />
+            <ListView prefHeight="125.0" prefWidth="387.0" />
+            <ButtonBar prefHeight="35.0" prefWidth="200.0">
+              <buttons>
+                <Button cancelButton="true" mnemonicParsing="false" text="Cancel" />
+                  <Button mnemonicParsing="false" text="Button" />
+                  <Button mnemonicParsing="false" text="Finalize" />
+              </buttons>
+               <padding>
+                  <Insets left="60.0" right="60.0" />
+               </padding>
+            </ButtonBar>
+         </children>
+      </VBox>
+      <Separator layoutX="397.0" layoutY="2.0" orientation="VERTICAL" prefHeight="310.0" prefWidth="3.0" AnchorPane.bottomAnchor="5.0" AnchorPane.topAnchor="5.0" />
+   </children>
+</AnchorPane>
