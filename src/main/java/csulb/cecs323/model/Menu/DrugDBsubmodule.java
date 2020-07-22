@@ -75,3 +75,5 @@ public class DrugDBsubmodule
         String.format  ("**  < 4 > Enter Drug Dosage(s)                      > %-50s**\n", workingCopy.getDosage()));
 
     }
+
+}
