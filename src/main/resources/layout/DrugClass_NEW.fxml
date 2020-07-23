@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layout.DrugClassNEW">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="csulb.cecs323.controller.DrugClass_NEW_CTRL">
    <children>
       <VBox layoutX="6.0" layoutY="4.0" prefHeight="590.0" prefWidth="387.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
          <children>
@@ -46,21 +46,25 @@
          </children></VBox>
       <VBox layoutX="670.0" layoutY="200.0" prefHeight="590.0" prefWidth="387.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
          <children>
-            <Label text="Parent" />
+            <Label text="Superclass (Parent)" />
             <ListView prefHeight="125.0" prefWidth="387.0" />
             <Label text="Drug List" />
             <ListView prefHeight="330.0" prefWidth="387.0" />
-            <Label text="Children" />
+            <Label text="Subclass (Children)" />
             <ListView prefHeight="125.0" prefWidth="387.0" />
-            <ButtonBar prefHeight="35.0" prefWidth="200.0">
+            <ButtonBar prefHeight="35.0">
               <buttons>
                 <Button cancelButton="true" mnemonicParsing="false" text="Cancel" />
-                  <Button mnemonicParsing="false" text="Button" />
-                  <Button mnemonicParsing="false" text="Finalize" />
+                  <Button mnemonicParsing="false" onAction="#drugClass_new_onButtonSelect" text="Edit" />
+                  <Button mnemonicParsing="false" text="Add" />
+                  <Button mnemonicParsing="false" text="Save" />
               </buttons>
                <padding>
-                  <Insets left="60.0" right="60.0" />
+                  <Insets right="25.0" top="5.0" />
                </padding>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
             </ButtonBar>
          </children>
       </VBox>

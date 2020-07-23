@@ -101,6 +101,12 @@ public class DrugClass
     public void setDrugs (ArrayList<Drug> drugs) { this.drugs = drugs; }
 
     // MISCELLANEOUS
+    @Override
+    public String toString ()
+    {
+        return String.format ("CID > %-5d\tClass Name > %-30s", this.cid, this.name);
+    }
+
     public void addSubclass (DrugClass child)
     {
         if (this.subclass == null)

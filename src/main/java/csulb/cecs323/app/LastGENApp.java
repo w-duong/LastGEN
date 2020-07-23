@@ -12,20 +12,22 @@
 
 package csulb.cecs323.app;
 
+import csulb.cecs323.controller.MainWindowCTRL;
 import csulb.cecs323.model.ClassClassIX;
+import csulb.cecs323.model.Drug;
 import csulb.cecs323.model.DrugClass;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.*;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class LastGENApp extends Application
@@ -34,34 +36,11 @@ public class LastGENApp extends Application
 
    private static final Logger LOGGER = Logger.getLogger(LastGENApp.class.getName());
 
+   /* CONSTRUCTORS */
    public LastGENApp () {}
-   public LastGENApp (EntityManager manager) {
-      this.entityManager = manager;
-   }
+   public LastGENApp (EntityManager manager) { this.entityManager = manager; }
 
-   public static void main (String[] args)
-   {
-      LOGGER.fine("Creating EntityManagerFactory and EntityManager");
-      EntityManagerFactory factory = Persistence.createEntityManagerFactory("LastGEN_PU");
-      EntityManager manager = factory.createEntityManager();
-      LastGENApp lastGEN = new LastGENApp (manager);
-
-
-      // Any changes to the database need to be done within a transaction.
-      // See: https://en.wikibooks.org/wiki/Java_Persistence/Transactions
-
-      LOGGER.fine("Begin of Transaction");
-      EntityTransaction tx = manager.getTransaction();
-
-      tx.begin();
-
-      lastGEN.loadInitialData();
-
-      tx.commit();
-      LOGGER.fine("End of Transaction");
-
-      launch(args);
-   }
+   public static void main (String[] args) { launch(args); }
 
    public void loadInitialData ()
    {
@@ -85,20 +64,48 @@ public class LastGENApp extends Application
    @Override
    public void start(Stage primaryStage) throws Exception
    {
-      URL sample = Paths.get("./src/main/resources/layout/sample.fxml").toUri().toURL();
-      URL style = Paths.get("./src/main/java/csulb/cecs323/app/sampleStyle.css").toUri().toURL();
-      // load "scene" from whatever is configured in FXML file instead of creating here in 'start'
-      Parent root = FXMLLoader.load(sample);
+      /* Initialize the database. */
+      /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      LOGGER.fine("Creating EntityManagerFactory and EntityManager");
+      EntityManagerFactory factory = Persistence.createEntityManagerFactory("LastGEN_PU");
+      EntityManager manager = factory.createEntityManager();
+      LastGENApp lastGEN = new LastGENApp (manager);
 
-      // stage = frame/window, scene = contents of frame
-      primaryStage.setTitle("FirstJFX");
+      LOGGER.fine("Begin of Transaction");
+      EntityTransaction tx = manager.getTransaction();
+
+      tx.begin();
+
+      lastGEN.loadInitialData();
+
+      tx.commit();
+      LOGGER.fine("End of Transaction");
+      /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      /* Extract Layout */
+      URL mainWindowScene = Paths.get("./src/main/resources/layout/MainWindow.fxml").toUri().toURL();
+      FXMLLoader loader = new FXMLLoader(mainWindowScene);
+      Parent root = loader.load();
+
+      /* Pass the next Stage the EntityManager for transactions */
+      MainWindowCTRL controller = loader.getController();
+      controller.setEntityManager(lastGEN.entityManager);
 
       // to apply style to scene, need to instantiate a 'Scene' -- otherwise, we could do anonymous object while 'staging'
-      Scene scene = new Scene (root); // can also specify size of scene/contents here, but already configured in FXML?
-//      scene.getStylesheets().add(style.toExternalForm());
+      Scene scene = new Scene (root);
 
       // "staging"
+      primaryStage.setTitle("LastGEN");
       primaryStage.setScene(scene);
       primaryStage.show();
+
+      primaryStage.setOnCloseRequest( event -> {
+         System.out.println("Closing Primary Stage");
+
+         Platform.exit();
+         System.exit(0);
+      });
    }
 }

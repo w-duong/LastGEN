@@ -4,10 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="768.0" prefWidth="1024.0" fx:controller="csulb.cecs323.controller.MainWindowCTRL"
-            xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="csulb.cecs323.controller.MainWindowCTRL">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -24,7 +21,7 @@
             <Menu mnemonicParsing="false" text="Database">
               <items>
                   <MenuItem mnemonicParsing="false" text="Drugs..." />
-                <MenuItem mnemonicParsing="false" text="Drug Class..." />
+                <MenuItem mnemonicParsing="false" onAction="#database_drugClass_onMenuSelect" text="Drug Class..." />
                   <MenuItem mnemonicParsing="false" text="Users..." />
               </items>
             </Menu>
