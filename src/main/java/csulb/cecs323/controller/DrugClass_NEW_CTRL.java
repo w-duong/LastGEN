@@ -1,7 +1,9 @@
 package csulb.cecs323.controller;
 
 import csulb.cecs323.model.DrugClass;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -24,7 +27,8 @@ public class DrugClass_NEW_CTRL implements Initializable
     EntityManager entityManager;
     public void setEntityManager (EntityManager entityManager) { this.entityManager = entityManager; }
 
-    DrugClass workingCopy = new DrugClass();
+    private DrugClass workingCopy = new DrugClass();
+    public void setWorkingCopy (DrugClass workingCopy) { this.workingCopy = workingCopy; }
 
     @FXML
     TextField inputNameField;
@@ -39,9 +43,9 @@ public class DrugClass_NEW_CTRL implements Initializable
         Parent root = loader.load();
 
         /* Pass EntityManager to next Stage and pass 'WorkingCopy' to set Controller<Type> */
-        General_SEARCH_CTRL controller = loader.getController();
+        General_SEARCH_CTRL<DrugClass, DrugClass_NEW_CTRL> controller = loader.getController();
         controller.setEntityManager(this.entityManager);
-        controller.setWorkingCopy(workingCopy);
+        controller.setLastScene(this);
 
         Scene scene = new Scene (root); // can also specify size of scene/contents here, but already configured in FXML?
 
@@ -55,10 +59,9 @@ public class DrugClass_NEW_CTRL implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
-
     }
 
-    public void refreshFields ()
+    public void refreshFields (ActionEvent actionEvent)
     {
         if (workingCopy.getName() == null || workingCopy.getName().equals(""))
             inputNameField.setPromptText("Drug Class Name...");
@@ -69,5 +72,7 @@ public class DrugClass_NEW_CTRL implements Initializable
             inputAbbrField.setPromptText("4-Letter Drug Abbreviation...");
         else
             inputAbbrField.setText(workingCopy.getAbbreviation());
+
+        System.out.println ("data inside of > " + workingCopy.toString());
     }
 }

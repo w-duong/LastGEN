@@ -2,6 +2,7 @@ package csulb.cecs323.controller;
 
 import csulb.cecs323.model.Drug;
 import csulb.cecs323.model.DrugClass;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,17 +25,17 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class General_SEARCH_CTRL<Type> implements Initializable
+public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
 {
     EntityManager entityManager;
     public void setEntityManager (EntityManager entityManager) { this.entityManager = entityManager; }
 
-    private Type workingCopy;
-    public void setWorkingCopy (Type workingCopy) { this.workingCopy = workingCopy; }
+    private SceneType lastScene;
+    public void setLastScene (SceneType parent) { this.lastScene = parent; }
 
     @FXML
-    private ListView<Type> resultsListView;
-    private ObservableList<Type> resultsList = FXCollections.observableArrayList();
+    private ListView<DataType> resultsListView;
+    private ObservableList<DataType> resultsList = FXCollections.observableArrayList();
 
     @FXML
     private TextField inputSearchBar;
@@ -59,21 +60,34 @@ public class General_SEARCH_CTRL<Type> implements Initializable
         String searchString = inputSearchBar.getText();
         TypedQuery query;
 
-        if (workingCopy instanceof DrugClass)
+        if (lastScene instanceof DrugClass_NEW_CTRL)
         {
             query = entityManager.createNamedQuery(DrugClass.FIND_ALL_BY_NAME, DrugClass.class).setParameter("searchString", searchString);
             resultsList.addAll(query.getResultList());
         }
-        else if (workingCopy instanceof Drug)
-        {
-            query = entityManager.createNamedQuery(Drug.FIND_ALL_BY_NAME, Drug.class).setParameter("searchString", searchString);
-            resultsList.addAll(query.getResultList());
-        }
+//        else if (lastScene instanceof Drug_NEW_CTRL)
+//        {
+//            query = entityManager.createNamedQuery(Drug.FIND_ALL_BY_NAME, Drug.class).setParameter("searchString", searchString);
+//            resultsList.addAll(query.getResultList());
+//        }
     }
 
     public void selectOperation ()
     {
-        workingCopy = resultsListView.getSelectionModel().getSelectedItem();
+        Object temp = resultsListView.getSelectionModel().getSelectedItem();
+
+        /*
+        *  Need to CAST 'lastScene' to appropriate type in order to access '.setWorkingCopy()',
+        *  then need to CAST 'temp' to appropriate data object while calling '.setWorkingCopy()'
+        */
+        if (temp instanceof DrugClass)
+        {
+            ((DrugClass_NEW_CTRL) lastScene).setWorkingCopy((DrugClass) temp);
+            ((DrugClass_NEW_CTRL) lastScene).inputNameField.setPromptText(((DrugClass) temp).getName());
+            ((DrugClass_NEW_CTRL) lastScene).inputAbbrField.setPromptText(((DrugClass) temp).getAbbreviation());
+        }
+//        else if (temp instanceof Drug)
+//            ((Drug_NEW_CTRL)lastScene).setWorkingCopy((Drug) temp);
 
         Stage popUp = (Stage) inputSearchBar.getScene().getWindow();
         popUp.close();
