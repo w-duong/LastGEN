@@ -19,25 +19,25 @@
                   <Insets top="90.0" />
                </VBox.margin>
             </Label>
-            <TextField>
+            <TextField fx:id="inputNameField">
                <VBox.margin>
                   <Insets bottom="30.0" />
                </VBox.margin>
             </TextField>
             <Label text="Class Abbreviation" />
-            <TextField>
+            <TextField fx:id="inputAbbrField">
                <VBox.margin>
                   <Insets bottom="30.0" />
                </VBox.margin>
             </TextField>
             <Label text="Class Parent(s)" />
-            <TextField>
+            <TextField fx:id="inputParentField">
                <VBox.margin>
                   <Insets bottom="30.0" />
                </VBox.margin>
             </TextField>
             <Label text="Class Child(ren)" />
-            <TextField>
+            <TextField fx:id="inputChildrenField">
                <VBox.margin>
                   <Insets bottom="30.0" />
                </VBox.margin>
