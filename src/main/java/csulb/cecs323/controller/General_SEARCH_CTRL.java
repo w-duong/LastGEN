@@ -2,7 +2,6 @@ package csulb.cecs323.controller;
 
 import csulb.cecs323.model.Drug;
 import csulb.cecs323.model.DrugClass;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,12 +16,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
-import javax.swing.*;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
@@ -83,8 +78,7 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
         if (temp instanceof DrugClass)
         {
             ((DrugClass_NEW_CTRL) lastScene).setWorkingCopy((DrugClass) temp);
-            ((DrugClass_NEW_CTRL) lastScene).inputNameField.setPromptText(((DrugClass) temp).getName());
-            ((DrugClass_NEW_CTRL) lastScene).inputAbbrField.setPromptText(((DrugClass) temp).getAbbreviation());
+            ((DrugClass_NEW_CTRL) lastScene).refreshFields();
         }
 //        else if (temp instanceof Drug)
 //            ((Drug_NEW_CTRL)lastScene).setWorkingCopy((Drug) temp);

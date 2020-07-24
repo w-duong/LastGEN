@@ -19,13 +19,13 @@
                   <Insets top="90.0" />
                </VBox.margin>
             </Label>
-            <TextField fx:id="inputNameField">
+            <TextField fx:id="inputNameField" onKeyPressed="#onClassNameEnterKey">
                <VBox.margin>
                   <Insets bottom="30.0" />
                </VBox.margin>
             </TextField>
             <Label text="Class Abbreviation" />
-            <TextField fx:id="inputAbbrField">
+            <TextField fx:id="inputAbbrField" onKeyPressed="#onClassAbbrEnterKey">
                <VBox.margin>
                   <Insets bottom="30.0" />
                </VBox.margin>
@@ -42,14 +42,14 @@
                   <Insets bottom="30.0" />
                </VBox.margin>
             </TextField>
-            <Button mnemonicParsing="false" onAction="#refreshFields" prefHeight="25.0" prefWidth="387.0" text="Add Drugs..." />
+            <Button mnemonicParsing="false" onAction="#testingPurposes" prefHeight="25.0" prefWidth="387.0" text="Add Drugs..." />
          </children></VBox>
       <VBox layoutX="670.0" layoutY="200.0" prefHeight="590.0" prefWidth="387.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
          <children>
             <Label text="Superclass (Parent)" />
             <ListView prefHeight="125.0" prefWidth="387.0" />
             <Label text="Drug List" />
-            <ListView prefHeight="330.0" prefWidth="387.0" />
+            <ListView fx:id="drugListView" prefHeight="330.0" prefWidth="387.0" />
             <Label text="Subclass (Children)" />
             <ListView prefHeight="125.0" prefWidth="387.0" />
             <ButtonBar prefHeight="35.0">

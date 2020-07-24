@@ -1,18 +1,19 @@
 package csulb.cecs323.controller;
 
+import csulb.cecs323.model.Drug;
 import csulb.cecs323.model.DrugClass;
-import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -27,13 +28,16 @@ public class DrugClass_NEW_CTRL implements Initializable
     EntityManager entityManager;
     public void setEntityManager (EntityManager entityManager) { this.entityManager = entityManager; }
 
-    private DrugClass workingCopy = new DrugClass();
+    private DrugClass workingCopy = new DrugClass("", "");
     public void setWorkingCopy (DrugClass workingCopy) { this.workingCopy = workingCopy; }
 
     @FXML
     TextField inputNameField;
     @FXML
     TextField inputAbbrField;
+    @FXML
+    ListView<Drug> drugListView;
+    private ObservableList<Drug> drugObservableList = FXCollections.observableArrayList();
 
     public void drugClass_new_onButtonSelect (ActionEvent actionEvent) throws IOException
     {
@@ -56,23 +60,58 @@ public class DrugClass_NEW_CTRL implements Initializable
         drugClass_generalSearch.show();
     }
 
+    public void onClassNameEnterKey (KeyEvent keyEvent)
+    {
+        if (keyEvent.getCode().equals(KeyCode.ENTER))
+        {
+            workingCopy.setName(inputNameField.getText());
+
+            inputNameField.setText(null);
+            inputNameField.setPromptText(workingCopy.getName());
+        }
+    }
+
+    public void onClassAbbrEnterKey (KeyEvent keyEvent)
+    {
+        if (keyEvent.getCode().equals(KeyCode.ENTER))
+        {
+            workingCopy.setAbbreviation(inputAbbrField.getText());
+
+            inputAbbrField.setText(null);
+            inputAbbrField.setPromptText(workingCopy.getAbbreviation());
+        }
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
+        drugObservableList.addAll(workingCopy.getDrugs());
+        drugListView.setItems(drugObservableList);
+        refreshFields();
     }
 
-    public void refreshFields (ActionEvent actionEvent)
+    public void testingPurposes (ActionEvent actionEvent) { refreshFields(); }
+
+    public void refreshFields ()
     {
         if (workingCopy.getName() == null || workingCopy.getName().equals(""))
             inputNameField.setPromptText("Drug Class Name...");
         else
-            inputNameField.setText(workingCopy.getName());
+        {
+            inputNameField.setText(null);
+            inputNameField.setPromptText(workingCopy.getName());
+        }
 
         if (workingCopy.getAbbreviation() == null || workingCopy.getAbbreviation().equals(""))
             inputAbbrField.setPromptText("4-Letter Drug Abbreviation...");
         else
-            inputAbbrField.setText(workingCopy.getAbbreviation());
+        {
+            inputAbbrField.setText(null);
+            inputAbbrField.setPromptText(workingCopy.getAbbreviation());
+        }
 
-        System.out.println ("data inside of > " + workingCopy.toString());
+        drugObservableList.removeAll(workingCopy.getDrugs()); // TO DO: this is horrible....
+        drugObservableList.addAll(workingCopy.getDrugs());
+        System.out.println (workingCopy.toString());
     }
 }
