@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -18,6 +19,7 @@ import javafx.stage.Stage;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
@@ -27,6 +29,11 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
 
     private SceneType lastScene;
     public void setLastScene (SceneType parent) { this.lastScene = parent; }
+
+    private boolean isMultipleMode = false;
+    public void setMultipleMode (boolean isMultipleMode) { this.isMultipleMode = isMultipleMode; }
+
+    private ArrayList<DataType> resultsBuffer = new ArrayList<>();
 
     @FXML
     private ListView<DataType> resultsListView;
@@ -38,6 +45,9 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
+        if (isMultipleMode)
+            resultsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
         resultsListView.setItems(resultsList);
     }
 
@@ -69,15 +79,18 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
 
     public void selectOperation ()
     {
-        Object temp = resultsListView.getSelectionModel().getSelectedItem();
+        if (isMultipleMode)
+            resultsBuffer.addAll(resultsListView.getSelectionModel().getSelectedItems());
+        else
+            resultsBuffer.add(resultsListView.getSelectionModel().getSelectedItem());
 
         /*
         *  Need to CAST 'lastScene' to appropriate type in order to access '.setWorkingCopy()',
         *  then need to CAST 'temp' to appropriate data object while calling '.setWorkingCopy()'
         */
-        if (temp instanceof DrugClass)
+        if (lastScene instanceof DrugClass_NEW_CTRL)
         {
-            ((DrugClass_NEW_CTRL) lastScene).setWorkingCopy((DrugClass) temp);
+            ((DrugClass_NEW_CTRL) lastScene).setWorkingCopy((DrugClass) resultsBuffer.get(0));
             ((DrugClass_NEW_CTRL) lastScene).refreshFields();
         }
 //        else if (temp instanceof Drug)

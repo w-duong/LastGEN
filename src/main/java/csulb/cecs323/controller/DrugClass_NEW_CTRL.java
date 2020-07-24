@@ -21,6 +21,7 @@ import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class DrugClass_NEW_CTRL implements Initializable
@@ -113,5 +114,11 @@ public class DrugClass_NEW_CTRL implements Initializable
         drugObservableList.removeAll(workingCopy.getDrugs()); // TO DO: this is horrible....
         drugObservableList.addAll(workingCopy.getDrugs());
         System.out.println (workingCopy.toString());
+    }
+
+    public void onCancelButton (ActionEvent actionEvent)
+    {
+        Stage popUp = (Stage) inputNameField.getScene().getWindow();
+        popUp.close();
     }
 }
