@@ -92,6 +92,7 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
         {
             ((DrugClass_NEW_CTRL) lastScene).setWorkingCopy((DrugClass) resultsBuffer.get(0));
             ((DrugClass_NEW_CTRL) lastScene).refreshFields();
+            ((DrugClass_NEW_CTRL) lastScene).refreshLists();
         }
 //        else if (temp instanceof Drug)
 //            ((Drug_NEW_CTRL)lastScene).setWorkingCopy((Drug) temp);
@@ -100,12 +101,16 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
         popUp.close();
     }
 
-    public void onSelectButton (ActionEvent actionEvent) { selectOperation(); }
+    public void onSelectButton (ActionEvent actionEvent)
+    {
+        if (!resultsListView.getSelectionModel().isEmpty())
+            selectOperation();
+    }
 
     KeyCombination select_shortcut = new KeyCodeCombination(KeyCode.T, KeyCombination.ALT_DOWN);
     public void onSelectShortcut (KeyEvent keyEvent)
     {
-        if (select_shortcut.match(keyEvent))
+        if (select_shortcut.match(keyEvent) && !resultsListView.getSelectionModel().isEmpty())
             selectOperation();
     }
 

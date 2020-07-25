@@ -2,6 +2,7 @@ package csulb.cecs323.controller;
 
 import csulb.cecs323.model.Drug;
 import csulb.cecs323.model.DrugClass;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,12 +17,16 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.controlsfx.control.textfield.TextFields;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
 import java.util.ResourceBundle;
 
 public class DrugClass_NEW_CTRL implements Initializable
@@ -37,8 +42,23 @@ public class DrugClass_NEW_CTRL implements Initializable
     @FXML
     TextField inputAbbrField;
     @FXML
+    TextField inputParentField;
+    @FXML
+    TextField inputChildrenField;
+    List<DrugClass> drugClassesTransient = new ArrayList<>();
+    ArrayList<String> autocompleteDrugClassList = new ArrayList<>();
+
+    @FXML
     ListView<Drug> drugListView;
     private ObservableList<Drug> drugObservableList = FXCollections.observableArrayList();
+
+    @FXML
+    ListView<DrugClass> parentListView;
+    private ObservableList<DrugClass> parentObservableList = FXCollections.observableArrayList();
+
+    @FXML
+    ListView<DrugClass> childrenListView;
+    private ObservableList<DrugClass> childObservableList = FXCollections.observableArrayList();
 
     public void drugClass_new_onButtonSelect (ActionEvent actionEvent) throws IOException
     {
@@ -86,12 +106,29 @@ public class DrugClass_NEW_CTRL implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
-        drugObservableList.addAll(workingCopy.getDrugs());
-        drugListView.setItems(drugObservableList);
-        refreshFields();
-    }
+        Platform.runLater(()->{
+            TypedQuery query = entityManager.createNamedQuery(DrugClass.FIND_ALL_BY_NAME, DrugClass.class).setParameter("searchString", "");
+            drugClassesTransient = query.getResultList();
 
-    public void testingPurposes (ActionEvent actionEvent) { refreshFields(); }
+            for (DrugClass dc : drugClassesTransient)
+                autocompleteDrugClassList.add(dc.getName());
+
+            TextFields.bindAutoCompletion(inputParentField, autocompleteDrugClassList);
+            TextFields.bindAutoCompletion(inputChildrenField, autocompleteDrugClassList);
+            inputParentField.setPromptText("Name of Drug Class to add as 'Parent'...");
+            inputChildrenField.setPromptText("Name of Drug Class to add as 'Child'...");
+
+            drugObservableList.addAll(workingCopy.getDrugs());
+            parentObservableList.addAll(workingCopy.getSuperclasses());
+            childObservableList.addAll(workingCopy.getSubclasses());
+
+            drugListView.setItems(drugObservableList);
+            parentListView.setItems(parentObservableList);
+            childrenListView.setItems(childObservableList);
+
+            refreshFields();
+        });
+    }
 
     public void refreshFields ()
     {
@@ -110,15 +147,60 @@ public class DrugClass_NEW_CTRL implements Initializable
             inputAbbrField.setText(null);
             inputAbbrField.setPromptText(workingCopy.getAbbreviation());
         }
+    }
 
-        drugObservableList.removeAll(workingCopy.getDrugs()); // TO DO: this is horrible....
+    public void refreshLists () // TO DO: this is horrible....
+    {
+        drugObservableList.removeAll(workingCopy.getDrugs());
         drugObservableList.addAll(workingCopy.getDrugs());
-        System.out.println (workingCopy.toString());
+
+        parentObservableList.removeAll(workingCopy.getSuperclasses());
+        parentObservableList.addAll(workingCopy.getSuperclasses());
+
+        childObservableList.removeAll(workingCopy.getSubclasses());
+        childObservableList.addAll(workingCopy.getSubclasses());
     }
 
     public void onCancelButton (ActionEvent actionEvent)
     {
         Stage popUp = (Stage) inputNameField.getScene().getWindow();
         popUp.close();
+    }
+
+    public void onParentEnterKey (KeyEvent keyEvent)
+    {
+        if (keyEvent.getCode().equals(KeyCode.ENTER))
+        {
+            for (DrugClass dc : drugClassesTransient)
+                if (dc.getName().equals(inputParentField.getText())) {
+                    workingCopy.addSuperclass(dc);
+                    break;
+                }
+
+            parentObservableList.removeAll(workingCopy.getSuperclasses());
+            parentObservableList.addAll(workingCopy.getSuperclasses());
+
+            inputParentField.setText(null);
+            inputParentField.setPromptText("Name of Drug Class to add as 'Parent'...");
+        }
+    }
+
+    public void onChildEnterKey (KeyEvent keyEvent)
+    {
+        if (keyEvent.getCode().equals(KeyCode.ENTER))
+        {
+            for (DrugClass dc : drugClassesTransient)
+                if (dc.getName().equals(inputChildrenField.getText()))
+                {
+                    workingCopy.addSubclass(dc);
+                    break;
+                }
+
+            childObservableList.removeAll(workingCopy.getSubclasses());
+            childObservableList.addAll(workingCopy.getSubclasses());
+
+            inputChildrenField.setText(null);
+            inputChildrenField.setPromptText("Name of Drug Class to add as 'Child'...");
+        }
     }
 }

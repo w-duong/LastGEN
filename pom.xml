@@ -54,6 +54,13 @@
 			<artifactId>javafx-fxml</artifactId>
 			<version>11.0.2</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.controlsfx/controlsfx -->
+		<!-- https://mvnrepository.com/artifact/org.controlsfx/controlsfx -->
+		<dependency>
+			<groupId>org.controlsfx</groupId>
+			<artifactId>controlsfx</artifactId>
+			<version>11.0.2</version>
+		</dependency>
 	</dependencies>
 	<!-- THIS SECTION NECESSARY FOR BUILDING FAT JAR (IDK WHAT ANY OF IT MEANS!!!) -->
 	<build>
@@ -67,6 +74,19 @@
 				<configuration>
 					<source>9</source>
 					<target>9</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-maven-plugin</artifactId>
+				<version>0.0.1</version>
+				<configuration>
+					<mainClass>csulb.cecs323.app.LastGENApp</mainClass>
+					<options>
+						<option>--add-exports</option>
+						<option>javafx.base/com.sun.javafx.event=org.controlsfx.controls</option>
+					</options>
 				</configuration>
 			</plugin>
 

@@ -31,13 +31,13 @@
                </VBox.margin>
             </TextField>
             <Label text="Class Parent(s)" />
-            <TextField fx:id="inputParentField">
+            <TextField fx:id="inputParentField" onKeyPressed="#onParentEnterKey">
                <VBox.margin>
                   <Insets bottom="30.0" />
                </VBox.margin>
             </TextField>
             <Label text="Class Child(ren)" />
-            <TextField fx:id="inputChildrenField">
+            <TextField fx:id="inputChildrenField" onKeyPressed="#onChildEnterKey">
                <VBox.margin>
                   <Insets bottom="30.0" />
                </VBox.margin>
@@ -47,11 +47,11 @@
       <VBox layoutX="670.0" layoutY="200.0" prefHeight="590.0" prefWidth="387.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
          <children>
             <Label text="Superclass (Parent)" />
-            <ListView prefHeight="125.0" prefWidth="387.0" />
+            <ListView fx:id="parentListView" prefHeight="125.0" prefWidth="387.0" />
             <Label text="Drug List" />
             <ListView fx:id="drugListView" prefHeight="330.0" prefWidth="387.0" />
             <Label text="Subclass (Children)" />
-            <ListView prefHeight="125.0" prefWidth="387.0" />
+            <ListView fx:id="childrenListView" prefHeight="125.0" prefWidth="387.0" />
             <ButtonBar prefHeight="35.0">
               <buttons>
                 <Button cancelButton="true" mnemonicParsing="false" onAction="#onCancelButton" text="Cancel" />
