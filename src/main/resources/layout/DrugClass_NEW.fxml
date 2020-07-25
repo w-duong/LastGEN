@@ -42,7 +42,7 @@
                   <Insets bottom="30.0" />
                </VBox.margin>
             </TextField>
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="387.0" text="Add Drugs..." />
+            <Button mnemonicParsing="false" onAction="#drugClassOnAddDrugsButton" prefHeight="25.0" prefWidth="387.0" text="Add Drugs..." />
          </children></VBox>
       <VBox layoutX="670.0" layoutY="200.0" prefHeight="590.0" prefWidth="387.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
          <children>
@@ -55,7 +55,7 @@
             <ButtonBar prefHeight="35.0">
               <buttons>
                 <Button cancelButton="true" mnemonicParsing="false" onAction="#onCancelButton" text="Cancel" />
-                  <Button mnemonicParsing="false" onAction="#drugClass_new_onButtonSelect" text="Edit" />
+                  <Button mnemonicParsing="false" onAction="#drugClassOnEditButton" text="Edit" />
                   <Button mnemonicParsing="false" text="Add" />
                   <Button mnemonicParsing="false" text="Save" />
               </buttons>

@@ -36,6 +36,7 @@ public class DrugClass_NEW_CTRL implements Initializable
 
     private DrugClass workingCopy = new DrugClass("", "");
     public void setWorkingCopy (DrugClass workingCopy) { this.workingCopy = workingCopy; }
+    public DrugClass getWorkingCopy () { return this.workingCopy; }
 
     @FXML
     TextField inputNameField;
@@ -60,25 +61,36 @@ public class DrugClass_NEW_CTRL implements Initializable
     ListView<DrugClass> childrenListView;
     private ObservableList<DrugClass> childObservableList = FXCollections.observableArrayList();
 
-    public void drugClass_new_onButtonSelect (ActionEvent actionEvent) throws IOException
+    public void drugClassOnEditButton (ActionEvent actionEvent) throws IOException
     {
-        Stage drugClass_generalSearch = new Stage();
+        readyStage(DrugClass.class, this, false, "Search for Drug Class");
+    }
+
+    public void drugClassOnAddDrugsButton (ActionEvent actionEvent) throws IOException
+    {
+        readyStage(Drug.class, this, true, "Search for Drug");
+    }
+
+    public <DataType, SceneType> void readyStage (DataType conOne, SceneType conTwo, boolean isMultiple, String title) throws IOException
+    {
+        Stage preset = new Stage();
         URL generalSearchScene = Paths.get("./src/main/resources/layout/General_SEARCH.fxml").toUri().toURL();
         FXMLLoader loader = new FXMLLoader(generalSearchScene);
         Parent root = loader.load();
 
         /* Pass EntityManager to next Stage and pass 'WorkingCopy' to set Controller<Type> */
-        General_SEARCH_CTRL<DrugClass, DrugClass_NEW_CTRL> controller = loader.getController();
-        controller.setEntityManager(this.entityManager);
-        controller.setLastScene(this);
+        General_SEARCH_CTRL<DataType, SceneType> controller = loader.getController();
+        controller.setEntityManager(this.entityManager); // necessary ???
+        controller.setMultipleMode(isMultiple);
+        controller.setLastScene(conTwo);
 
-        Scene scene = new Scene (root); // can also specify size of scene/contents here, but already configured in FXML?
+        Scene scene = new Scene (root);
 
         // "staging"
-        drugClass_generalSearch.setTitle("Search for Drug Class");
-        drugClass_generalSearch.initModality(Modality.APPLICATION_MODAL); // prevents user from moving to another Stage until done
-        drugClass_generalSearch.setScene(scene);
-        drugClass_generalSearch.show();
+        preset.setTitle(title);
+        preset.initModality(Modality.APPLICATION_MODAL); // prevents user from moving to another Stage until done
+        preset.setScene(scene);
+        preset.show();
     }
 
     public void onClassNameEnterKey (KeyEvent keyEvent)
@@ -151,13 +163,13 @@ public class DrugClass_NEW_CTRL implements Initializable
 
     public void refreshLists () // TO DO: this is horrible....
     {
-        drugObservableList.removeAll(workingCopy.getDrugs());
+        drugObservableList.removeAll(drugObservableList);
         drugObservableList.addAll(workingCopy.getDrugs());
 
-        parentObservableList.removeAll(workingCopy.getSuperclasses());
+        parentObservableList.removeAll(parentObservableList);
         parentObservableList.addAll(workingCopy.getSuperclasses());
 
-        childObservableList.removeAll(workingCopy.getSubclasses());
+        childObservableList.removeAll(childObservableList);
         childObservableList.addAll(workingCopy.getSubclasses());
     }
 

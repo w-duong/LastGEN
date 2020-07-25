@@ -62,6 +62,10 @@ public class LastGENApp extends Application
       zocor.setDrugSchedule(temp1);
       zocor.addBrandName("FloLipid");
 
+      Drug lotensin = new Drug ("Benazepril", "Blood pressure medication");
+      lotensin.addBrandName("Lotensin");
+      lotensin.setDrugSchedule(temp1);
+
       DrugClass antiINF = new DrugClass ("ATIF", "Anti-Infective");
       DrugClass macrolide = new DrugClass ("MACR", "Macrolides");
       DrugClass metabolics = new DrugClass ("META", "Metabolic Agents");

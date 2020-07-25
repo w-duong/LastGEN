@@ -2,6 +2,7 @@ package csulb.cecs323.controller;
 
 import csulb.cecs323.model.Drug;
 import csulb.cecs323.model.DrugClass;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -30,7 +31,7 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
     private SceneType lastScene;
     public void setLastScene (SceneType parent) { this.lastScene = parent; }
 
-    private boolean isMultipleMode = false;
+    private boolean isMultipleMode;
     public void setMultipleMode (boolean isMultipleMode) { this.isMultipleMode = isMultipleMode; }
 
     private ArrayList<DataType> resultsBuffer = new ArrayList<>();
@@ -45,10 +46,15 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
-        if (isMultipleMode)
-            resultsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        /* NECESSARY, or values will remain NULL - such as, 'isMultipleMode' */
+        Platform.runLater(()->{
+            if (isMultipleMode)
+                resultsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            else
+                resultsListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
-        resultsListView.setItems(resultsList);
+            resultsListView.setItems(resultsList);
+        });
     }
 
     public void onSearchButton (ActionEvent actionEvent) { searchOperation(); }
@@ -65,19 +71,21 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
         String searchString = inputSearchBar.getText();
         TypedQuery query;
 
-        if (lastScene instanceof DrugClass_NEW_CTRL)
+        System.out.println ("Checkpoint1");
+
+        if (lastScene instanceof DrugClass_NEW_CTRL && !isMultipleMode)
         {
             query = entityManager.createNamedQuery(DrugClass.FIND_ALL_BY_NAME, DrugClass.class).setParameter("searchString", searchString);
             resultsList.addAll(query.getResultList());
         }
-//        else if (lastScene instanceof Drug_NEW_CTRL)
-//        {
-//            query = entityManager.createNamedQuery(Drug.FIND_ALL_BY_NAME, Drug.class).setParameter("searchString", searchString);
-//            resultsList.addAll(query.getResultList());
-//        }
+        else if (lastScene instanceof DrugClass_NEW_CTRL && isMultipleMode)
+        {
+            query = entityManager.createNamedQuery(Drug.FIND_ALL_BY_NAME, Drug.class).setParameter("searchString", searchString);
+            resultsList.addAll(query.getResultList());
+        }
     }
 
-    public void selectOperation ()
+    public void selectOperation()
     {
         if (isMultipleMode)
             resultsBuffer.addAll(resultsListView.getSelectionModel().getSelectedItems());
@@ -88,14 +96,19 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
         *  Need to CAST 'lastScene' to appropriate type in order to access '.setWorkingCopy()',
         *  then need to CAST 'temp' to appropriate data object while calling '.setWorkingCopy()'
         */
-        if (lastScene instanceof DrugClass_NEW_CTRL)
+        if (lastScene instanceof DrugClass_NEW_CTRL && !isMultipleMode)
         {
             ((DrugClass_NEW_CTRL) lastScene).setWorkingCopy((DrugClass) resultsBuffer.get(0));
             ((DrugClass_NEW_CTRL) lastScene).refreshFields();
             ((DrugClass_NEW_CTRL) lastScene).refreshLists();
         }
-//        else if (temp instanceof Drug)
-//            ((Drug_NEW_CTRL)lastScene).setWorkingCopy((Drug) temp);
+        else if (lastScene instanceof DrugClass_NEW_CTRL && isMultipleMode)
+        {
+            for (DataType drug : resultsBuffer)
+                ((DrugClass_NEW_CTRL) lastScene).getWorkingCopy().addDrug((Drug) drug);
+
+            ((DrugClass_NEW_CTRL) lastScene).refreshLists();
+        }
 
         Stage popUp = (Stage) inputSearchBar.getScene().getWindow();
         popUp.close();
