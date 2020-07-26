@@ -106,6 +106,8 @@ public class Drug
             this.brand_names.add (newLabel);
     }
 
+
+
     public void addInterxAsBase (DrugDrugIX interaction)
     {
         if (this.interxAsBase == null)
