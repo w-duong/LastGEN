@@ -38,9 +38,6 @@ public class Drug
     @OneToMany (mappedBy = "base", cascade = CascadeType.PERSIST)
     private List<DrugDrugIX> interxAsBase;
     
-    @OneToMany (mappedBy = "offender", cascade = CascadeType.PERSIST)
-    private List<DrugDrugIX> interxAsOffender;
-    
     @ManyToMany (mappedBy = "drugs")
     private List<DrugClass> classes;
     
@@ -70,8 +67,7 @@ public class Drug
     public List<DrugClass> getDrugClass () { return this.classes; }
 
     public List<DrugDrugIX> getInterxAsBase () { return this.interxAsBase; }
-    public List<DrugDrugIX> getInterxAsOffender () { return this.interxAsOffender; }
-    
+
     // MUTATORS
     public void setChemicalName (String chemical_name) { this.chemical_name = chemical_name; }
     public void setDescription (String description) { this.description = description; }
@@ -106,7 +102,10 @@ public class Drug
             this.brand_names.add (newLabel);
     }
 
-
+    public void addInterxAsBase (Drug other, String description, int severityLevel)
+    {
+        DrugDrugIX interaction = new DrugDrugIX (this, other, description, severityLevel);
+    }
 
     public void addInterxAsBase (DrugDrugIX interaction)
     {
@@ -114,14 +113,6 @@ public class Drug
             interxAsBase = new ArrayList<>();
 
         interxAsBase.add (interaction);
-    }
-
-    public void addInterxAsOffender (DrugDrugIX interaction)
-    {
-        if (this.interxAsOffender == null)
-            interxAsOffender = new ArrayList<>();
-
-        interxAsOffender.add (interaction);
     }
 
     public void addDrugClass (DrugClass parent)

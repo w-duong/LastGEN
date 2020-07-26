@@ -9,13 +9,15 @@ import java.util.ArrayList;
 @NamedQueries({
         @NamedQuery (name = DEA_Class.FIND_ALL, query = "SELECT ds FROM DEA_Class ds"),
         @NamedQuery (name = DEA_Class.SCHEDULE_OF_DRUGS,
-                     query = "SELECT d FROM DEA_Class ds INNER JOIN ds.drugs d WHERE ds.symbol = :drugSchedule")
+                     query = "SELECT d FROM DEA_Class ds INNER JOIN ds.drugs d WHERE ds.symbol = :drugSchedule"),
+        @NamedQuery (name = DEA_Class.RETRIEVE_A_DEA_CLASS, query = "SELECT ds FROM DEA_Class ds WHERE ds.symbol = :deaSymbol")
 })
 public class DEA_Class
 {
     // QUERY STRING(S)
     public static final String FIND_ALL = "DEA_Class.findAll";
     public static final String SCHEDULE_OF_DRUGS = "DEA_Class.scheduleOfDrugs";
+    public static final String RETRIEVE_A_DEA_CLASS = "DEA_Class.retrieveDEAC";
 
     public static enum DEA {RX, INV, I, II, III, IV, V, F, OTC}
 

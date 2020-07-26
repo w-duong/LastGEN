@@ -12,10 +12,7 @@
 
 package csulb.cecs323.app;
 
-import csulb.cecs323.model.ClassClassIX;
-import csulb.cecs323.model.DEA_Class;
-import csulb.cecs323.model.Drug;
-import csulb.cecs323.model.DrugClass;
+import csulb.cecs323.model.*;
 import csulb.cecs323.model.Menu.ClassDBsubmodule;
 import csulb.cecs323.model.Menu.DrugDBMenu;
 
@@ -63,15 +60,22 @@ public class LastGENApp
       tx.commit();
       LOGGER.fine("End of Transaction");
 
-      DrugDBMenu testModule = new DrugDBMenu(lastGEN.entityManager);
-      testModule.display();
-      //lastGEN.testDelete();
+      // (1)
+//      DrugDBMenu testModule = new DrugDBMenu(lastGEN.entityManager);
+//      testModule.display();
+
+      // (2)
+//      lastGEN.testDelete();
+
+      // (3)
+      lastGEN.randomQuery();
    }
 
    public void randomQuery ()
    {
-      List<DEA_Class> deaClassList = entityManager.createNamedQuery(DEA_Class.FIND_ALL, DEA_Class.class).getResultList();
+      System.out.println ("FIRST QUERY >>>>>>> Retrieve all DEA classes and every Drug within that category");
 
+      List<DEA_Class> deaClassList = entityManager.createNamedQuery(DEA_Class.FIND_ALL, DEA_Class.class).getResultList();
       for (DEA_Class result : deaClassList)
       {
          System.out.println (result);
@@ -82,6 +86,18 @@ public class LastGENApp
 
          for (Drug inList : drugList)
             System.out.println (inList);
+      }
+
+      System.out.println ("SECOND QUERY >>>>>> Retrieve every drug in DB and every interaction they have");
+
+      List<Drug> drugList = entityManager.createNamedQuery(Drug.FIND_ALL_BY_NAME, Drug.class).setParameter("searchString", "").getResultList();
+      for (Drug drug : drugList)
+      {
+         System.out.println (drug);
+         System.out.println ("=================");
+
+         for (DrugDrugIX interx : drug.getInterxAsBase())
+            System.out.println("\t" + interx);
       }
 
       System.out.println ("FINISHED QUERY");
@@ -98,27 +114,52 @@ public class LastGENApp
 
       entityManager.flush();
 
+      // retrieve 'F' class from DB
+      Query query = entityManager.createNamedQuery(DEA_Class.RETRIEVE_A_DEA_CLASS, DEA_Class.class);
+      query.setParameter("deaSymbol", DEA_Class.DEA.F);
+      DEA_Class temp1 = (DEA_Class) query.getResultList().get(0);
+
+      // add classes
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       DrugClass antiINF = new DrugClass ("ATIF", "Anti-Infective");
       DrugClass macrolide = new DrugClass ("MACR", "Macrolides");
       DrugClass metabolics = new DrugClass ("META", "Metabolic Agents");
       DrugClass statin = new DrugClass ("STNS", "Statins");
+      DrugClass antacids = new DrugClass ("ATAC", "Antacids");
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+      // add drugs
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       Drug zocor = new Drug ("Simvastatin", "Zocor", "Cholesterol medication, CYP3A4 metabolite.", statin);
-      DEA_Class temp1 = new DEA_Class(DEA_Class.DEA.F, INITIAL_DEA_SCHEDULE.get(F));
+//      DEA_Class temp1 = new DEA_Class(DEA_Class.DEA.F, INITIAL_DEA_SCHEDULE.get(F));
       zocor.setDrugSchedule(temp1);
       zocor.addBrandName("FloLipid");
 
+      Drug coumadin = new Drug ("Warfarin", "Coumadin", "Blood thinner, anti-platelets", metabolics);
+      coumadin.setDrugSchedule(temp1);
+      Drug prilosec = new Drug ("Omeprazole", "Prilosec", "Proton pump inhibitor", antacids);
+      prilosec.setDrugSchedule(temp1);
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      // operations
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       metabolics.addSubclass(statin);
       antiINF.addSubclass(macrolide);
 
+      coumadin.addInterxAsBase (prilosec, "PPI inhibition of CYP3a4", 2);
       ClassClassIX statinMacrolide = new ClassClassIX (statin, macrolide, "Macrolide 3A4 inhibition, check Statin.", 2);
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+      // persist
+      entityManager.persist (antacids);
+      entityManager.persist (prilosec);
       entityManager.persist (statinMacrolide);
       entityManager.persist (antiINF);
       entityManager.persist (macrolide);
       entityManager.persist (statin);
       entityManager.persist (metabolics);
       entityManager.persist (zocor);
+      entityManager.persist (coumadin);
    }
 
    public void testDelete ()
