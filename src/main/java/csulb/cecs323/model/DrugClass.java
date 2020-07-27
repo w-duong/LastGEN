@@ -45,9 +45,6 @@ public class DrugClass
     @OneToMany (mappedBy = "base", cascade = CascadeType.ALL)
     private List<ClassClassIX> interxAsBase;
 
-    @OneToMany (mappedBy = "offender", cascade = CascadeType.ALL)
-    private List<ClassClassIX> interxAsOffender;
-
     // CONSTRUCTORS
     public DrugClass () { }
     public DrugClass (String abbreviation, String name)
@@ -92,7 +89,6 @@ public class DrugClass
     public List<DrugClass> getSubclasses () { return this.subclass; }
     public List<DrugClass> getSuperclasses () { return this.superclass; }
     public List<ClassClassIX> getInterxAsBase () { return this.interxAsBase; }
-    public List<ClassClassIX> getInterxAsOffender () { return this.interxAsOffender; }
 
     // MUTATORS
     public void setCID (long cid) { this.cid = cid; }
@@ -151,20 +147,19 @@ public class DrugClass
         }
     }
 
-    public void addInterxAsBase (ClassClassIX interaction)
+    public void addInterxAsBase (DrugClass other, String description, int severityLevel)
+    {
+        ClassClassIX interaction = new ClassClassIX (this, other, description, severityLevel);
+        ClassClassIX reciprocate = new ClassClassIX (other, this, description, severityLevel);
+    }
+
+    protected void addInterxAsBase (ClassClassIX interaction)
     {
         if (this.interxAsBase == null)
             interxAsBase = new ArrayList<>();
 
-        interxAsBase.add (interaction);
-    }
-
-    public void addInterxAsOffender (ClassClassIX interaction)
-    {
-        if (this.interxAsOffender == null)
-            interxAsOffender = new ArrayList<>();
-
-        interxAsOffender.add (interaction);
+        if (!this.interxAsBase.contains(interaction))
+            interxAsBase.add (interaction);
     }
 
     public void addDrug (Drug drug)

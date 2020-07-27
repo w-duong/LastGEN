@@ -22,7 +22,7 @@ public class Pharmacology
     private String elimination_route;
 
     // ASSOCIATION(S)
-    @OneToOne (mappedBy = "PK_profile")
+    @ManyToOne
     private Drug drug;
 
     // CONSTRUCTORS

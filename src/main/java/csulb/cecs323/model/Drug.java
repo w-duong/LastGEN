@@ -30,8 +30,8 @@ public class Drug
     @ManyToOne (cascade = CascadeType.PERSIST)
     private DEA_Class schedule;
 
-    @OneToOne (cascade = CascadeType.PERSIST)
-    private Pharmacology PK_profile;
+    @OneToMany (mappedBy = "drug", cascade = CascadeType.PERSIST)
+    private List<Pharmacology> PK_profiles;
 
     @OneToMany (mappedBy = "drug", cascade = CascadeType.PERSIST)
     private List<Usage> usages;
@@ -64,17 +64,16 @@ public class Drug
     public long getDID () { return this.did; }
     public String getChemical_name () { return this.chemical_name; }
     public String getDescription () { return this.description; }
-    public Pharmacology getPharmacology () { return this.PK_profile; }
     public DEA_Class getDrugSchedule () { return this.schedule; }
+
     public List<BrandName> getBrandNames () { return this.brand_names; }
     public List<DrugClass> getDrugClass () { return this.classes; }
-
+    public List<Pharmacology> getPharmacology () { return this.PK_profiles; }
     public List<DrugDrugIX> getDrugInteractions () { return this.interxAsBase; }
 
     // MUTATORS
     public void setChemicalName (String chemical_name) { this.chemical_name = chemical_name; }
     public void setDescription (String description) { this.description = description; }
-    public void setPharmacology (Pharmacology pharmacology) { this.PK_profile = pharmacology; }
     public void setDrugSchedule (DEA_Class schedule)
     {
         DEA_Class temp = null;
@@ -91,7 +90,24 @@ public class Drug
         if ((schedule.getDrugs () == null) || (! schedule.getDrugs().contains (this)))
             schedule.addDrug (this);
     }
-    
+
+    public void setPharmacology (List<Pharmacology> pharmacology)
+    {
+        for (Pharmacology pgy : pharmacology)
+            this.addPKProfile(pgy);
+    }
+    public void setBrandNames (List<BrandName> brands)
+    {
+        for (BrandName bns : brands)
+            this.addBrandname(bns);
+    }
+    public void setDDInterx (List<DrugDrugIX> interactions)
+    {
+        for (DrugDrugIX ddix : interactions)
+            this.addInterxAsBase(ddix);
+    }
+
+
     // MISCELLANEOUS
     public void addBrandName (String name)
     {
@@ -103,6 +119,14 @@ public class Drug
         if (! this.brand_names.contains(newLabel))
             this.brand_names.add (newLabel);
     }
+    public void addBrandname (BrandName brand)
+    {
+        if (this.brand_names == null)
+            this.brand_names = new ArrayList<>();
+
+        if (!this.brand_names.contains(brand))
+            this.brand_names.add(brand);
+    }
 
     public void addUsage (String indication, String doseRange, boolean isApproved)
     {
@@ -110,7 +134,6 @@ public class Drug
 
         addUsage(newIndication);
     }
-
     public void addUsage (Usage newIndication)
     {
         if (this.usages == null)
@@ -125,11 +148,13 @@ public class Drug
 
         addPKProfile(profile);
     }
-
     public void addPKProfile (Pharmacology pharmacology)
     {
-        if (this.PK_profile == null)
-            this.PK_profile = pharmacology;
+        if (this.PK_profiles == null)
+            PK_profiles = new ArrayList<>();
+
+        if (!PK_profiles.contains(pharmacology))
+            PK_profiles.add(pharmacology);
     }
 
     public void addInterxAsBase (Drug other, String description, int severityLevel)
@@ -137,7 +162,6 @@ public class Drug
         DrugDrugIX interaction = new DrugDrugIX (this, other, description, severityLevel);
         DrugDrugIX reciprocate = new DrugDrugIX (other, this,description, severityLevel);
     }
-
     public void addInterxAsBase (DrugDrugIX interaction)
     {
         if (this.interxAsBase == null)

@@ -48,12 +48,6 @@ public class ClassClassIX
             this.offender = precipitate;
 
         if ((this.base == object && this.offender == precipitate) && (severityLevel == -1))
-        {
-            if (object.getInterxAsBase() == null)
-                object.addInterxAsBase(this);
-
-            if (precipitate.getInterxAsOffender() == null)
-                precipitate.addInterxAsOffender(this);
-        }
+            object.addInterxAsBase(this);
     }
 }
