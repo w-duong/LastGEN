@@ -42,13 +42,13 @@ public class DrugDrugIX
             this.offender = precipitate;
 
         if ((this.base == object && this.offender == precipitate) && (severityLevel == -1))
-        {
-            if (object.getInterxAsBase() == null)
-                object.addInterxAsBase(this);
-
-            if (precipitate.getInterxAsOffender() == null)
-                precipitate.addInterxAsOffender(this);
-        }
+            object.addInterxAsBase(this);
     }
-    
+
+    @Override
+    public String toString ()
+    {
+        return String.format ("Base: %-20s\tOffender: %-20s\tSVL > %-3d", base.getChemical_name(),
+                offender.getChemical_name(), severityLevel);
+    }
 }

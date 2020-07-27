@@ -50,7 +50,7 @@ public class DrugDBsubmodule
         int drugCount = 0;
         int maxSize = (workingCopy.getChemical_name().length() > 45) ? 45 : workingCopy.getChemical_name().length ();
         ArrayList<String> paragraph_describe = paragraphSplitter(workingCopy.getDescription(), 42, 50);
-        ArrayList<String> paragraph_clinical = paragraphSplitter(workingCopy.getPharmacology(), 42, 50);
+        //ArrayList<String> paragraph_clinical = paragraphSplitter(workingCopy.getPharmacology(), 42, 50);
 
         System.out.println("\n\n\n\n\n\n\n\n\n\n");
         System.out.print
@@ -69,10 +69,10 @@ public class DrugDBsubmodule
                     System.out.print ( String.format ("**%-49s>%-50s**", "", line) );
         System.out.print
                 (       "**  < 3 > Enter Clinical Pharmacology               >                                                 **\n");
-                for (String line : paragraph_clinical)
-                    System.out.print ( String.format ("**%-49s>%-50s**", "", line) );
-        System.out.print (
-        String.format  ("**  < 4 > Enter Drug Dosage(s)                      > %-50s**\n", workingCopy.getDosage()));
+//                for (String line : paragraph_clinical)
+//                    System.out.print ( String.format ("**%-49s>%-50s**", "", line) );
+        System.out.println ();
+//        String.format  ("**  < 4 > Enter Drug Dosage(s)                      > %-50s**\n", workingCopy.getDosage()));
 
     }
 

@@ -20,6 +20,8 @@
 		<class>csulb.cecs323.model.BrandName</class>
 		<class>csulb.cecs323.model.BrandName_PK</class>
 		<class>csulb.cecs323.model.DEA_Class</class>
+		<class>csulb.cecs323.model.Pharmacology</class>
+		<class>csulb.cecs323.model.Usage</class>
 
 		<properties>
 

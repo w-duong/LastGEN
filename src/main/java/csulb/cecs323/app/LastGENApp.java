@@ -55,10 +55,14 @@ public class LastGENApp extends Application
          entityManager.persist (temp);
       }
 
+      // retrieve 'F' class from DB
+      Query query = entityManager.createNamedQuery(DEA_Class.RETRIEVE_A_DEA_CLASS, DEA_Class.class);
+      query.setParameter("deaSymbol", DEA_Class.DEA.F);
+      DEA_Class temp1 = (DEA_Class) query.getResultList().get(0);
+
       DrugClass statin = new DrugClass ("STNS", "Statins");
 
       Drug zocor = new Drug ("Simvastatin", "Zocor", "Cholesterol medication, CYP3A4 metabolite.", statin);
-      DEA_Class temp1 = new DEA_Class(DEA_Class.DEA.F, INITIAL_DEA_SCHEDULE.get(F));
       zocor.setDrugSchedule(temp1);
       zocor.addBrandName("FloLipid");
 

@@ -21,8 +21,6 @@ public class Drug
 
     private String chemical_name;
     private String description;
-    private String clinical_pharmacology;
-    private String dosage;
 
     //<--TO DO: more attributes --> //
     // -contraindication ?
@@ -31,15 +29,18 @@ public class Drug
     // ASSOCIATION(S)
     @ManyToOne (cascade = CascadeType.PERSIST)
     private DEA_Class schedule;
+
+    @OneToOne (cascade = CascadeType.PERSIST)
+    private Pharmacology PK_profile;
+
+    @OneToMany (mappedBy = "drug", cascade = CascadeType.PERSIST)
+    private List<Usage> usages;
     
     @OneToMany (mappedBy = "generic", cascade = CascadeType.PERSIST)
     private List<BrandName> brand_names;
     
     @OneToMany (mappedBy = "base", cascade = CascadeType.PERSIST)
     private List<DrugDrugIX> interxAsBase;
-    
-    @OneToMany (mappedBy = "offender", cascade = CascadeType.PERSIST)
-    private List<DrugDrugIX> interxAsOffender;
     
     @ManyToMany (mappedBy = "drugs")
     private List<DrugClass> classes;
@@ -63,20 +64,17 @@ public class Drug
     public long getDID () { return this.did; }
     public String getChemical_name () { return this.chemical_name; }
     public String getDescription () { return this.description; }
-    public String getPharmacology () { return this.clinical_pharmacology; }
-    public String getDosage () { return this.dosage; }
+    public Pharmacology getPharmacology () { return this.PK_profile; }
     public DEA_Class getDrugSchedule () { return this.schedule; }
     public List<BrandName> getBrandNames () { return this.brand_names; }
     public List<DrugClass> getDrugClass () { return this.classes; }
 
-    public List<DrugDrugIX> getInterxAsBase () { return this.interxAsBase; }
-    public List<DrugDrugIX> getInterxAsOffender () { return this.interxAsOffender; }
-    
+    public List<DrugDrugIX> getDrugInteractions () { return this.interxAsBase; }
+
     // MUTATORS
     public void setChemicalName (String chemical_name) { this.chemical_name = chemical_name; }
     public void setDescription (String description) { this.description = description; }
-    public void setPharmacology (String pharmacology) { this.clinical_pharmacology = pharmacology; }
-    public void setDosage (String dosageGuide) { this.dosage = dosageGuide; }
+    public void setPharmacology (Pharmacology pharmacology) { this.PK_profile = pharmacology; }
     public void setDrugSchedule (DEA_Class schedule)
     {
         DEA_Class temp = null;
@@ -106,20 +104,47 @@ public class Drug
             this.brand_names.add (newLabel);
     }
 
+    public void addUsage (String indication, String doseRange, boolean isApproved)
+    {
+        Usage newIndication = new Usage (indication, doseRange, isApproved);
+
+        addUsage(newIndication);
+    }
+
+    public void addUsage (Usage newIndication)
+    {
+        if (this.usages == null)
+            this.usages = new ArrayList<>();
+
+        usages.add(newIndication);
+    }
+
+    public void addPKProfile (String organ, String enzyme, String elim_route)
+    {
+        Pharmacology profile = new Pharmacology(organ, enzyme, elim_route);
+
+        addPKProfile(profile);
+    }
+
+    public void addPKProfile (Pharmacology pharmacology)
+    {
+        if (this.PK_profile == null)
+            this.PK_profile = pharmacology;
+    }
+
+    public void addInterxAsBase (Drug other, String description, int severityLevel)
+    {
+        DrugDrugIX interaction = new DrugDrugIX (this, other, description, severityLevel);
+        DrugDrugIX reciprocate = new DrugDrugIX (other, this,description, severityLevel);
+    }
+
     public void addInterxAsBase (DrugDrugIX interaction)
     {
         if (this.interxAsBase == null)
             interxAsBase = new ArrayList<>();
 
-        interxAsBase.add (interaction);
-    }
-
-    public void addInterxAsOffender (DrugDrugIX interaction)
-    {
-        if (this.interxAsOffender == null)
-            interxAsOffender = new ArrayList<>();
-
-        interxAsOffender.add (interaction);
+        if (!this.interxAsBase.contains(interaction))
+            interxAsBase.add (interaction);
     }
 
     public void addDrugClass (DrugClass parent)
@@ -147,6 +172,12 @@ public class Drug
     @Override
     public String toString ()
     {
+        /*
+        *  NECESSARY, 'List' are not instantiated on invokation of 'toString'
+        *  (i.e. will not trigger a database read) -- needs workaround
+        * */
+        List<BrandName> temp = new ArrayList<>(this.brand_names);
+
         return (String.format ("Chemical: %-15s\tBrand: %-10s\tSchedule: %-3s",
                                 chemical_name, brand_names.toString(), schedule.getSchedule()) );
     }
