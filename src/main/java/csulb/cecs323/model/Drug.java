@@ -37,6 +37,9 @@ public class Drug
     
     @OneToMany (mappedBy = "base", cascade = CascadeType.PERSIST)
     private List<DrugDrugIX> interxAsBase;
+
+//    @OneToMany (mappedBy = "offender", cascade = CascadeType.PERSIST)
+//    private List<DrugDrugIX> interxAsOffender;
     
     @ManyToMany (mappedBy = "drugs")
     private List<DrugClass> classes;
@@ -105,6 +108,7 @@ public class Drug
     public void addInterxAsBase (Drug other, String description, int severityLevel)
     {
         DrugDrugIX interaction = new DrugDrugIX (this, other, description, severityLevel);
+        DrugDrugIX reciprocate = new DrugDrugIX (other, this, description, severityLevel);
     }
 
     public void addInterxAsBase (DrugDrugIX interaction)
@@ -112,8 +116,18 @@ public class Drug
         if (this.interxAsBase == null)
             interxAsBase = new ArrayList<>();
 
-        interxAsBase.add (interaction);
+        if (!this.interxAsBase.contains(interaction))
+            interxAsBase.add (interaction);
     }
+
+//    public void addInterxAsOffender (DrugDrugIX interaction)
+//    {
+//        if (this.interxAsBase == null)
+//            interxAsBase = new ArrayList<>();
+//
+//        if (!this.interxAsBase.contains(interaction))
+//            interxAsBase.add (interaction);
+//    }
 
     public void addDrugClass (DrugClass parent)
     {
@@ -140,7 +154,9 @@ public class Drug
     @Override
     public String toString ()
     {
+        List<BrandName> temp = new ArrayList<>(this.brand_names);
+
         return (String.format ("Chemical: %-15s\tBrand: %-10s\tSchedule: %-3s",
-                                chemical_name, brand_names.toString(), schedule.getSchedule()) );
+                                chemical_name, temp.toString(), schedule.getSchedule()) );
     }
 }

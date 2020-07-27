@@ -11,11 +11,11 @@ public class DrugDrugIX
     private int severityLevel = -1;
     
     // ASSOCIATION(S)
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.PERSIST)
     @MapsId ("base")
     private Drug base;
     
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.PERSIST)
     @MapsId ("offender")
     private Drug offender;
     
@@ -43,11 +43,8 @@ public class DrugDrugIX
 //
 //        if ((this.base == object && this.offender == precipitate) && (severityLevel == -1))
 //        {
-//            if (object.getInterxAsBase() == null)
-//                object.addInterxAsBase(this);
-//
-//            if (precipitate.getInterxAsOffender() == null)
-//                precipitate.addInterxAsOffender(this);
+//            object.addInterxAsBase(this);
+//            precipitate.addInterxAsOffender(this);
 //        }
 //    }
 
@@ -59,13 +56,7 @@ public class DrugDrugIX
             this.offender = precipitate;
 
         if ((this.base == object && this.offender == precipitate) && (severityLevel == -1))
-        {
-            if (object.getInterxAsBase() == null)
-                object.addInterxAsBase(this);
-
-            if (precipitate.getInterxAsBase() == null)
-                precipitate.addInterxAsBase(this);
-        }
+            object.addInterxAsBase(this);
     }
 
     @Override

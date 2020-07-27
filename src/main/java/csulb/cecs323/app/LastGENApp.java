@@ -50,15 +50,15 @@ public class LastGENApp
       // Any changes to the database need to be done within a transaction.
       // See: https://en.wikibooks.org/wiki/Java_Persistence/Transactions
 
-      LOGGER.fine("Begin of Transaction");
-      EntityTransaction tx = manager.getTransaction();
-
-      tx.begin();
-
-      lastGEN.loadInitialData();
-
-      tx.commit();
-      LOGGER.fine("End of Transaction");
+//      LOGGER.fine("Begin of Transaction");
+//      EntityTransaction tx = manager.getTransaction();
+//
+//      tx.begin();
+//
+//      lastGEN.loadInitialData();
+//
+//      tx.commit();
+//      LOGGER.fine("End of Transaction");
 
       // (1)
 //      DrugDBMenu testModule = new DrugDBMenu(lastGEN.entityManager);
@@ -95,6 +95,7 @@ public class LastGENApp
       {
          System.out.println (drug);
          System.out.println ("=================");
+         System.out.println ("NUMBER OF DRUG INTERACTIONS: " + drug.getInterxAsBase().size());
 
          for (DrugDrugIX interx : drug.getInterxAsBase())
             System.out.println("\t" + interx);
@@ -140,6 +141,8 @@ public class LastGENApp
       Drug prilosec = new Drug ("Omeprazole", "Prilosec", "Proton pump inhibitor", antacids);
       prilosec.setDrugSchedule(temp1);
       //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      entityManager.persist (prilosec);
+      entityManager.persist (coumadin);
 
       // operations
       //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -152,14 +155,12 @@ public class LastGENApp
 
       // persist
       entityManager.persist (antacids);
-      entityManager.persist (prilosec);
       entityManager.persist (statinMacrolide);
       entityManager.persist (antiINF);
       entityManager.persist (macrolide);
       entityManager.persist (statin);
       entityManager.persist (metabolics);
       entityManager.persist (zocor);
-      entityManager.persist (coumadin);
    }
 
    public void testDelete ()
