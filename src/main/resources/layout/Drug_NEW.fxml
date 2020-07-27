@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox layoutX="91.0" layoutY="200.0" prefHeight="590.0" prefWidth="389.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+         <children>
+            <Label alignment="CENTER" prefHeight="14.0" prefWidth="383.0" text="Drug" textFill="RED">
+               <font>
+                  <Font name="System Bold Italic" size="20.0" />
+               </font></Label>
+            <HBox prefHeight="14.0" prefWidth="389.0" spacing="5.0">
+               <children>
+                  <Label prefWidth="190.0" text="Chemical Name" />
+                  <Label prefWidth="190.0" text="Brand Name(s)" />
+               </children>
+               <padding>
+                  <Insets top="15.0" />
+               </padding>
+            </HBox>
+            <HBox prefHeight="27.0" prefWidth="389.0" spacing="5.0">
+               <children>
+                  <TextField prefHeight="25.0" prefWidth="190.0" />
+                  <TextField prefWidth="190.0" />
+               </children>
+               <padding>
+                  <Insets bottom="7.0" />
+               </padding>
+            </HBox>
+            <Label text="Drug Description">
+               <padding>
+                  <Insets top="5.0" />
+               </padding></Label>
+            <TextArea prefHeight="307.0" prefWidth="389.0" />
+            <HBox prefHeight="9.0" prefWidth="389.0" spacing="5.0">
+               <children>
+                  <Label prefWidth="190.0" text="Parent Class" />
+                  <Label prefWidth="190.0" text="DEA Schedule" />
+               </children>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+            </HBox>
+            <HBox prefHeight="30.0" prefWidth="389.0" spacing="5.0">
+               <children>
+                  <TextField prefWidth="190.0" />
+               </children>
+            </HBox>
+            <Label text="Add Profiles">
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+            </Label>
+            <ButtonBar prefHeight="34.0" prefWidth="389.0">
+              <buttons>
+                <Button mnemonicParsing="false" text="Pharmacology" />
+                  <Button mnemonicParsing="false" text="Interaction" />
+                  <Button mnemonicParsing="false" text="Usage" />
+              </buttons>
+               <padding>
+                  <Insets right="45.0" />
+               </padding>
+            </ButtonBar>
+         </children></VBox>
+      <VBox layoutX="591.0" layoutY="200.0" prefHeight="590.0" prefWidth="389.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+         <children>
+            <Label text="Parents" />
+            <ListView prefHeight="88.0" prefWidth="389.0" />
+            <Label text="Drug Profile" />
+            <TextArea prefHeight="447.0" prefWidth="389.0" />
+            <ButtonBar prefHeight="40.0" prefWidth="200.0">
+              <buttons>
+                <Button mnemonicParsing="false" text="Cancel" />
+                  <Button mnemonicParsing="false" text="Edit" />
+                  <Button mnemonicParsing="false" text="Save" />
+                  <Button mnemonicParsing="false" text="Add" />
+              </buttons>
+               <VBox.margin>
+                  <Insets right="26.0" />
+               </VBox.margin>
+            </ButtonBar>
+         </children>
+      </VBox>
+      <Separator layoutX="397.0" layoutY="5.0" orientation="VERTICAL" prefHeight="590.0" prefWidth="0.0" />
+   </children>
+</AnchorPane>
