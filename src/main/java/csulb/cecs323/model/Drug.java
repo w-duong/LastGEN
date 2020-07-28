@@ -99,7 +99,7 @@ public class Drug
     public void setBrandNames (List<BrandName> brands)
     {
         for (BrandName bns : brands)
-            this.addBrandname(bns);
+            this.addBrandName(bns);
     }
     public void setDDInterx (List<DrugDrugIX> interactions)
     {
@@ -119,7 +119,12 @@ public class Drug
         if (! this.brand_names.contains(newLabel))
             this.brand_names.add (newLabel);
     }
-    public void addBrandname (BrandName brand)
+    public void removeBrandName (String name)
+    {
+        if (this.brand_names != null)
+            this.brand_names.removeIf(bns -> bns.toString().equals(name));
+    }
+    protected void addBrandName (BrandName brand)
     {
         if (this.brand_names == null)
             this.brand_names = new ArrayList<>();

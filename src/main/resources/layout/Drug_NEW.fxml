@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="csulb.cecs323.controller.Drug_NEW_CTRL">
+   <stylesheets>
+      <URL value="@../style/new_modules.css" />
+   </stylesheets>
    <children>
       <VBox layoutX="91.0" layoutY="200.0" prefHeight="590.0" prefWidth="389.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
          <children>
@@ -24,8 +28,9 @@
             </HBox>
             <HBox prefHeight="27.0" prefWidth="389.0" spacing="5.0">
                <children>
-                  <TextField prefHeight="25.0" prefWidth="190.0" />
-                  <TextField prefWidth="190.0" />
+                  <TextField fx:id="inputCNameField" onKeyPressed="#onChemNameEnterKey" prefHeight="25.0" prefWidth="190.0" promptText="Enter chemical name..." />
+                  <TextField fx:id="inputBNameField" onKeyPressed="#onBrandNameEnterKey" prefWidth="160.0" promptText="Add a Brand name..." />
+                  <Button mnemonicParsing="false" onAction="#onBrandNameDeleteButton" text="(-)" />
                </children>
                <padding>
                   <Insets bottom="7.0" />
@@ -47,7 +52,10 @@
             </HBox>
             <HBox prefHeight="30.0" prefWidth="389.0" spacing="5.0">
                <children>
-                  <TextField prefWidth="190.0" />
+                  <TextField fx:id="inputPNameField" prefWidth="156.0" />
+                  <Button mnemonicParsing="false" prefWidth="32.0" text="(-)" />
+                  <ChoiceBox prefWidth="156.0" />
+                  <Button mnemonicParsing="false" prefWidth="32.0" text="(+)" />
                </children>
             </HBox>
             <Label text="Add Profiles">
@@ -55,7 +63,7 @@
                   <Insets top="10.0" />
                </padding>
             </Label>
-            <ButtonBar prefHeight="34.0" prefWidth="389.0">
+            <ButtonBar fx:id="profileBar" prefHeight="34.0" prefWidth="389.0">
               <buttons>
                 <Button mnemonicParsing="false" text="Pharmacology" />
                   <Button mnemonicParsing="false" text="Interaction" />
@@ -71,7 +79,7 @@
             <Label text="Parents" />
             <ListView prefHeight="88.0" prefWidth="389.0" />
             <Label text="Drug Profile" />
-            <TextArea prefHeight="447.0" prefWidth="389.0" />
+            <TextArea prefHeight="447.0" prefWidth="434.0" />
             <ButtonBar prefHeight="40.0" prefWidth="200.0">
               <buttons>
                 <Button mnemonicParsing="false" text="Cancel" />

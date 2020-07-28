@@ -1,0 +1,5 @@
+#profileBar {
+    -fx-border-color: dimgray;
+    -fx-border-width: 2;
+    -fx-border-style: solid;
+}

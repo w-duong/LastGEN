@@ -5,7 +5,12 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="csulb.cecs323.controller.DrugClass_NEW_CTRL">
+<?import java.net.URL?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="800.0"
+            xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="csulb.cecs323.controller.DrugClass_NEW_CTRL">
+   <stylesheets>
+   </stylesheets>
    <children>
       <VBox layoutX="6.0" layoutY="4.0" prefHeight="590.0" prefWidth="387.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
          <children>
@@ -52,7 +57,7 @@
             <ListView fx:id="drugListView" prefHeight="330.0" prefWidth="387.0" />
             <Label text="Subclass (Children)" />
             <ListView fx:id="childrenListView" prefHeight="125.0" prefWidth="387.0" />
-            <ButtonBar prefHeight="35.0">
+            <ButtonBar fx:id="optionsButtonBar" prefHeight="35.0">
               <buttons>
                 <Button cancelButton="true" mnemonicParsing="false" onAction="#onCancelButton" text="Cancel" />
                   <Button mnemonicParsing="false" onAction="#drugClassOnEditButton" text="Edit" />

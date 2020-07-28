@@ -34,4 +34,22 @@ public class MainWindowCTRL
         db_drugClass_newWindow.setScene(scene);
         db_drugClass_newWindow.show();
     }
+
+    public void database_drug_onMenuSelect (ActionEvent actionEvent) throws IOException
+    {
+        Stage db_drug_newWindow = new Stage();
+        URL drugScene = Paths.get("./src/main/resources/layout/Drug_NEW.fxml").toUri().toURL();
+        FXMLLoader loader = new FXMLLoader(drugScene);
+        Parent root = loader.load();
+
+        Drug_NEW_CTRL controller = loader.getController();
+        controller.setEntityManager(this.entityManager);
+        Scene scene = new Scene (root);
+
+        // "staging"
+        db_drug_newWindow.setTitle("Add/Edit Drug");
+        db_drug_newWindow.initModality(Modality.APPLICATION_MODAL); // prevents user from moving to another Stage until done
+        db_drug_newWindow.setScene(scene);
+        db_drug_newWindow.show();
+    }
 }
