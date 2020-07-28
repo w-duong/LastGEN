@@ -45,4 +45,13 @@ public class Pharmacology
     public void setEliminationRoute (String elim_route) { this.elimination_route = elim_route; }
 
     // MISCELLANEOUS
+    @Override
+    public String toString ()
+    {
+        String organ = (this.clearance_organ.length() > 20) ? this.clearance_organ.substring(0,17) + "..." : this.clearance_organ;
+        String enzyme = (this.clearance_enzyme.length() > 20) ? this.clearance_enzyme.substring(0,17) + "..." : this.clearance_enzyme;
+        String elim = (this.elimination_route.length() > 20) ? this.elimination_route.substring(0,17) + "..." : this.elimination_route;
+
+        return String.format ("Organ: %-20s\tEnzyme: %-20s\tElimination: %-20s", organ, enzyme, elim);
+    }
 }

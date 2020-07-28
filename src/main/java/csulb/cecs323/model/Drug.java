@@ -54,6 +54,7 @@ public class Drug
 
         this.brand_names = new ArrayList<>();
         this.classes = new ArrayList<>();
+        this.PK_profiles = new ArrayList<>();
     }
     public Drug (String chemical_name, String brand_name, String description, DrugClass parent_class)
     {

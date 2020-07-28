@@ -1,24 +1,28 @@
 package csulb.cecs323.controller;
 
-import csulb.cecs323.model.BrandName;
-import csulb.cecs323.model.DEA_Class;
-import csulb.cecs323.model.Drug;
-import csulb.cecs323.model.DrugClass;
+import csulb.cecs323.model.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.controlsfx.control.textfield.TextFields;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -123,6 +127,27 @@ public class Drug_NEW_CTRL implements Initializable
             for (DEA_Class dea : deaClassesTransient)
                 if (dea.getSymbol().toString().equals(scheduleCBox.getValue()))
                     workingCopy.setDrugSchedule(dea);
+    }
+
+    public void onPharmacologyAddButton (ActionEvent actionEvent) throws IOException
+    {
+        for (Pharmacology pgy : workingCopy.getPharmacology())
+            System.out.println (pgy.toString());
+
+        Stage stage = new Stage();
+        URL newPharmacology = Paths.get("./src/main/resources/layout/Pharmacology_POPUP.fxml").toUri().toURL();
+        FXMLLoader loader = new FXMLLoader(newPharmacology);
+        Parent root = loader.load();
+
+        Pharmacology_POPUP_CTRL controller = loader.getController();
+        controller.setWorkingCopy(workingCopy.getPharmacology());
+
+        Scene scene = new Scene(root);
+
+        stage.setTitle("Add/Edit Pharmacology Profile");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.show();
     }
 
     @Override
