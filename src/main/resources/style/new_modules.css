@@ -1,5 +1,11 @@
 #profileBar {
-    -fx-border-color: dimgray;
+    -fx-border-color: lightgray;
+    -fx-border-width: 1;
+    -fx-border-style: solid;
+}
+
+#mainHeader {
+    -fx-border-color: lightgray;
     -fx-border-width: 2;
     -fx-border-style: solid;
 }

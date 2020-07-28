@@ -51,6 +51,9 @@ public class Drug
     {
         setChemicalName (chemical_name);
         setDescription (description);
+
+        this.brand_names = new ArrayList<>();
+        this.classes = new ArrayList<>();
     }
     public Drug (String chemical_name, String brand_name, String description, DrugClass parent_class)
     {
@@ -78,6 +81,10 @@ public class Drug
     {
         DEA_Class temp = null;
 
+        /*
+        *  If this Drug has a Schedule currently assigned, swap it out for the incoming parameter. Then have the
+        *  old Schedule remove this Drug from it's list of Drugs.
+        */
         if (this.schedule == null)
             this.schedule = schedule;
         else
@@ -87,6 +94,7 @@ public class Drug
             this.schedule = schedule;
         }
 
+        /* New assigned Schedule should add this Drug to it's records */
         if ((schedule.getDrugs () == null) || (! schedule.getDrugs().contains (this)))
             schedule.addDrug (this);
     }

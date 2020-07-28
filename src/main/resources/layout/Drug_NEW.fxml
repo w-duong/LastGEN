@@ -13,7 +13,7 @@
    <children>
       <VBox layoutX="91.0" layoutY="200.0" prefHeight="590.0" prefWidth="389.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
          <children>
-            <Label alignment="CENTER" prefHeight="14.0" prefWidth="383.0" text="Drug" textFill="RED">
+            <Label fx:id="mainHeader" alignment="CENTER" prefHeight="30.0" prefWidth="389.0" text="Drug" textFill="RED">
                <font>
                   <Font name="System Bold Italic" size="20.0" />
                </font></Label>
@@ -40,7 +40,11 @@
                <padding>
                   <Insets top="5.0" />
                </padding></Label>
-            <TextArea prefHeight="307.0" prefWidth="389.0" />
+            <ScrollPane hbarPolicy="NEVER">
+               <content>
+                  <TextArea prefHeight="307.0" prefWidth="389.0" />
+               </content>
+            </ScrollPane>
             <HBox prefHeight="9.0" prefWidth="389.0" spacing="5.0">
                <children>
                   <Label prefWidth="190.0" text="Parent Class" />
@@ -52,10 +56,10 @@
             </HBox>
             <HBox prefHeight="30.0" prefWidth="389.0" spacing="5.0">
                <children>
-                  <TextField fx:id="inputPNameField" prefWidth="156.0" />
-                  <Button mnemonicParsing="false" prefWidth="32.0" text="(-)" />
-                  <ChoiceBox prefWidth="156.0" />
-                  <Button mnemonicParsing="false" prefWidth="32.0" text="(+)" />
+                  <TextField fx:id="inputPNameField" onKeyPressed="#onParentNameEnterKey" prefWidth="156.0" promptText="Add a parent Drug class..." />
+                  <Button mnemonicParsing="false" onAction="#onParentNameDeleteButton" prefWidth="32.0" text="(-)" />
+                  <ChoiceBox fx:id="scheduleCBox" prefWidth="156.0" />
+                  <Button mnemonicParsing="false" onAction="#onScheduleAddButton" prefWidth="32.0" text="(+)" />
                </children>
             </HBox>
             <Label text="Add Profiles">
@@ -79,7 +83,11 @@
             <Label text="Parents" />
             <ListView prefHeight="88.0" prefWidth="389.0" />
             <Label text="Drug Profile" />
-            <TextArea prefHeight="447.0" prefWidth="434.0" />
+            <ScrollPane hbarPolicy="NEVER" prefHeight="447.0" prefWidth="434.0">
+               <content>
+                  <TextFlow prefHeight="447.0" prefWidth="434.0" />
+               </content>
+            </ScrollPane>
             <ButtonBar prefHeight="40.0" prefWidth="200.0">
               <buttons>
                 <Button mnemonicParsing="false" text="Cancel" />
