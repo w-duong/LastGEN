@@ -71,21 +71,19 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
         String searchString = inputSearchBar.getText();
         TypedQuery query;
 
-        System.out.println ("Checkpoint1");
-
         if (lastScene instanceof DrugClass_NEW_CTRL && !isMultipleMode)
         {
             query = entityManager.createNamedQuery(DrugClass.FIND_ALL_BY_NAME, DrugClass.class).setParameter("searchString", searchString);
             resultsList.addAll(query.getResultList());
         }
-        else if (lastScene instanceof DrugClass_NEW_CTRL && isMultipleMode)
+        else if ((lastScene instanceof DrugClass_NEW_CTRL && isMultipleMode) || (lastScene instanceof Drug_NEW_CTRL && !isMultipleMode))
         {
             query = entityManager.createNamedQuery(Drug.FIND_ALL_BY_NAME, Drug.class).setParameter("searchString", searchString);
             resultsList.addAll(query.getResultList());
         }
     }
 
-    public void selectOperation()
+    public void selectOperation() // TO DO: this is awful...
     {
         if (isMultipleMode)
             resultsBuffer.addAll(resultsListView.getSelectionModel().getSelectedItems());
@@ -108,6 +106,11 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
                 ((DrugClass_NEW_CTRL) lastScene).getWorkingCopy().addDrug((Drug) drug);
 
             ((DrugClass_NEW_CTRL) lastScene).refreshLists();
+        }
+        else if (lastScene instanceof Drug_NEW_CTRL && !isMultipleMode)
+        {
+            ((Drug_NEW_CTRL) lastScene).setWorkingCopy((Drug)resultsBuffer.get(0));
+            ((Drug_NEW_CTRL) lastScene).refreshFields();
         }
 
         Stage popUp = (Stage) inputSearchBar.getScene().getWindow();

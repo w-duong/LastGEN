@@ -85,14 +85,14 @@
             <Label text="Drug Profile" />
             <ScrollPane hbarPolicy="NEVER" prefHeight="447.0" prefWidth="434.0">
                <content>
-                  <TextFlow prefHeight="447.0" prefWidth="434.0" />
+                  <TextFlow fx:id="profileTextFlow" prefHeight="447.0" prefWidth="434.0" />
                </content>
             </ScrollPane>
             <ButtonBar prefHeight="40.0" prefWidth="200.0">
               <buttons>
                 <Button mnemonicParsing="false" text="Cancel" />
-                  <Button mnemonicParsing="false" text="Edit" />
-                  <Button mnemonicParsing="false" text="Save" />
+                  <Button mnemonicParsing="false" onAction="#onDrugEditButton" text="Edit" />
+                  <Button mnemonicParsing="false" onAction="#printProfile" text="Save" />
                   <Button mnemonicParsing="false" text="Add" />
               </buttons>
                <VBox.margin>

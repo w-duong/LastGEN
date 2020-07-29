@@ -5,7 +5,7 @@
 }
 
 #mainHeader {
-    -fx-border-color: lightgray;
+    -fx-border-color: #d3d3d3;
     -fx-border-width: 2;
     -fx-border-style: solid;
 }
