@@ -1,5 +1,6 @@
 package csulb.cecs323.controller;
 
+import com.sun.javafx.image.impl.General;
 import csulb.cecs323.model.Drug;
 import csulb.cecs323.model.DrugClass;
 import javafx.application.Platform;
@@ -63,15 +64,16 @@ public class DrugClass_NEW_CTRL implements Initializable
 
     public void drugClassOnEditButton (ActionEvent actionEvent) throws IOException
     {
-        readyStage(DrugClass.class, this, false, "Search for Drug Class");
+        readyStage(DrugClass.class, this, false, "Search for Drug Class", General_SEARCH_CTRL.Mode_DCEditDC);
     }
 
     public void drugClassOnAddDrugsButton (ActionEvent actionEvent) throws IOException
     {
-        readyStage(Drug.class, this, true, "Search for Drug");
+        readyStage(Drug.class, this, true, "Search for Drug", General_SEARCH_CTRL.Mode_DCAddDG);
     }
 
-    public <DataType, SceneType> void readyStage (DataType conOne, SceneType conTwo, boolean isMultiple, String title) throws IOException
+    public <DataType, SceneType> void readyStage
+            (DataType conOne, SceneType conTwo, boolean isMultiple, String title, String operation) throws IOException
     {
         Stage preset = new Stage();
         URL generalSearchScene = Paths.get("./src/main/resources/layout/General_SEARCH.fxml").toUri().toURL();
@@ -83,6 +85,7 @@ public class DrugClass_NEW_CTRL implements Initializable
         controller.setEntityManager(this.entityManager); // necessary ???
         controller.setMultipleMode(isMultiple);
         controller.setLastScene(conTwo);
+        controller.setOperationSelect(operation);
 
         Scene scene = new Scene (root);
 

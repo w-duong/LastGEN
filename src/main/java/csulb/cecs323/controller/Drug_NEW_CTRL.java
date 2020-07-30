@@ -170,10 +170,11 @@ public class Drug_NEW_CTRL implements Initializable
 
     public void onDrugEditButton (ActionEvent actionEvent) throws IOException
     {
-        readyStage(Drug.class, this, false, "Search for Drug");
+        readyStage(Drug.class, this, false, "Search for Drug", General_SEARCH_CTRL.Mode_DGEditDG);
     }
 
-    public <DataType, SceneType> void readyStage (DataType conOne, SceneType conTwo, boolean isMultiple, String title) throws IOException
+    public <DataType, SceneType> void readyStage
+            (DataType conOne, SceneType conTwo, boolean isMultiple, String title, String operation) throws IOException
     {
         Stage preset = new Stage();
         URL generalSearchScene = Paths.get("./src/main/resources/layout/General_SEARCH.fxml").toUri().toURL();
@@ -185,6 +186,7 @@ public class Drug_NEW_CTRL implements Initializable
         controller.setEntityManager(this.entityManager); // necessary ???
         controller.setMultipleMode(isMultiple);
         controller.setLastScene(conTwo);
+        controller.setOperationSelect(operation);
 
         Scene scene = new Scene (root);
 
@@ -217,6 +219,12 @@ public class Drug_NEW_CTRL implements Initializable
             TextFields.bindAutoCompletion(inputBNameField, autocompleteBNameList);
             TextFields.bindAutoCompletion(inputPNameField, autocompletePNameList);
         });
+    }
+
+    public void onCancelButton (ActionEvent actionEvent)
+    {
+        Stage popUp = (Stage) inputCNameField.getScene().getWindow();
+        popUp.close();
     }
 
     public void refreshFields ()

@@ -25,14 +25,23 @@ import java.util.ResourceBundle;
 
 public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
 {
+    /* Select operational mode of search window */
+    static final String Mode_DCEditDC = "drugClass.EditDrugClass";
+    static final String Mode_DCAddDG = "drugClass.AddDrug";
+    static final String Mode_DGEditDG = "drug.EditDrug";
+
+    private String operationSelect;
+    public void setOperationSelect (String operation) { this.operationSelect = operation; }
+    public String getOperationSelect () { return this.operationSelect; }
+
+    private boolean isMultipleMode;
+    public void setMultipleMode (boolean isMultipleMode) { this.isMultipleMode = isMultipleMode; }
+
     EntityManager entityManager;
     public void setEntityManager (EntityManager entityManager) { this.entityManager = entityManager; }
 
     private SceneType lastScene;
     public void setLastScene (SceneType parent) { this.lastScene = parent; }
-
-    private boolean isMultipleMode;
-    public void setMultipleMode (boolean isMultipleMode) { this.isMultipleMode = isMultipleMode; }
 
     private ArrayList<DataType> resultsBuffer = new ArrayList<>();
 
@@ -71,12 +80,12 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
         String searchString = inputSearchBar.getText();
         TypedQuery query;
 
-        if (lastScene instanceof DrugClass_NEW_CTRL && !isMultipleMode)
+        if (operationSelect.equals(Mode_DCEditDC))
         {
             query = entityManager.createNamedQuery(DrugClass.FIND_ALL_BY_NAME, DrugClass.class).setParameter("searchString", searchString);
             resultsList.addAll(query.getResultList());
         }
-        else if ((lastScene instanceof DrugClass_NEW_CTRL && isMultipleMode) || (lastScene instanceof Drug_NEW_CTRL && !isMultipleMode))
+        else if (operationSelect.equals(Mode_DCAddDG) || operationSelect.equals(Mode_DGEditDG))
         {
             query = entityManager.createNamedQuery(Drug.FIND_ALL_BY_NAME, Drug.class).setParameter("searchString", searchString);
             resultsList.addAll(query.getResultList());
@@ -94,23 +103,23 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
         *  Need to CAST 'lastScene' to appropriate type in order to access '.setWorkingCopy()',
         *  then need to CAST 'temp' to appropriate data object while calling '.setWorkingCopy()'
         */
-        if (lastScene instanceof DrugClass_NEW_CTRL && !isMultipleMode)
+        switch (operationSelect)
         {
-            ((DrugClass_NEW_CTRL) lastScene).setWorkingCopy((DrugClass) resultsBuffer.get(0));
-            ((DrugClass_NEW_CTRL) lastScene).refreshFields();
-            ((DrugClass_NEW_CTRL) lastScene).refreshLists();
-        }
-        else if (lastScene instanceof DrugClass_NEW_CTRL && isMultipleMode)
-        {
-            for (DataType drug : resultsBuffer)
-                ((DrugClass_NEW_CTRL) lastScene).getWorkingCopy().addDrug((Drug) drug);
+            case Mode_DCEditDC:
+                ((DrugClass_NEW_CTRL) lastScene).setWorkingCopy((DrugClass) resultsBuffer.get(0));
+                ((DrugClass_NEW_CTRL) lastScene).refreshFields();
+                ((DrugClass_NEW_CTRL) lastScene).refreshLists();
+                break;
+            case Mode_DCAddDG:
+                for (DataType drug : resultsBuffer)
+                    ((DrugClass_NEW_CTRL) lastScene).getWorkingCopy().addDrug((Drug) drug);
 
-            ((DrugClass_NEW_CTRL) lastScene).refreshLists();
-        }
-        else if (lastScene instanceof Drug_NEW_CTRL && !isMultipleMode)
-        {
-            ((Drug_NEW_CTRL) lastScene).setWorkingCopy((Drug)resultsBuffer.get(0));
-            ((Drug_NEW_CTRL) lastScene).refreshFields();
+                ((DrugClass_NEW_CTRL) lastScene).refreshLists();
+                break;
+            case Mode_DGEditDG:
+                ((Drug_NEW_CTRL) lastScene).setWorkingCopy((Drug)resultsBuffer.get(0));
+                ((Drug_NEW_CTRL) lastScene).refreshFields();
+                break;
         }
 
         Stage popUp = (Stage) inputSearchBar.getScene().getWindow();

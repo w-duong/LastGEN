@@ -90,7 +90,7 @@
             </ScrollPane>
             <ButtonBar prefHeight="40.0" prefWidth="200.0">
               <buttons>
-                <Button mnemonicParsing="false" text="Cancel" />
+                <Button mnemonicParsing="false" onAction="#onCancelButton" text="Cancel" />
                   <Button mnemonicParsing="false" onAction="#onDrugEditButton" text="Edit" />
                   <Button mnemonicParsing="false" onAction="#printProfile" text="Save" />
                   <Button mnemonicParsing="false" text="Add" />
