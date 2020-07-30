@@ -7,7 +7,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
@@ -15,11 +18,14 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -57,10 +63,18 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
     {
         /* NECESSARY, or values will remain NULL - such as, 'isMultipleMode' */
         Platform.runLater(()->{
-            if (isMultipleMode)
-                resultsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-            else
-                resultsListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+            switch (operationSelect)
+            {
+                case Mode_DCEditDC:
+                case Mode_DGEditDG:
+                    isMultipleMode = true;
+                    resultsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+                    break;
+                case Mode_DCAddDG:
+                    isMultipleMode = false;
+                    resultsListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+                    break;
+            }
 
             resultsListView.setItems(resultsList);
         });
@@ -144,4 +158,56 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
         Stage popUp = (Stage) inputSearchBar.getScene().getWindow();
         popUp.close();
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public static <DataType, SceneType> Stage readyStage
+    (DataType conOne, SceneType conTwo, String operation, String title, EntityManager manager) throws IOException
+    {
+        Stage preset = new Stage();
+        URL generalSearchScene = Paths.get("./src/main/resources/layout/General_SEARCH.fxml").toUri().toURL();
+        FXMLLoader loader = new FXMLLoader(generalSearchScene);
+        Parent root = loader.load();
+
+        /* Pass EntityManager to next Stage and pass 'WorkingCopy' to set Controller<Type> */
+        General_SEARCH_CTRL<DataType, SceneType> controller = loader.getController(); //REQUIRED: since static method
+        controller.setLastScene(conTwo);
+        controller.setOperationSelect(operation);
+        controller.setEntityManager(manager); // necessary ???
+
+        Scene scene = new Scene (root);
+
+        // "staging"
+        preset.setTitle(title);
+        preset.initModality(Modality.APPLICATION_MODAL); // prevents user from moving to another Stage until done
+        preset.setScene(scene);
+
+        return preset;
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //Deprecated version of readyStage, save just in case
+//    public <DataType, SceneType> void readyStage
+//            (DataType conOne, SceneType conTwo, boolean isMultiple, String title, String operation) throws IOException
+//    {
+//        Stage preset = new Stage();
+//        URL generalSearchScene = Paths.get("./src/main/resources/layout/General_SEARCH.fxml").toUri().toURL();
+//        FXMLLoader loader = new FXMLLoader(generalSearchScene);
+//        Parent root = loader.load();
+//
+//        /* Pass EntityManager to next Stage and pass 'WorkingCopy' to set Controller<Type> */
+//        General_SEARCH_CTRL<DataType, SceneType> controller = loader.getController();
+//        controller.setEntityManager(this.entityManager); // necessary ???
+//        controller.setMultipleMode(isMultiple);
+//        controller.setLastScene(conTwo);
+//        controller.setOperationSelect(operation);
+//
+//        Scene scene = new Scene (root);
+//
+//        // "staging"
+//        preset.setTitle(title);
+//        preset.initModality(Modality.APPLICATION_MODAL); // prevents user from moving to another Stage until done
+//        preset.setScene(scene);
+//        preset.show();
+//    }
+
 }

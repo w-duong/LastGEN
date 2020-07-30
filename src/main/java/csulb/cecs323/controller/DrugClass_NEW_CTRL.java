@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -64,36 +65,18 @@ public class DrugClass_NEW_CTRL implements Initializable
 
     public void drugClassOnEditButton (ActionEvent actionEvent) throws IOException
     {
-        readyStage(DrugClass.class, this, false, "Search for Drug Class", General_SEARCH_CTRL.Mode_DCEditDC);
+        Stage newSearch = General_SEARCH_CTRL.readyStage(DrugClass.class, this, General_SEARCH_CTRL.Mode_DCEditDC,
+                "Search for Drug Class", this.entityManager);
+
+        newSearch.show();
     }
 
     public void drugClassOnAddDrugsButton (ActionEvent actionEvent) throws IOException
     {
-        readyStage(Drug.class, this, true, "Search for Drug", General_SEARCH_CTRL.Mode_DCAddDG);
-    }
+        Stage newSearch = General_SEARCH_CTRL.readyStage(Drug.class, this, General_SEARCH_CTRL.Mode_DCAddDG,
+                "Search for Drug", this.entityManager);
 
-    public <DataType, SceneType> void readyStage
-            (DataType conOne, SceneType conTwo, boolean isMultiple, String title, String operation) throws IOException
-    {
-        Stage preset = new Stage();
-        URL generalSearchScene = Paths.get("./src/main/resources/layout/General_SEARCH.fxml").toUri().toURL();
-        FXMLLoader loader = new FXMLLoader(generalSearchScene);
-        Parent root = loader.load();
-
-        /* Pass EntityManager to next Stage and pass 'WorkingCopy' to set Controller<Type> */
-        General_SEARCH_CTRL<DataType, SceneType> controller = loader.getController();
-        controller.setEntityManager(this.entityManager); // necessary ???
-        controller.setMultipleMode(isMultiple);
-        controller.setLastScene(conTwo);
-        controller.setOperationSelect(operation);
-
-        Scene scene = new Scene (root);
-
-        // "staging"
-        preset.setTitle(title);
-        preset.initModality(Modality.APPLICATION_MODAL); // prevents user from moving to another Stage until done
-        preset.setScene(scene);
-        preset.show();
+        newSearch.show();
     }
 
     public void onClassNameEnterKey (KeyEvent keyEvent)
@@ -141,6 +124,10 @@ public class DrugClass_NEW_CTRL implements Initializable
             parentListView.setItems(parentObservableList);
             childrenListView.setItems(childObservableList);
 
+            drugListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            parentListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            childrenListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
             refreshFields();
         });
     }
@@ -164,16 +151,31 @@ public class DrugClass_NEW_CTRL implements Initializable
         }
     }
 
+    public void refreshParentList ()
+    {
+        parentObservableList.removeAll(parentObservableList);
+        parentObservableList.addAll(workingCopy.getSuperclasses());
+
+        inputParentField.setText(null);
+        inputParentField.setPromptText("Name of Drug Class to add as 'Parent'...");
+    }
+
+    public void refreshChildList ()
+    {
+        childObservableList.removeAll(childObservableList);
+        childObservableList.addAll(workingCopy.getSubclasses());
+
+        inputChildrenField.setText(null);
+        inputChildrenField.setPromptText("Name of Drug Class to add as 'Child'...");
+    }
+
     public void refreshLists () // TO DO: this is horrible....
     {
         drugObservableList.removeAll(drugObservableList);
         drugObservableList.addAll(workingCopy.getDrugs());
 
-        parentObservableList.removeAll(parentObservableList);
-        parentObservableList.addAll(workingCopy.getSuperclasses());
-
-        childObservableList.removeAll(childObservableList);
-        childObservableList.addAll(workingCopy.getSubclasses());
+        refreshParentList();
+        refreshChildList();
     }
 
     public void onCancelButton (ActionEvent actionEvent)
@@ -187,16 +189,34 @@ public class DrugClass_NEW_CTRL implements Initializable
         if (keyEvent.getCode().equals(KeyCode.ENTER))
         {
             for (DrugClass dc : drugClassesTransient)
-                if (dc.getName().equals(inputParentField.getText())) {
+                if (dc.getName().equals(inputParentField.getText()) && !workingCopy.getSuperclasses().contains(dc))
+                {
                     workingCopy.addSuperclass(dc);
                     break;
                 }
+            refreshParentList();
+        }
+    }
 
-            parentObservableList.removeAll(workingCopy.getSuperclasses());
-            parentObservableList.addAll(workingCopy.getSuperclasses());
+    public void onDeleteFromParentList (KeyEvent keyEvent)
+    {
+        if (keyEvent.getCode().equals(KeyCode.DELETE) && parentListView.getSelectionModel().getSelectedItems() != null)
+        {
+            for (DrugClass dc : parentListView.getSelectionModel().getSelectedItems())
+                workingCopy.removeSuperclass(dc);
 
-            inputParentField.setText(null);
-            inputParentField.setPromptText("Name of Drug Class to add as 'Parent'...");
+            refreshParentList();
+        }
+    }
+
+    public void onDeleteFromChildList (KeyEvent keyEvent)
+    {
+        if (keyEvent.getCode().equals(KeyCode.DELETE) && childrenListView.getSelectionModel().getSelectedItems() != null)
+        {
+            for (DrugClass dc : childrenListView.getSelectionModel().getSelectedItems())
+                workingCopy.removeSubclass(dc);
+
+            refreshChildList();
         }
     }
 
@@ -205,17 +225,12 @@ public class DrugClass_NEW_CTRL implements Initializable
         if (keyEvent.getCode().equals(KeyCode.ENTER))
         {
             for (DrugClass dc : drugClassesTransient)
-                if (dc.getName().equals(inputChildrenField.getText()))
+                if (dc.getName().equals(inputChildrenField.getText()) && !workingCopy.getSubclasses().contains(dc))
                 {
                     workingCopy.addSubclass(dc);
                     break;
                 }
-
-            childObservableList.removeAll(workingCopy.getSubclasses());
-            childObservableList.addAll(workingCopy.getSubclasses());
-
-            inputChildrenField.setText(null);
-            inputChildrenField.setPromptText("Name of Drug Class to add as 'Child'...");
+            refreshChildList();
         }
     }
 }

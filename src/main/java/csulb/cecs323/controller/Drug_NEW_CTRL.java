@@ -99,7 +99,10 @@ public class Drug_NEW_CTRL implements Initializable
         {
             for (DrugClass dc : drugClassesTransient)
                 if (dc.getName().equals(inputPNameField.getText()))
+                {
                     workingCopy.removeDrugClass(dc);
+                    break;
+                }
 
             inputPNameField.setText(null);
             inputPNameField.setPromptText("Add a parent Drug class...");
@@ -170,31 +173,10 @@ public class Drug_NEW_CTRL implements Initializable
 
     public void onDrugEditButton (ActionEvent actionEvent) throws IOException
     {
-        readyStage(Drug.class, this, false, "Search for Drug", General_SEARCH_CTRL.Mode_DGEditDG);
-    }
-
-    public <DataType, SceneType> void readyStage
-            (DataType conOne, SceneType conTwo, boolean isMultiple, String title, String operation) throws IOException
-    {
-        Stage preset = new Stage();
-        URL generalSearchScene = Paths.get("./src/main/resources/layout/General_SEARCH.fxml").toUri().toURL();
-        FXMLLoader loader = new FXMLLoader(generalSearchScene);
-        Parent root = loader.load();
-
-        /* Pass EntityManager to next Stage and pass 'WorkingCopy' to set Controller<Type> */
-        General_SEARCH_CTRL<DataType, SceneType> controller = loader.getController();
-        controller.setEntityManager(this.entityManager); // necessary ???
-        controller.setMultipleMode(isMultiple);
-        controller.setLastScene(conTwo);
-        controller.setOperationSelect(operation);
-
-        Scene scene = new Scene (root);
-
-        // "staging"
-        preset.setTitle(title);
-        preset.initModality(Modality.APPLICATION_MODAL); // prevents user from moving to another Stage until done
-        preset.setScene(scene);
-        preset.show();
+//        readyStage(Drug.class, this, false, "Search for Drug", General_SEARCH_CTRL.Mode_DGEditDG);
+        Stage newSearch = General_SEARCH_CTRL.readyStage(Drug.class,this,General_SEARCH_CTRL.Mode_DGEditDG,
+                "Search for Drug", this.entityManager);
+        newSearch.show();
     }
 
     @FXML
