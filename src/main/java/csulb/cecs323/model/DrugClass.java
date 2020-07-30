@@ -103,7 +103,7 @@ public class DrugClass
         return String.format ("CID > %-5d\tClass Name > %-30s", this.cid, this.name);
     }
 
-    public void addSubclass (DrugClass child)
+    public void addSubclass (DrugClass child) // TO DO: if Super/Sub class have drug list, import list (???)
     {
         if (this.subclass == null)
             subclass = new ArrayList<>();
@@ -125,7 +125,7 @@ public class DrugClass
         }
     }
 
-    public void addSuperclass (DrugClass parent)
+    public void addSuperclass (DrugClass parent) // TO DO: if Super/Sub class have drug list, import list (???)
     {
         if (this.superclass == null)
             superclass = new ArrayList<>();
