@@ -42,7 +42,7 @@
                </padding></Label>
             <ScrollPane hbarPolicy="NEVER">
                <content>
-                  <TextArea prefHeight="307.0" prefWidth="389.0" />
+                  <TextArea prefHeight="307.0" prefWidth="389.0" wrapText="true" />
                </content>
             </ScrollPane>
             <HBox prefHeight="9.0" prefWidth="389.0" spacing="5.0">
@@ -71,7 +71,7 @@
               <buttons>
                 <Button mnemonicParsing="false" onAction="#onPharmacologyAddButton" text="Pharmacology" />
                   <Button mnemonicParsing="false" text="Interaction" />
-                  <Button mnemonicParsing="false" text="Usage" />
+                  <Button mnemonicParsing="false" onAction="#onUsageAddButton" text="Usage" />
               </buttons>
                <padding>
                   <Insets right="45.0" />

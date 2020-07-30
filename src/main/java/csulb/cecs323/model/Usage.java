@@ -40,5 +40,10 @@ public class Usage
     public void setDosageRange (String dosage) { this.dosage_range = dosage; }
 
     // MISCELLANEOUS
+    @Override
+    public String toString ()
+    {
+        return String.format ("Indication: %-30s\tDose Range: %-20s");
+    }
 
 }

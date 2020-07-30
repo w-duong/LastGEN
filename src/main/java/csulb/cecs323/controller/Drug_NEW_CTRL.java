@@ -22,11 +22,11 @@ import org.controlsfx.control.textfield.TextFields;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -134,9 +134,6 @@ public class Drug_NEW_CTRL implements Initializable
 
     public void onPharmacologyAddButton (ActionEvent actionEvent) throws IOException
     {
-        for (Pharmacology pgy : workingCopy.getPharmacology())
-            System.out.println (pgy.toString());
-
         Stage stage = new Stage();
         URL newPharmacology = Paths.get("./src/main/resources/layout/Pharmacology_POPUP.fxml").toUri().toURL();
         FXMLLoader loader = new FXMLLoader(newPharmacology);
@@ -148,6 +145,24 @@ public class Drug_NEW_CTRL implements Initializable
         Scene scene = new Scene(root);
 
         stage.setTitle("Add/Edit Pharmacology Profile");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void onUsageAddButton (ActionEvent actionEvent) throws IOException
+    {
+        Stage stage = new Stage();
+        URL newUsage = Paths.get("./src/main/resources/layout/Usage_POPUP.fxml").toUri().toURL();
+        FXMLLoader loader = new FXMLLoader(newUsage);
+        Parent root = loader.load();
+
+        Usage_POPUP_CTRL controller = loader.getController();
+        controller.setWorkingCopy(workingCopy.getUsages());
+
+        Scene scene = new Scene(root);
+
+        stage.setTitle("Add/Edit Indications");
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
         stage.show();
@@ -222,21 +237,7 @@ public class Drug_NEW_CTRL implements Initializable
     {
         profileTextFlow.getChildren().removeAll(profileTextFlow.getChildren());
 
-        String preset = "-fx-font-weight: bold; -fx-font-style: italic; -fx-font-size: 13; -fx-font-family: Verdana;" +
-                "-fx-fill: dimgray";
-
-        String [] sections = {"Name:", "Brands:", "Family:", "DEA Schedule:", "Description:",
-                                "Pharmacology Profiles:", "Indication/Dosage:"};
-
-        List<Text> formattedSections = new ArrayList<>();
-        for (String word : sections)
-        {
-            Text blank = new Text("\n\n");
-            Text header = new Text(word);
-            header.setStyle(preset);
-            formattedSections.add(header);
-            formattedSections.add(blank);
-        }
+        List<Text> formattedSections = preformat();
 
         for (int i = 0; i < formattedSections.size(); ++i)
         {
@@ -271,20 +272,68 @@ public class Drug_NEW_CTRL implements Initializable
                     formattedSections.add(i+1, empty);
                     break;
                 case "Pharmacology Profiles:":
-                    String total = "";
-                    for (int j = 0; j < workingCopy.getPharmacology().size(); ++j)
-                    {
-                        total += String.format ("\n%d:",j + 1);
-                        total += String.format ("\t[%s] > %s\n","Organ",workingCopy.getPharmacology().get(j).getClearanceOrgan());
-                        total += String.format ("\t[%s] > %s\n","Enzyme",workingCopy.getPharmacology().get(j).getClearanceEnzyme());
-                        total += String.format ("\t[%s] > %s\n","Elimination Route",workingCopy.getPharmacology().get(j).getEliminationRoute());
-                    }
-
-                    empty = new Text ("\n" + total);
+                    String allPharm = pharmacologyHelper();
+                    empty = new Text ("\n" + allPharm);
+                    formattedSections.add(i+1, empty);
+                    break;
+                case "Indication/Dosage:":
+                    String allUse = usagesHelper();
+                    empty = new Text ("\n" + allUse);
                     formattedSections.add(i+1, empty);
             }
         }
 
         profileTextFlow.getChildren().addAll(formattedSections);
+    }
+
+    protected List<Text> preformat ()
+    {
+        String preset = "-fx-font-weight: bold; -fx-font-style: italic; -fx-font-size: 12; -fx-font-family: Verdana;" +
+                "-fx-fill: dimgray";
+
+        String [] sections = {"Name:", "Brands:", "Family:", "DEA Schedule:", "Description:",
+                "Pharmacology Profiles:", "Indication/Dosage:"};
+
+        List<Text> formattedSections = new ArrayList<>();
+        for (String word : sections)
+        {
+            Text blank = new Text("\n\n");
+            Text header = new Text(word);
+            header.setStyle(preset);
+            formattedSections.add(header);
+            formattedSections.add(blank);
+        }
+
+        return formattedSections;
+    }
+
+    protected String pharmacologyHelper ()
+    {
+        String total = "";
+
+        for (int j = 0; j < workingCopy.getPharmacology().size(); ++j)
+        {
+            total += String.format ("\n%d:",j + 1);
+            total += String.format ("\t[%s] > %s\n","Organ",workingCopy.getPharmacology().get(j).getClearanceOrgan());
+            total += String.format ("\t[%s] > %s\n","Enzyme",workingCopy.getPharmacology().get(j).getClearanceEnzyme());
+            total += String.format ("\t[%s] > %s\n","Elimination Route",workingCopy.getPharmacology().get(j).getEliminationRoute());
+        }
+
+        return total;
+    }
+
+    protected String usagesHelper ()
+    {
+        String total = "";
+
+        for (int j = 0; j < workingCopy.getUsages().size(); ++j)
+        {
+            total += String.format ("\n%d:",j + 1);
+            total += String.format ("\t[%s] > %s\n", "Indication", workingCopy.getUsages().get(j).getIndication());
+            total += String.format ("\t[%s] > %s\t[%s] > %s\n", "Dose Range", workingCopy.getUsages().get(j).getDosageRange(),
+                    "FDA Approved", workingCopy.getUsages().get(j).getApproval());
+        }
+
+        return total;
     }
 }

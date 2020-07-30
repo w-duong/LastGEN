@@ -73,6 +73,7 @@ public class Drug
     public List<BrandName> getBrandNames () { return this.brand_names; }
     public List<DrugClass> getDrugClass () { return this.classes; }
     public List<Pharmacology> getPharmacology () { return this.PK_profiles; }
+    public List<Usage> getUsages () { return this.usages; }
     public List<DrugDrugIX> getDrugInteractions () { return this.interxAsBase; }
 
     // MUTATORS
