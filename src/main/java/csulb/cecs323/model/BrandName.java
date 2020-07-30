@@ -32,6 +32,18 @@ public class BrandName
     public void setName (String name) { this.brand_CPK.setName(name); }
     
     // MISCELLANEOUS
+//    @Override
+//    public boolean equals (Object other)
+//    {
+//        if (other instanceof BrandName)
+//        {
+//            BrandName second = (BrandName) other;
+//            return (this.brand_CPK == second.brand_CPK);
+//        }
+//        else
+//            return false;
+//    }
+
     @Override
     public String toString () { return brand_CPK.getName (); }
 }

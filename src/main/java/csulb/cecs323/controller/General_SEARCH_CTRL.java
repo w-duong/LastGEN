@@ -132,6 +132,7 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
                 break;
             case Mode_DGEditDG:
                 ((Drug_NEW_CTRL) lastScene).setWorkingCopy((Drug)resultsBuffer.get(0));
+                ((Drug_NEW_CTRL) lastScene).refreshBNameAutoComplete();
                 ((Drug_NEW_CTRL) lastScene).refreshFields();
                 break;
         }

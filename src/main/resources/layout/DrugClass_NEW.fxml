@@ -35,25 +35,17 @@
                </VBox.margin>
             </TextField>
             <Label text="Class Parent(s)" />
-            <HBox spacing="5.0">
+            <TextField fx:id="inputParentField" onKeyPressed="#onParentEnterKey" prefHeight="25.0">
                <VBox.margin>
                   <Insets bottom="30.0" />
                </VBox.margin>
-               <children>
-                  <TextField fx:id="inputParentField" onKeyPressed="#onParentEnterKey" prefHeight="25.0" prefWidth="354.0" />
-                  <Button mnemonicParsing="false" text="(-)" />
-               </children>
-            </HBox>
+            </TextField>
             <Label text="Class Child(ren)" />
-            <HBox spacing="5.0">
+            <TextField fx:id="inputChildrenField" onKeyPressed="#onChildEnterKey" prefHeight="25.0" prefWidth="354.0">
                <VBox.margin>
                   <Insets bottom="30.0" />
                </VBox.margin>
-               <children>
-                  <TextField fx:id="inputChildrenField" onKeyPressed="#onChildEnterKey" prefHeight="25.0" prefWidth="354.0" />
-                  <Button mnemonicParsing="false" text="(-)" />
-               </children>
-            </HBox>
+            </TextField>
             <Button mnemonicParsing="false" onAction="#drugClassOnAddDrugsButton" prefHeight="25.0" prefWidth="387.0" text="Add Drugs..." />
          </children></VBox>
       <VBox layoutX="670.0" layoutY="200.0" prefHeight="590.0" prefWidth="387.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">

@@ -79,6 +79,11 @@ public class DrugClass_NEW_CTRL implements Initializable
         newSearch.show();
     }
 
+    public void drugClassOnDeleteFromList (KeyEvent keyEvent)
+    {
+
+    }
+
     public void onClassNameEnterKey (KeyEvent keyEvent)
     {
         if (keyEvent.getCode().equals(KeyCode.ENTER))

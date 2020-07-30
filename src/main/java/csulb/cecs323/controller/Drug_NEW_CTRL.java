@@ -29,6 +29,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 public class Drug_NEW_CTRL implements Initializable
 {
@@ -57,22 +58,37 @@ public class Drug_NEW_CTRL implements Initializable
 
     public void onBrandNameEnterKey (KeyEvent keyEvent)
     {
-        if (keyEvent.getCode().equals(KeyCode.ENTER) && inputBNameField != null)
+        if (keyEvent.getCode().equals(KeyCode.ENTER) && !inputBNameField.getText().isEmpty() && inputBNameField.getText().trim() != null
+        && !autocompleteBNameList.contains(inputBNameField.getText()))
         {
             workingCopy.addBrandName(inputBNameField.getText());
-            inputBNameField.setText(null);
+            refreshBNameAutoComplete();
+
             inputBNameField.setPromptText("Add a Brand name...");
+            inputBNameField.setText(null);
         }
     }
 
     public void onBrandNameDeleteButton (ActionEvent actionEvent)
     {
-        if ((inputBNameField.getText() != null) && (inputBNameField.getText() != ""))
+        if ((inputBNameField.getText() != null) && (inputBNameField.getText().trim() != ""))
         {
             workingCopy.removeBrandName(inputBNameField.getText());
-            inputBNameField.setText(null);
+            refreshBNameAutoComplete();
+
             inputBNameField.setPromptText("Add a Brand name...");
+            inputBNameField.setText(null);
         }
+    }
+
+    protected void refreshBNameAutoComplete ()
+    {
+        autocompleteBNameList.removeAll(autocompleteBNameList);
+
+        for (BrandName bns : workingCopy.getBrandNames())
+            autocompleteBNameList.add(bns.toString());
+
+        TextFields.bindAutoCompletion(inputBNameField, autocompleteBNameList);
     }
 
     @FXML
@@ -195,10 +211,8 @@ public class Drug_NEW_CTRL implements Initializable
                 autocompletePNameList.add(dc.getName());
 
             //NOTE: may need to pull from DB here (!!)
-            for (BrandName bns: workingCopy.getBrandNames())
-                autocompleteBNameList.add(bns.toString());
+            refreshBNameAutoComplete();
 
-            TextFields.bindAutoCompletion(inputBNameField, autocompleteBNameList);
             TextFields.bindAutoCompletion(inputPNameField, autocompletePNameList);
         });
     }
