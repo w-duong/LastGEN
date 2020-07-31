@@ -58,7 +58,7 @@ public class Drug_NEW_CTRL implements Initializable
 
     public void onBrandNameEnterKey (KeyEvent keyEvent)
     {
-        if (keyEvent.getCode().equals(KeyCode.ENTER) && !inputBNameField.getText().isEmpty() && inputBNameField.getText().trim() != null
+        if (keyEvent.getCode().equals(KeyCode.ENTER) && !inputBNameField.getText().isEmpty() && !inputBNameField.getText().trim().equals("")
         && !autocompleteBNameList.contains(inputBNameField.getText()))
         {
             workingCopy.addBrandName(inputBNameField.getText());
@@ -71,7 +71,7 @@ public class Drug_NEW_CTRL implements Initializable
 
     public void onBrandNameDeleteButton (ActionEvent actionEvent)
     {
-        if ((inputBNameField.getText() != null) && (inputBNameField.getText().trim() != ""))
+        if ((inputBNameField.getText() != null) && (!inputBNameField.getText().trim().equals("")))
         {
             workingCopy.removeBrandName(inputBNameField.getText());
             refreshBNameAutoComplete();
@@ -189,7 +189,6 @@ public class Drug_NEW_CTRL implements Initializable
 
     public void onDrugEditButton (ActionEvent actionEvent) throws IOException
     {
-//        readyStage(Drug.class, this, false, "Search for Drug", General_SEARCH_CTRL.Mode_DGEditDG);
         Stage newSearch = General_SEARCH_CTRL.readyStage(Drug.class,this,General_SEARCH_CTRL.Mode_DGEditDG,
                 "Search for Drug", this.entityManager);
         newSearch.show();

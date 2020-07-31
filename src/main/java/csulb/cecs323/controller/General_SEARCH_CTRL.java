@@ -67,12 +67,12 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
             {
                 case Mode_DCEditDC:
                 case Mode_DGEditDG:
-                    isMultipleMode = true;
-                    resultsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-                    break;
-                case Mode_DCAddDG:
                     isMultipleMode = false;
                     resultsListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+                    break;
+                case Mode_DCAddDG:
+                    isMultipleMode = true;
+                    resultsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
                     break;
             }
 
@@ -121,6 +121,7 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
         {
             case Mode_DCEditDC:
                 ((DrugClass_NEW_CTRL) lastScene).setWorkingCopy((DrugClass) resultsBuffer.get(0));
+                ((DrugClass_NEW_CTRL) lastScene).resetLabels();
                 ((DrugClass_NEW_CTRL) lastScene).refreshFields();
                 ((DrugClass_NEW_CTRL) lastScene).refreshLists();
                 break;

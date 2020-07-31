@@ -73,9 +73,12 @@ public class LastGENApp extends Application
       DrugClass antiINF = new DrugClass ("ATIF", "Anti-Infective");
       DrugClass macrolide = new DrugClass ("MACR", "Macrolides");
       DrugClass metabolics = new DrugClass ("META", "Metabolic Agents");
+      DrugClass testClass = new DrugClass ("TSTC", "Test Class");
+      entityManager.persist(testClass);
 
       metabolics.addSubclass(statin);
       antiINF.addSubclass(macrolide);
+      testClass.addDrug(lotensin);
 
       ClassClassIX statinMacrolide = new ClassClassIX (statin, macrolide, "Macrolide 3A4 inhibition, check Statin.", 2);
 
@@ -85,6 +88,20 @@ public class LastGENApp extends Application
       entityManager.persist (macrolide);
       entityManager.persist (statin);
       entityManager.persist (metabolics);
+      entityManager.persist (testClass);
+   }
+
+   public void randomQuery ()
+   {
+      TypedQuery query;
+      List<DrugClass> resultsList = null;
+
+      String searchString = "";
+      query = this.entityManager.createNamedQuery(DrugClass.FIND_ALL_BY_NAME, DrugClass.class).setParameter("searchString", searchString);
+      resultsList = query.getResultList();
+
+      for (DrugClass dc : resultsList)
+         System.out.println (dc);
    }
 
    @Override
@@ -100,13 +117,23 @@ public class LastGENApp extends Application
 
       LOGGER.fine("Begin of Transaction");
       EntityTransaction tx = manager.getTransaction();
-
       tx.begin();
 
       lastGEN.loadInitialData();
 
       tx.commit();
       LOGGER.fine("End of Transaction");
+
+      /////////////////////////////////////////
+      TypedQuery query;
+      List<DrugClass> resultsList = null;
+
+      String searchString = "";
+      query = lastGEN.entityManager.createNamedQuery(DrugClass.FIND_ALL_BY_NAME, DrugClass.class).setParameter("searchString", searchString);
+      resultsList = query.getResultList();
+
+      for (DrugClass dc : resultsList)
+         System.out.println (dc);
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

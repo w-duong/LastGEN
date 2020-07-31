@@ -12,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
@@ -22,6 +23,7 @@ import javafx.stage.Stage;
 import org.controlsfx.control.textfield.TextFields;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 import java.io.IOException;
 import java.net.URL;
@@ -43,7 +45,11 @@ public class DrugClass_NEW_CTRL implements Initializable
     @FXML
     TextField inputNameField;
     @FXML
+    Label nameLabel;
+    @FXML
     TextField inputAbbrField;
+    @FXML
+    Label abbrLabel;
     @FXML
     TextField inputParentField;
     @FXML
@@ -81,14 +87,28 @@ public class DrugClass_NEW_CTRL implements Initializable
 
     public void drugClassOnDeleteFromList (KeyEvent keyEvent)
     {
+        if (keyEvent.getCode().equals(KeyCode.DELETE) && drugListView.getSelectionModel().getSelectedItems() != null)
+        {
+            for (Drug drug : drugListView.getSelectionModel().getSelectedItems())
+                workingCopy.removeDrug(drug);
 
+            refreshDrugList();
+        }
+    }
+
+    protected void resetLabels ()
+    {
+        nameLabel.setText("Class Name: " + workingCopy.getName());
+        abbrLabel.setText("Class Abbreviation: " + workingCopy.getAbbreviation());
     }
 
     public void onClassNameEnterKey (KeyEvent keyEvent)
     {
-        if (keyEvent.getCode().equals(KeyCode.ENTER))
+        if (keyEvent.getCode().equals(KeyCode.ENTER) && !inputNameField.getText().trim().isEmpty()
+                && !inputNameField.getText().trim().equals(""))
         {
             workingCopy.setName(inputNameField.getText());
+            resetLabels();
 
             inputNameField.setText(null);
             inputNameField.setPromptText(workingCopy.getName());
@@ -97,9 +117,11 @@ public class DrugClass_NEW_CTRL implements Initializable
 
     public void onClassAbbrEnterKey (KeyEvent keyEvent)
     {
-        if (keyEvent.getCode().equals(KeyCode.ENTER))
+        if (keyEvent.getCode().equals(KeyCode.ENTER) && !inputAbbrField.getText().isEmpty()
+                && !inputAbbrField.getText().trim().equals(""))
         {
             workingCopy.setAbbreviation(inputAbbrField.getText());
+            resetLabels();
 
             inputAbbrField.setText(null);
             inputAbbrField.setPromptText(workingCopy.getAbbreviation());
@@ -174,11 +196,15 @@ public class DrugClass_NEW_CTRL implements Initializable
         inputChildrenField.setPromptText("Name of Drug Class to add as 'Child'...");
     }
 
-    public void refreshLists () // TO DO: this is horrible....
+    public void refreshDrugList ()
     {
         drugObservableList.removeAll(drugObservableList);
         drugObservableList.addAll(workingCopy.getDrugs());
+    }
 
+    public void refreshLists () // TO DO: this is horrible....
+    {
+        refreshDrugList();
         refreshParentList();
         refreshChildList();
     }
@@ -187,6 +213,15 @@ public class DrugClass_NEW_CTRL implements Initializable
     {
         Stage popUp = (Stage) inputNameField.getScene().getWindow();
         popUp.close();
+    }
+
+    public void onSaveButton (ActionEvent actionEvent)
+    {
+        entityManager.getTransaction().begin();
+
+
+        entityManager.persist(workingCopy);
+        entityManager.getTransaction().commit();
     }
 
     public void onParentEnterKey (KeyEvent keyEvent)

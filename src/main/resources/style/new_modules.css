@@ -9,3 +9,9 @@
     -fx-border-width: 2;
     -fx-border-style: solid;
 }
+
+#deleteBox {
+    -fx-border-color: lightslategray;
+    -fx-border-width: 1;
+    -fx-border-style: solid;
+}

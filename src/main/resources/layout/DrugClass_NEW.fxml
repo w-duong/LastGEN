@@ -18,7 +18,7 @@
                   <Font name="System Bold Italic" size="20.0" />
                </font>
             </Label>
-            <Label text="Class Name">
+            <Label fx:id="nameLabel" text="Class Name">
                <VBox.margin>
                   <Insets top="90.0" />
                </VBox.margin>
@@ -28,7 +28,7 @@
                   <Insets bottom="30.0" />
                </VBox.margin>
             </TextField>
-            <Label text="Class Abbreviation" />
+            <Label fx:id="abbrLabel" text="Class Abbreviation" />
             <TextField fx:id="inputAbbrField" onKeyPressed="#onClassAbbrEnterKey">
                <VBox.margin>
                   <Insets bottom="30.0" />
@@ -46,22 +46,33 @@
                   <Insets bottom="30.0" />
                </VBox.margin>
             </TextField>
-            <Button mnemonicParsing="false" onAction="#drugClassOnAddDrugsButton" prefHeight="25.0" prefWidth="387.0" text="Add Drugs..." />
+            <Button mnemonicParsing="false" onAction="#drugClassOnAddDrugsButton" prefHeight="25.0" prefWidth="387.0" text="Add Drugs...">
+               <VBox.margin>
+                  <Insets bottom="30.0" />
+               </VBox.margin></Button>
+            <HBox fx:id="deleteBox" alignment="CENTER">
+               <children>
+                  <Button mnemonicParsing="false" text="DELETE CLASS" />
+               </children>
+               <padding>
+                  <Insets bottom="3.0" top="3.0" />
+               </padding>
+            </HBox>
          </children></VBox>
       <VBox layoutX="670.0" layoutY="200.0" prefHeight="590.0" prefWidth="387.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
          <children>
             <Label text="Superclass (Parent)" />
             <ListView fx:id="parentListView" onKeyPressed="#onDeleteFromParentList" prefHeight="125.0" prefWidth="387.0" />
             <Label text="Drug List" />
-            <ListView fx:id="drugListView" prefHeight="330.0" prefWidth="387.0" />
+            <ListView fx:id="drugListView" onKeyPressed="#drugClassOnDeleteFromList" prefHeight="330.0" prefWidth="387.0" />
             <Label text="Subclass (Children)" />
             <ListView fx:id="childrenListView" onKeyPressed="#onDeleteFromChildList" prefHeight="125.0" prefWidth="387.0" />
             <ButtonBar fx:id="profileBar" prefHeight="35.0">
               <buttons>
                 <Button cancelButton="true" mnemonicParsing="false" onAction="#onCancelButton" text="Cancel" />
                   <Button mnemonicParsing="false" onAction="#drugClassOnEditButton" text="Edit" />
+                  <Button mnemonicParsing="false" onAction="#onSaveButton" text="Save" />
                   <Button mnemonicParsing="false" text="Add" />
-                  <Button mnemonicParsing="false" text="Save" />
               </buttons>
                <padding>
                   <Insets right="25.0" />
