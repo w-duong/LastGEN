@@ -30,6 +30,7 @@ public class ClassClassIX
 
     // ACCESSORS
     public ClassClassIX_PK getInteractionCPK () { return interaction_CPK; }
+    public String getDescription() { return this.interaction_CPK.getDescription(); }
     public int getSeverityLevel() { return severityLevel; }
     public DrugClass getBase () { return this.base; }
     public DrugClass getOffender () { return this.offender; }

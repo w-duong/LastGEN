@@ -35,6 +35,11 @@ import java.util.ResourceBundle;
 
 public class DrugClass_NEW_CTRL implements Initializable
 {
+    private boolean isMidTransaction = false;
+    protected void setIsMidTransaction (boolean isMidTransaction) { this.isMidTransaction = isMidTransaction; }
+    private boolean isDuplicate = false;
+    protected void setIsDuplicate (boolean isDuplicate) { this.isDuplicate = isDuplicate; }
+
     EntityManager entityManager;
     public void setEntityManager (EntityManager entityManager) { this.entityManager = entityManager; }
 
@@ -211,17 +216,45 @@ public class DrugClass_NEW_CTRL implements Initializable
 
     public void onCancelButton (ActionEvent actionEvent)
     {
+        if (isMidTransaction)
+            entityManager.getTransaction().rollback();
+
         Stage popUp = (Stage) inputNameField.getScene().getWindow();
         popUp.close();
     }
 
     public void onSaveButton (ActionEvent actionEvent)
     {
-        entityManager.getTransaction().begin();
+        if (!workingCopy.getName().trim().equals("") && !workingCopy.getAbbreviation().trim().equals(""))
+        {
+            if (isMidTransaction && !isDuplicate)
+            {
+                entityManager.persist(workingCopy);
+                entityManager.getTransaction().commit();
+                isMidTransaction = false;
+            }
+            else if (isMidTransaction && isDuplicate)
+            {
+                DrugClass newTemp = new DrugClass (workingCopy);
+                entityManager.getTransaction().rollback();
 
+                entityManager.getTransaction().begin();
+                entityManager.persist(newTemp);
+                entityManager.getTransaction().commit();
+                isMidTransaction = false;
+            }
+            else
+            {
+                entityManager.getTransaction().begin();
+                entityManager.persist(workingCopy);
+                entityManager.getTransaction().commit();
+            }
 
-        entityManager.persist(workingCopy);
-        entityManager.getTransaction().commit();
+            workingCopy = new DrugClass ("", "");
+            refreshFields();
+            refreshLists();
+            resetLabels();
+        }
     }
 
     public void onParentEnterKey (KeyEvent keyEvent)

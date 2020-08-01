@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
@@ -57,6 +58,9 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
 
     @FXML
     private TextField inputSearchBar;
+
+    @FXML
+    private CheckBox duplicateCheck;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
@@ -124,6 +128,10 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
                 ((DrugClass_NEW_CTRL) lastScene).resetLabels();
                 ((DrugClass_NEW_CTRL) lastScene).refreshFields();
                 ((DrugClass_NEW_CTRL) lastScene).refreshLists();
+
+                ((DrugClass_NEW_CTRL) lastScene).setIsDuplicate(duplicateCheck.isSelected());
+                ((DrugClass_NEW_CTRL) lastScene).setIsMidTransaction(true);
+                entityManager.getTransaction().begin();
                 break;
             case Mode_DCAddDG:
                 for (DataType drug : resultsBuffer)

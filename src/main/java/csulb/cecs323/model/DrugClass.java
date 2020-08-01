@@ -55,6 +55,7 @@ public class DrugClass
         this.drugs = new ArrayList<>();
         this.subclass = new ArrayList<>();
         this.superclass = new ArrayList<>();
+        this.interxAsBase = new ArrayList<>();
     }
     public DrugClass (DrugClass copy)
     {
@@ -78,6 +79,12 @@ public class DrugClass
         else
             for (DrugClass child : copy.getSubclasses())
                 this.addSubclass(child);
+
+        if (copy.getInterxAsBase().size() == 0)
+            this.interxAsBase = new ArrayList<>();
+        else
+            for (ClassClassIX interx : copy.getInterxAsBase())
+                this.addInterxAsBase(interx.getOffender(), interx.getDescription(), interx.getSeverityLevel());
     }
 
     // ACCESSORS

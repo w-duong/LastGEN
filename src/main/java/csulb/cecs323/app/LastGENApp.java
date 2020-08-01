@@ -119,7 +119,7 @@ public class LastGENApp extends Application
       EntityTransaction tx = manager.getTransaction();
       tx.begin();
 
-      lastGEN.loadInitialData();
+//      lastGEN.loadInitialData();
 
       tx.commit();
       LOGGER.fine("End of Transaction");

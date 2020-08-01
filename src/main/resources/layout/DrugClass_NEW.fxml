@@ -72,10 +72,9 @@
                 <Button cancelButton="true" mnemonicParsing="false" onAction="#onCancelButton" text="Cancel" />
                   <Button mnemonicParsing="false" onAction="#drugClassOnEditButton" text="Edit" />
                   <Button mnemonicParsing="false" onAction="#onSaveButton" text="Save" />
-                  <Button mnemonicParsing="false" text="Add" />
               </buttons>
                <padding>
-                  <Insets right="25.0" />
+                  <Insets right="70.0" />
                </padding>
                <VBox.margin>
                   <Insets />

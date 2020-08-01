@@ -39,8 +39,8 @@
 			     <!-- to create the tables:  create-tables -->
 			     <!-- to do nothing (use what's in the DBMS):  none -->
 			<!-- See: https://www.eclipse.org/eclipselink/documentation/2.5/jpa/extensions/p_ddl_generation.htm#BABHEJJI -->
-			<property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
-<!--			<property name="eclipselink.ddl-generation" value="none" />-->
+<!--			<property name="eclipselink.ddl-generation" value="drop-and-create-tables" />-->
+			<property name="eclipselink.ddl-generation" value="none" />
 
 
 			<!-- SEE: https://www.eclipse.org/eclipselink/documentation/2.5/jpa/extensions/p_ddl_generation_output_mode.htm -->
