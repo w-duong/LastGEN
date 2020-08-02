@@ -46,13 +46,18 @@
                   <Insets bottom="30.0" />
                </VBox.margin>
             </TextField>
-            <Button mnemonicParsing="false" onAction="#drugClassOnAddDrugsButton" prefHeight="25.0" prefWidth="387.0" text="Add Drugs...">
+            <HBox prefHeight="25.0" prefWidth="192.0" spacing="5.0">
                <VBox.margin>
                   <Insets bottom="30.0" />
-               </VBox.margin></Button>
+               </VBox.margin>
+               <children>
+                  <Button mnemonicParsing="false" onAction="#drugClassOnAddDrugsButton" prefHeight="25.0" prefWidth="191.0" text="Add Drugs" />
+                  <Button mnemonicParsing="false" prefWidth="191.0" text="Add Interactions" />
+               </children>
+            </HBox>
             <HBox fx:id="deleteBox" alignment="CENTER">
                <children>
-                  <Button mnemonicParsing="false" text="DELETE CLASS" />
+                  <Button mnemonicParsing="false" onAction="#onDeleteClassButton" text="DELETE CLASS" />
                </children>
                <padding>
                   <Insets bottom="3.0" top="3.0" />

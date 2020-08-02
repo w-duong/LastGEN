@@ -24,6 +24,7 @@ import org.controlsfx.control.textfield.TextFields;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.io.IOException;
 import java.net.URL;
@@ -223,6 +224,25 @@ public class DrugClass_NEW_CTRL implements Initializable
         popUp.close();
     }
 
+    public void onDeleteClassButton (ActionEvent actionEvent)
+    {
+        if (isMidTransaction)
+        {
+            entityManager.getTransaction().commit();
+            isMidTransaction = false;
+            isDuplicate = false;
+        }
+
+        entityManager.getTransaction().begin();
+
+        Query deleteQuery = entityManager.createQuery("DELETE FROM DrugClass dc WHERE dc = :toDelete");
+        int deletedCount = deleteQuery.setParameter("toDelete", workingCopy).executeUpdate();
+
+        entityManager.getTransaction().commit();
+
+        cleanUpTransaction();
+    }
+
     public void onSaveButton (ActionEvent actionEvent)
     {
         if (!workingCopy.getName().trim().equals("") && !workingCopy.getAbbreviation().trim().equals(""))
@@ -242,6 +262,7 @@ public class DrugClass_NEW_CTRL implements Initializable
                 entityManager.persist(newTemp);
                 entityManager.getTransaction().commit();
                 isMidTransaction = false;
+                isDuplicate = false;
             }
             else
             {
@@ -250,11 +271,16 @@ public class DrugClass_NEW_CTRL implements Initializable
                 entityManager.getTransaction().commit();
             }
 
-            workingCopy = new DrugClass ("", "");
-            refreshFields();
-            refreshLists();
-            resetLabels();
+        cleanUpTransaction();
         }
+    }
+
+    protected void cleanUpTransaction ()
+    {
+        workingCopy = new DrugClass ("", "");
+        refreshFields();
+        refreshLists();
+        resetLabels();
     }
 
     public void onParentEnterKey (KeyEvent keyEvent)
