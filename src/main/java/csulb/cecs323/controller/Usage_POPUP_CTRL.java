@@ -29,8 +29,6 @@ public class Usage_POPUP_CTRL implements Initializable
     private boolean isMidTransaction = false;
     public void setIsMidTransaction (boolean isMidTransaction) { this.isMidTransaction = isMidTransaction; }
 
-//    private List<Usage> workingCopy;
-//    public void setWorkingCopy (List<Usage> profiles) { this.workingCopy = profiles; }
     private Drug workingCopy;
     public void setWorkingCopy (Drug workingCopy) { this.workingCopy = workingCopy; }
     private EntityManager entityManager;

@@ -164,7 +164,9 @@ public class Drug_NEW_CTRL implements Initializable
         Parent root = loader.load();
 
         Pharmacology_POPUP_CTRL controller = loader.getController();
-        controller.setWorkingCopy(workingCopy.getPharmacology());
+        controller.setWorkingCopy(this.workingCopy);
+        controller.setEntityManager(this.entityManager);
+        controller.setIsMidTransaction(isMidTransaction);
 
         Scene scene = new Scene(root);
 
@@ -182,7 +184,6 @@ public class Drug_NEW_CTRL implements Initializable
         Parent root = loader.load();
 
         Usage_POPUP_CTRL controller = loader.getController();
-//        controller.setWorkingCopy(workingCopy.getUsages());
         controller.setWorkingCopy(this.workingCopy);
         controller.setEntityManager(this.entityManager);
         controller.setIsMidTransaction(isMidTransaction);

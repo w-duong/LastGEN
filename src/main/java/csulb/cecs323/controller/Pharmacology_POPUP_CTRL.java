@@ -1,6 +1,8 @@
 package csulb.cecs323.controller;
 
+import csulb.cecs323.model.Drug;
 import csulb.cecs323.model.Pharmacology;
+import csulb.cecs323.model.Usage;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +17,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -23,8 +27,13 @@ public class Pharmacology_POPUP_CTRL implements Initializable
 {
     private boolean isEdit = false;
     private Pharmacology edit;
-    private List<Pharmacology> workingCopy;
-    public void setWorkingCopy (List<Pharmacology> profiles) { this.workingCopy = profiles; }
+    private boolean isMidTransaction = false;
+    public void setIsMidTransaction (boolean isMidTransaction) { this.isMidTransaction = isMidTransaction; }
+
+    private Drug workingCopy;
+    public void setWorkingCopy (Drug workingCopy) { this.workingCopy = workingCopy; }
+    private EntityManager entityManager;
+    public void setEntityManager (EntityManager entityManager) { this.entityManager = entityManager; }
 
     @FXML
     ListView<Pharmacology> profilesListView;
@@ -46,9 +55,9 @@ public class Pharmacology_POPUP_CTRL implements Initializable
         if (organ.trim().equals("") && enzyme.trim().equals("") && elim_route.trim().equals(""))
             return;
         if (isEdit)
-            workingCopy.remove(edit);
+            workingCopy.getPharmacology().remove(edit);
 
-        workingCopy.add (new Pharmacology(organ, enzyme, elim_route));
+        workingCopy.addPKProfile (organ, enzyme, elim_route);
 
         clearFields();
         refreshList();
@@ -66,8 +75,26 @@ public class Pharmacology_POPUP_CTRL implements Initializable
     {
         if(profilesListView.getSelectionModel().getSelectedItems() != null)
         {
-            workingCopy.removeAll(profilesListView.getSelectionModel().getSelectedItems());
+            List<Pharmacology> deleteBuffer = profilesListView.getSelectionModel().getSelectedItems();
+            workingCopy.getPharmacology().removeAll(deleteBuffer);
 
+            for (Pharmacology profile : deleteBuffer)
+            {
+                if (!isMidTransaction)
+                {
+                    entityManager.getTransaction().begin();
+                    TypedQuery query = entityManager.createNamedQuery(Pharmacology.DELETE_BY_ONE, Pharmacology.class);
+                    query.setParameter("usageObj",profile);
+                    query.executeUpdate();
+                    entityManager.getTransaction().commit();
+                }
+                else
+                {
+                    TypedQuery query = entityManager.createNamedQuery(Pharmacology.DELETE_BY_ONE, Pharmacology.class);
+                    query.setParameter("usageObj",profile);
+                    query.executeUpdate();
+                }
+            }
             clearFields();
             refreshList();
         }
@@ -89,7 +116,7 @@ public class Pharmacology_POPUP_CTRL implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Platform.runLater(()->{
-            profilesList.setAll(workingCopy);
+            profilesList.setAll(workingCopy.getPharmacology());
             profilesListView.setItems(profilesList);
 
             profilesListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -99,7 +126,7 @@ public class Pharmacology_POPUP_CTRL implements Initializable
     public void refreshList ()
     {
         profilesList.removeAll(profilesList);
-        profilesList.addAll(workingCopy);
+        profilesList.addAll(workingCopy.getPharmacology());
         profilesListView.setItems(profilesList);
     }
 

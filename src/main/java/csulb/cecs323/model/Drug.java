@@ -193,16 +193,17 @@ public class Drug
         if (this.usages == null)
             this.usages = new ArrayList<>();
 
-        usages.add(newIndication);
+        if (!usages.contains(newIndication))
+            usages.add(newIndication);
     }
 
     public void addPKProfile (String organ, String enzyme, String elim_route)
     {
-        Pharmacology profile = new Pharmacology(organ, enzyme, elim_route);
+        Pharmacology profile = new Pharmacology(this, organ, enzyme, elim_route);
 
         addPKProfile(profile);
     }
-    public void addPKProfile (Pharmacology pharmacology)
+    protected void addPKProfile (Pharmacology pharmacology)
     {
         if (this.PK_profiles == null)
             PK_profiles = new ArrayList<>();
