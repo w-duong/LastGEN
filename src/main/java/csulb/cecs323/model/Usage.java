@@ -6,8 +6,14 @@ import javax.persistence.*;
 @Table (name = "usages",
         uniqueConstraints = @UniqueConstraint (columnNames = {"indication", "dosage_range"})
 )
+@NamedQueries({
+        @NamedQuery (name = Usage.DELETE_BY_ONE,
+                query = "DELETE FROM Usage us WHERE us = :usageObj")
+})
 public class Usage
 {
+    public static final String DELETE_BY_ONE = "usage.DeleteOneUsage";
+
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private long usid;
@@ -43,7 +49,7 @@ public class Usage
     @Override
     public String toString ()
     {
-        return String.format ("Indication: %-30s\tDose Range: %-20s");
+        return String.format ("Indication: %-30s\tDose Range: %-20s", this.indication, this.dosage_range);
     }
 
 }

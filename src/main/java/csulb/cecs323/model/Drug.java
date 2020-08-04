@@ -30,10 +30,10 @@ public class Drug
     @ManyToOne (cascade = CascadeType.PERSIST)
     private DEA_Class schedule;
 
-    @OneToMany (mappedBy = "drug", cascade = CascadeType.PERSIST)
+    @OneToMany (mappedBy = "drug", cascade = CascadeType.ALL)
     private List<Pharmacology> PK_profiles;
 
-    @OneToMany (mappedBy = "drug", cascade = CascadeType.PERSIST)
+    @OneToMany (mappedBy = "drug", cascade = CascadeType.ALL)
     private List<Usage> usages;
     
     @OneToMany (mappedBy = "generic", cascade = CascadeType.PERSIST)
@@ -55,6 +55,8 @@ public class Drug
         this.brand_names = new ArrayList<>();
         this.classes = new ArrayList<>();
         this.PK_profiles = new ArrayList<>();
+        this.usages = new ArrayList<>();
+        this.interxAsBase = new ArrayList<>();
     }
     public Drug (String chemical_name, String brand_name, String description, DrugClass parent_class)
     {

@@ -33,6 +33,11 @@ import java.util.Set;
 
 public class Drug_NEW_CTRL implements Initializable
 {
+    private boolean isMidTransaction = false;
+    protected void setIsMidTransaction (boolean isMidTransaction) { this.isMidTransaction = isMidTransaction; }
+    private boolean isDuplicate = false;
+    protected void setIsDuplicate (boolean isDuplicate) { this.isDuplicate = isDuplicate; }
+
     EntityManager entityManager;
     public void setEntityManager (EntityManager entityManager) { this.entityManager = entityManager; }
 
@@ -178,10 +183,30 @@ public class Drug_NEW_CTRL implements Initializable
 
         Usage_POPUP_CTRL controller = loader.getController();
         controller.setWorkingCopy(workingCopy.getUsages());
+        controller.setEntityManager(this.entityManager);
 
         Scene scene = new Scene(root);
 
         stage.setTitle("Add/Edit Indications");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void onInteractionAddButton (ActionEvent actionEvent) throws IOException
+    {
+        Stage stage = new Stage();
+        URL newInteraction = Paths.get("./src/main/resources/layout/Interaction_POPUP.fxml").toUri().toURL();
+        FXMLLoader loader = new FXMLLoader(newInteraction);
+        Parent root = loader.load();
+
+        Interaction_POPUP_CTRL controller = loader.getController();
+        controller.setWorkingCopy(workingCopy.getDrugInteractions());
+        controller.setEntityManager(this.entityManager);
+
+        Scene scene = new Scene(root);
+
+        stage.setTitle("Add/Edit Interactions");
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
         stage.show();

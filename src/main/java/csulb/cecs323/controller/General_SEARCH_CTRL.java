@@ -36,6 +36,7 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
     static final String Mode_DCEditDC = "drugClass.EditDrugClass";
     static final String Mode_DCAddDG = "drugClass.AddDrug";
     static final String Mode_DGEditDG = "drug.EditDrug";
+    static final String Mode_IXAddDG = "interaction.AddDrug";
 
     private String operationSelect;
     public void setOperationSelect (String operation) { this.operationSelect = operation; }
@@ -62,6 +63,7 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
     @FXML
     private CheckBox duplicateCheck;
 
+    // MODIFY (1)
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
@@ -69,12 +71,15 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
         Platform.runLater(()->{
             switch (operationSelect)
             {
+                case Mode_IXAddDG:
+                    duplicateCheck.setDisable(true);
                 case Mode_DCEditDC:
                 case Mode_DGEditDG:
                     isMultipleMode = false;
                     resultsListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
                     break;
                 case Mode_DCAddDG:
+                    duplicateCheck.setDisable(true);
                     isMultipleMode = true;
                     resultsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
                     break;
@@ -92,6 +97,7 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
             searchOperation();
     }
 
+    // MODIFY (2)
     public void searchOperation ()
     {
         resultsList.removeAll(resultsList);
@@ -103,13 +109,16 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
             query = entityManager.createNamedQuery(DrugClass.FIND_ALL_BY_NAME, DrugClass.class).setParameter("searchString", searchString);
             resultsList.addAll(query.getResultList());
         }
-        else if (operationSelect.equals(Mode_DCAddDG) || operationSelect.equals(Mode_DGEditDG))
+        else if (operationSelect.equals(Mode_DCAddDG) ||
+                operationSelect.equals(Mode_DGEditDG) ||
+                operationSelect.equals(Mode_IXAddDG) )
         {
             query = entityManager.createNamedQuery(Drug.FIND_ALL_BY_NAME, Drug.class).setParameter("searchString", searchString);
             resultsList.addAll(query.getResultList());
         }
     }
 
+    // MODIFY (3)
     public void selectOperation() // TO DO: this is awful...
     {
         if (isMultipleMode)
@@ -143,6 +152,10 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
                 ((Drug_NEW_CTRL) lastScene).setWorkingCopy((Drug)resultsBuffer.get(0));
                 ((Drug_NEW_CTRL) lastScene).refreshBNameAutoComplete();
                 ((Drug_NEW_CTRL) lastScene).refreshFields();
+                break;
+            case Mode_IXAddDG:
+                ((Interaction_POPUP_CTRL) lastScene).setOffendingDrug((Drug) resultsBuffer.get(0));
+                ((Interaction_POPUP_CTRL) lastScene).inputDrugField.setPromptText(((Drug) resultsBuffer.get(0)).getChemical_name());
                 break;
         }
 
@@ -193,31 +206,4 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
 
         return preset;
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //Deprecated version of readyStage, save just in case
-//    public <DataType, SceneType> void readyStage
-//            (DataType conOne, SceneType conTwo, boolean isMultiple, String title, String operation) throws IOException
-//    {
-//        Stage preset = new Stage();
-//        URL generalSearchScene = Paths.get("./src/main/resources/layout/General_SEARCH.fxml").toUri().toURL();
-//        FXMLLoader loader = new FXMLLoader(generalSearchScene);
-//        Parent root = loader.load();
-//
-//        /* Pass EntityManager to next Stage and pass 'WorkingCopy' to set Controller<Type> */
-//        General_SEARCH_CTRL<DataType, SceneType> controller = loader.getController();
-//        controller.setEntityManager(this.entityManager); // necessary ???
-//        controller.setMultipleMode(isMultiple);
-//        controller.setLastScene(conTwo);
-//        controller.setOperationSelect(operation);
-//
-//        Scene scene = new Scene (root);
-//
-//        // "staging"
-//        preset.setTitle(title);
-//        preset.initModality(Modality.APPLICATION_MODAL); // prevents user from moving to another Stage until done
-//        preset.setScene(scene);
-//        preset.show();
-//    }
-
 }

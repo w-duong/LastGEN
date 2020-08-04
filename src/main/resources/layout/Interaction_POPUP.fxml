@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="350.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="csulb.cecs323.controller.Interaction_POPUP_CTRL">
+    <children>
+        <VBox layoutX="150.0" layoutY="6.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+            <children>
+                <Label alignment="CENTER" prefHeight="17.0" prefWidth="390.0" text="Interaction">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Label>
+                <Label text="Current Profiles">
+                    <VBox.margin>
+                        <Insets top="20.0" />
+                    </VBox.margin>
+                </Label>
+                <ListView fx:id="profilesListView" onKeyPressed="#onDeleteKeyPress" onMouseClicked="#onListDoubleClick" prefHeight="100.0" prefWidth="390.0" />
+            <HBox>
+               <children>
+                      <Label prefWidth="315.0" text="Offending Drug" />
+                  <Label prefWidth="75.0" text="Severity" />
+               </children>
+            </HBox>
+                <HBox spacing="5.0">
+                    <children>
+                        <TextField fx:id="inputDrugField" prefHeight="25.0" prefWidth="235.0">
+                            <HBox.margin>
+                                <Insets />
+                            </HBox.margin>
+                        </TextField>
+                  <Button mnemonicParsing="false" onAction="#onDrugSearchButton" prefHeight="25.0" prefWidth="75.0" text="Search" />
+                  <ChoiceBox fx:id="severityCBox" prefWidth="75.0" />
+                    </children>
+                </HBox>
+                <Label text="Description" />
+                <TextArea fx:id="inputIXDescription" prefHeight="61.0" prefWidth="390.0" wrapText="true" />
+                <ButtonBar prefHeight="40.0" prefWidth="200.0">
+                    <buttons>
+                        <Button cancelButton="true" mnemonicParsing="false" onAction="#onCancelButton" text="Cancel" />
+                        <Button mnemonicParsing="false" text="Delete" />
+                        <Button mnemonicParsing="false" text="Save" />
+                    </buttons>
+                    <VBox.margin>
+                        <Insets top="10.0" />
+                    </VBox.margin>
+                    <padding>
+                        <Insets right="73.0" />
+                    </padding>
+                </ButtonBar>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

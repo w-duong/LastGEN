@@ -14,6 +14,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -22,8 +25,12 @@ public class Usage_POPUP_CTRL implements Initializable
 {
     private boolean isEdit = false;
     private Usage edit;
+
     private List<Usage> workingCopy;
     public void setWorkingCopy (List<Usage> profiles) { this.workingCopy = profiles; }
+    private EntityManager entityManager;
+    public void setEntityManager (EntityManager entityManager) { this.entityManager = entityManager; }
+
 
     @FXML
     ListView<Usage> profilesListView;
@@ -64,11 +71,28 @@ public class Usage_POPUP_CTRL implements Initializable
     {
         if(profilesListView.getSelectionModel().getSelectedItems() != null)
         {
-            workingCopy.removeAll(profilesListView.getSelectionModel().getSelectedItems());
+            List<Usage> deleteBuffer = profilesListView.getSelectionModel().getSelectedItems();
+            workingCopy.removeAll(deleteBuffer);
 
+            for (Usage indication : deleteBuffer)
+            {
+                entityManager.getTransaction().begin();
+                TypedQuery query = entityManager.createNamedQuery(Usage.DELETE_BY_ONE,Usage.class).setParameter("usageObj",indication);
+                query.executeUpdate();
+                entityManager.getTransaction().commit();
+            }
             clearFields();
             refreshList();
         }
+    }
+
+    public void randomQuery ()
+    {
+        Query findAll = entityManager.createQuery("SELECT us FROM Usage us");
+        List<Object> results = findAll.getResultList();
+
+        for (Object index : results)
+            System.out.println (((Usage) index).toString());
     }
 
     public void onListDoubleClick (MouseEvent mouseEvent)

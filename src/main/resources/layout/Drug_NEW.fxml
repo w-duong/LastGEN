@@ -70,7 +70,7 @@
             <ButtonBar fx:id="profileBar" prefHeight="34.0" prefWidth="389.0">
               <buttons>
                 <Button mnemonicParsing="false" onAction="#onPharmacologyAddButton" text="Pharmacology" />
-                  <Button mnemonicParsing="false" text="Interaction" />
+                  <Button mnemonicParsing="false" onAction="#onInteractionAddButton" text="Interaction" />
                   <Button mnemonicParsing="false" onAction="#onUsageAddButton" text="Usage" />
               </buttons>
                <padding>
