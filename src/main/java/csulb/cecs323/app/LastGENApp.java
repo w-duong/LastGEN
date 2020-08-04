@@ -13,10 +13,7 @@
 package csulb.cecs323.app;
 
 import csulb.cecs323.controller.MainWindowCTRL;
-import csulb.cecs323.model.ClassClassIX;
-import csulb.cecs323.model.DEA_Class;
-import csulb.cecs323.model.Drug;
-import csulb.cecs323.model.DrugClass;
+import csulb.cecs323.model.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -124,17 +121,7 @@ public class LastGENApp extends Application
       tx.commit();
       LOGGER.fine("End of Transaction");
 
-      /////////////////////////////////////////
-      TypedQuery query;
-      List<DrugClass> resultsList = null;
 
-      String searchString = "";
-      query = lastGEN.entityManager.createNamedQuery(DrugClass.FIND_ALL_BY_NAME, DrugClass.class).setParameter("searchString", searchString);
-      resultsList = query.getResultList();
-
-      for (DrugClass dc : resultsList)
-         System.out.println (dc);
-      /////////////////////////////////////////////////////////////////////////////////////////////////////////////
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       /* Extract Layout */

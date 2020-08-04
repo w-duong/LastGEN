@@ -92,11 +92,10 @@
               <buttons>
                 <Button mnemonicParsing="false" onAction="#onCancelButton" text="Cancel" />
                   <Button mnemonicParsing="false" onAction="#onDrugEditButton" text="Edit" />
-                  <Button mnemonicParsing="false" onAction="#printProfile" text="Save" />
-                  <Button mnemonicParsing="false" text="Add" />
+                  <Button mnemonicParsing="false" onAction="#onSaveButton" text="Save" />
               </buttons>
                <VBox.margin>
-                  <Insets right="26.0" />
+                  <Insets right="75.0" />
                </VBox.margin>
             </ButtonBar>
          </children>

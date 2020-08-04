@@ -52,6 +52,7 @@ public class Drug
         setChemicalName (chemical_name);
         setDescription (description);
 
+        this.schedule = null;
         this.brand_names = new ArrayList<>();
         this.classes = new ArrayList<>();
         this.PK_profiles = new ArrayList<>();
@@ -64,6 +65,42 @@ public class Drug
         addBrandName(brand_name);
         setDescription(description);
         addDrugClass(parent_class);
+    }
+    public Drug (Drug copy)
+    {
+        setChemicalName(copy.getChemical_name());
+        setDescription(copy.getDescription());
+        setDrugSchedule(copy.getDrugSchedule());
+
+        if (copy.getBrandNames().size() == 0)
+            this.brand_names = new ArrayList<>();
+        else
+            for (BrandName bns : copy.getBrandNames())
+                addBrandName(bns);
+
+        if (copy.getDrugClass().size() == 0)
+            this.classes = new ArrayList<>();
+        else
+            for (DrugClass parent : copy.getDrugClass())
+                addDrugClass(parent);
+
+        if (copy.getDrugInteractions().size() == 0)
+            this.interxAsBase = new ArrayList<>();
+        else
+            for (DrugDrugIX interx: copy.getDrugInteractions())
+                addInterxAsBase(interx.getOffender(), interx.getDescription(), interx.getSeverityLevel());
+
+        if (copy.getUsages().size() == 0)
+            this.usages = new ArrayList<>();
+        else
+            for (Usage indication: copy.getUsages())
+                addUsage(indication.getIndication(), indication.getDosageRange(), indication.getApproval());
+
+        if (copy.getPharmacology().size() == 0)
+            this.PK_profiles = new ArrayList<>();
+        else
+            for (Pharmacology profile: copy.getPharmacology())
+                addPKProfile(profile.getClearanceOrgan(), profile.getClearanceEnzyme(), profile.getEliminationRoute());
     }
 
     // ACCESSORS
@@ -147,11 +184,11 @@ public class Drug
 
     public void addUsage (String indication, String doseRange, boolean isApproved)
     {
-        Usage newIndication = new Usage (indication, doseRange, isApproved);
+        Usage newIndication = new Usage (this, indication, doseRange, isApproved);
 
         addUsage(newIndication);
     }
-    public void addUsage (Usage newIndication)
+    protected void addUsage (Usage newIndication)
     {
         if (this.usages == null)
             this.usages = new ArrayList<>();

@@ -1,5 +1,6 @@
 package csulb.cecs323.controller;
 
+import csulb.cecs323.model.Drug;
 import csulb.cecs323.model.Pharmacology;
 import csulb.cecs323.model.Usage;
 import javafx.application.Platform;
@@ -25,9 +26,13 @@ public class Usage_POPUP_CTRL implements Initializable
 {
     private boolean isEdit = false;
     private Usage edit;
+    private boolean isMidTransaction = false;
+    public void setIsMidTransaction (boolean isMidTransaction) { this.isMidTransaction = isMidTransaction; }
 
-    private List<Usage> workingCopy;
-    public void setWorkingCopy (List<Usage> profiles) { this.workingCopy = profiles; }
+//    private List<Usage> workingCopy;
+//    public void setWorkingCopy (List<Usage> profiles) { this.workingCopy = profiles; }
+    private Drug workingCopy;
+    public void setWorkingCopy (Drug workingCopy) { this.workingCopy = workingCopy; }
     private EntityManager entityManager;
     public void setEntityManager (EntityManager entityManager) { this.entityManager = entityManager; }
 
@@ -51,9 +56,9 @@ public class Usage_POPUP_CTRL implements Initializable
         if (indication.trim().equals("") || dosaging.trim().equals(""))
             return;
         if (isEdit)
-            workingCopy.remove(edit);
+            workingCopy.getUsages().remove(edit);
 
-        workingCopy.add (new Usage(indication, dosaging, !fdaCheck.isSelected()));
+        workingCopy.addUsage(indication, dosaging, !fdaCheck.isSelected());
 
         clearFields();
         refreshList();
@@ -72,27 +77,26 @@ public class Usage_POPUP_CTRL implements Initializable
         if(profilesListView.getSelectionModel().getSelectedItems() != null)
         {
             List<Usage> deleteBuffer = profilesListView.getSelectionModel().getSelectedItems();
-            workingCopy.removeAll(deleteBuffer);
+            workingCopy.getUsages().removeAll(deleteBuffer);
 
             for (Usage indication : deleteBuffer)
             {
-                entityManager.getTransaction().begin();
-                TypedQuery query = entityManager.createNamedQuery(Usage.DELETE_BY_ONE,Usage.class).setParameter("usageObj",indication);
-                query.executeUpdate();
-                entityManager.getTransaction().commit();
+                if (!isMidTransaction)
+                {
+                    entityManager.getTransaction().begin();
+                    TypedQuery query = entityManager.createNamedQuery(Usage.DELETE_BY_ONE,Usage.class).setParameter("usageObj",indication);
+                    query.executeUpdate();
+                    entityManager.getTransaction().commit();
+                }
+                else
+                {
+                    TypedQuery query = entityManager.createNamedQuery(Usage.DELETE_BY_ONE,Usage.class).setParameter("usageObj",indication);
+                    query.executeUpdate();
+                }
             }
             clearFields();
             refreshList();
         }
-    }
-
-    public void randomQuery ()
-    {
-        Query findAll = entityManager.createQuery("SELECT us FROM Usage us");
-        List<Object> results = findAll.getResultList();
-
-        for (Object index : results)
-            System.out.println (((Usage) index).toString());
     }
 
     public void onListDoubleClick (MouseEvent mouseEvent)
@@ -111,7 +115,7 @@ public class Usage_POPUP_CTRL implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Platform.runLater(()->{
-            profilesList.setAll(workingCopy);
+            profilesList.setAll(workingCopy.getUsages());
             profilesListView.setItems(profilesList);
 
             profilesListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -121,14 +125,14 @@ public class Usage_POPUP_CTRL implements Initializable
     public void refreshList ()
     {
         profilesList.removeAll(profilesList);
-        profilesList.addAll(workingCopy);
+        profilesList.addAll(workingCopy.getUsages());
         profilesListView.setItems(profilesList);
     }
 
     public void clearFields ()
     {
-        inputIndicationField.setText(null);
-        inputDoseRangeArea.setText(null);
+        inputIndicationField.setText("");
+        inputDoseRangeArea.setText("");
         fdaCheck.setSelected(false);
     }
 

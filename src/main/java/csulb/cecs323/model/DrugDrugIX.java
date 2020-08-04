@@ -29,6 +29,9 @@ public class DrugDrugIX
     }
     
     // ACCESSORS
+    public Drug getOffender () { return this.offender; }
+    public int getSeverityLevel () { return this.severityLevel; }
+    public String getDescription () { return interaction_CPK.getDescription(); }
     
     // MUTATORS
     public void setSeverityLevel (int severityLevel) { this.severityLevel = severityLevel; }

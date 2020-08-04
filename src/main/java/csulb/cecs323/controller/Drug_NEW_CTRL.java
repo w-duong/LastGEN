@@ -182,8 +182,10 @@ public class Drug_NEW_CTRL implements Initializable
         Parent root = loader.load();
 
         Usage_POPUP_CTRL controller = loader.getController();
-        controller.setWorkingCopy(workingCopy.getUsages());
+//        controller.setWorkingCopy(workingCopy.getUsages());
+        controller.setWorkingCopy(this.workingCopy);
         controller.setEntityManager(this.entityManager);
+        controller.setIsMidTransaction(isMidTransaction);
 
         Scene scene = new Scene(root);
 
@@ -243,8 +245,50 @@ public class Drug_NEW_CTRL implements Initializable
 
     public void onCancelButton (ActionEvent actionEvent)
     {
+        if(isMidTransaction)
+            entityManager.getTransaction().rollback();
+
         Stage popUp = (Stage) inputCNameField.getScene().getWindow();
         popUp.close();
+    }
+
+    public void onSaveButton (ActionEvent actionEvent)
+    {
+        if (!workingCopy.getChemical_name().trim().equals("") && !workingCopy.getDescription().trim().equals(""))
+        {
+            if (isMidTransaction && !isDuplicate)
+            {
+                entityManager.persist(workingCopy);
+                entityManager.getTransaction().commit();
+                isMidTransaction = false;
+            }
+            else if (isMidTransaction && isDuplicate)
+            {
+                Drug newTemp = new Drug (workingCopy);
+                entityManager.getTransaction().rollback();
+
+                entityManager.getTransaction().begin();
+                entityManager.persist(newTemp);
+                entityManager.getTransaction().commit();
+                isMidTransaction = false;
+                isDuplicate = false;
+            }
+            else
+            {
+                entityManager.getTransaction().begin();
+                entityManager.persist(workingCopy);
+                entityManager.getTransaction().commit();
+            }
+            cleanUpTransaction();
+        }
+    }
+
+    protected void cleanUpTransaction ()
+    {
+        workingCopy = new Drug ("","");
+        refreshFields();
+        refreshBNameAutoComplete();
+        printProfile();
     }
 
     public void refreshFields ()
@@ -257,7 +301,9 @@ public class Drug_NEW_CTRL implements Initializable
             inputCNameField.setPromptText(workingCopy.getChemical_name());
         }
 
-        if(!workingCopy.getDrugSchedule().getSymbol().toString().isEmpty())
+        if(workingCopy.getDrugSchedule() == null)
+            scheduleCBox.setValue(DEA_Class.DEA.F.toString());
+        else
             scheduleCBox.setValue(workingCopy.getDrugSchedule().getSymbol().toString());
     }
 
@@ -292,7 +338,8 @@ public class Drug_NEW_CTRL implements Initializable
                     formattedSections.add(i+1, empty);
                     break;
                 case "DEA Schedule:":
-                    empty = new Text("\n" + workingCopy.getDrugSchedule().getSymbol().toString());
+                    empty = (workingCopy.getDrugSchedule() == null) ? new Text ("\n") :
+                            new Text("\n" + workingCopy.getDrugSchedule().getSymbol().toString());
                     formattedSections.add(i+1, empty);
                     break;
                 case "Description:":

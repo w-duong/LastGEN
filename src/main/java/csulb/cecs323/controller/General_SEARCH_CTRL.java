@@ -152,6 +152,11 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
                 ((Drug_NEW_CTRL) lastScene).setWorkingCopy((Drug)resultsBuffer.get(0));
                 ((Drug_NEW_CTRL) lastScene).refreshBNameAutoComplete();
                 ((Drug_NEW_CTRL) lastScene).refreshFields();
+                ((Drug_NEW_CTRL) lastScene).printProfile();
+
+                ((Drug_NEW_CTRL) lastScene).setIsDuplicate(duplicateCheck.isSelected());
+                ((Drug_NEW_CTRL) lastScene).setIsMidTransaction(true);
+                entityManager.getTransaction().begin();
                 break;
             case Mode_IXAddDG:
                 ((Interaction_POPUP_CTRL) lastScene).setOffendingDrug((Drug) resultsBuffer.get(0));
