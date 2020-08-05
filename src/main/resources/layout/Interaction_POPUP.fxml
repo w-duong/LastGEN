@@ -42,8 +42,8 @@
                 <ButtonBar prefHeight="40.0" prefWidth="200.0">
                     <buttons>
                         <Button cancelButton="true" mnemonicParsing="false" onAction="#onCancelButton" text="Cancel" />
-                        <Button mnemonicParsing="false" text="Delete" />
-                        <Button mnemonicParsing="false" text="Save" />
+                        <Button mnemonicParsing="false" onAction="#onDeleteButton" text="Delete" />
+                        <Button mnemonicParsing="false" onAction="#onSaveButton" text="Save" />
                     </buttons>
                     <VBox.margin>
                         <Insets top="10.0" />

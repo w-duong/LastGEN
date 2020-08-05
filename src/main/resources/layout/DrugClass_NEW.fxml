@@ -20,7 +20,7 @@
             </Label>
             <Label fx:id="nameLabel" text="Class Name">
                <VBox.margin>
-                  <Insets top="90.0" />
+                  <Insets top="80.0" />
                </VBox.margin>
             </Label>
             <TextField fx:id="inputNameField" onKeyPressed="#onClassNameEnterKey">
@@ -67,12 +67,12 @@
       <VBox layoutX="670.0" layoutY="200.0" prefHeight="590.0" prefWidth="387.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
          <children>
             <Label text="Superclass (Parent)" />
-            <ListView fx:id="parentListView" onKeyPressed="#onDeleteFromParentList" prefHeight="125.0" prefWidth="387.0" />
+            <ListView fx:id="parentListView" onKeyPressed="#onDeleteFromParentList" prefHeight="120.0" prefWidth="387.0" />
             <Label text="Drug List" />
-            <ListView fx:id="drugListView" onKeyPressed="#drugClassOnDeleteFromList" prefHeight="330.0" prefWidth="387.0" />
+            <ListView fx:id="drugListView" onKeyPressed="#drugClassOnDeleteFromList" prefHeight="275.0" prefWidth="387.0" />
             <Label text="Subclass (Children)" />
-            <ListView fx:id="childrenListView" onKeyPressed="#onDeleteFromChildList" prefHeight="125.0" prefWidth="387.0" />
-            <ButtonBar fx:id="profileBar" prefHeight="35.0">
+            <ListView fx:id="childrenListView" onKeyPressed="#onDeleteFromChildList" prefHeight="120.0" prefWidth="387.0" />
+            <ButtonBar prefHeight="35.0">
               <buttons>
                 <Button cancelButton="true" mnemonicParsing="false" onAction="#onCancelButton" text="Cancel" />
                   <Button mnemonicParsing="false" onAction="#drugClassOnEditButton" text="Edit" />
@@ -82,7 +82,7 @@
                   <Insets right="70.0" />
                </padding>
                <VBox.margin>
-                  <Insets />
+                  <Insets top="5.0" />
                </VBox.margin>
             </ButtonBar>
          </children>

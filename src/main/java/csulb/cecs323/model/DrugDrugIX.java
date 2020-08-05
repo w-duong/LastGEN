@@ -4,8 +4,13 @@ import javax.persistence.*;
 
 @Entity
 @Table (name = "drug_drug_interactions")
+@NamedQueries({
+        @NamedQuery (name = DrugDrugIX.DELETE_BY_ONE, query = "DELETE FROM DrugDrugIX ddix WHERE ddix = :ixObject")
+})
 public class DrugDrugIX
 {
+    public static final String DELETE_BY_ONE = "DrugDrugIX.deleteOneIX";
+
     @EmbeddedId
     private DrugDrugIX_PK interaction_CPK;
     private int severityLevel = -1;

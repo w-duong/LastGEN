@@ -34,7 +34,6 @@ public class Usage_POPUP_CTRL implements Initializable
     private EntityManager entityManager;
     public void setEntityManager (EntityManager entityManager) { this.entityManager = entityManager; }
 
-
     @FXML
     ListView<Usage> profilesListView;
     private ObservableList<Usage> profilesList = FXCollections.observableArrayList();
@@ -51,15 +50,32 @@ public class Usage_POPUP_CTRL implements Initializable
         String indication = inputIndicationField.getText();
         String dosaging = inputDoseRangeArea.getText();
 
-        if (indication.trim().equals("") || dosaging.trim().equals(""))
-            return;
-        if (isEdit)
-            workingCopy.getUsages().remove(edit);
+        if (!indication.trim().equals("") && !dosaging.trim().equals(""))
+        {
+            if (isEdit && !isMidTransaction)
+            {
+                workingCopy.getUsages().remove(edit);
 
-        workingCopy.addUsage(indication, dosaging, !fdaCheck.isSelected());
+                entityManager.getTransaction().begin();
+                TypedQuery query = entityManager.createNamedQuery(Usage.DELETE_BY_ONE,Usage.class).setParameter("usageObj",indication);
+                query.executeUpdate();
+                entityManager.getTransaction().commit();
 
-        clearFields();
-        refreshList();
+                isEdit = false;
+            }
+            else if (isEdit && isMidTransaction)
+            {
+                TypedQuery query = entityManager.createNamedQuery(Usage.DELETE_BY_ONE,Usage.class).setParameter("usageObj",indication);
+                query.executeUpdate();
+
+                isEdit = false;
+            }
+
+            workingCopy.addUsage(indication, dosaging, !fdaCheck.isSelected());
+
+            clearFields();
+            refreshList();
+        }
     }
 
     public void onDeleteButton (ActionEvent actionEvent) { deleteAction(); }

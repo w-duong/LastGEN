@@ -35,6 +35,7 @@ public class Drug_NEW_CTRL implements Initializable
 {
     private boolean isMidTransaction = false;
     protected void setIsMidTransaction (boolean isMidTransaction) { this.isMidTransaction = isMidTransaction; }
+    protected boolean isMidTransaction () { return this.isMidTransaction; }
     private boolean isDuplicate = false;
     protected void setIsDuplicate (boolean isDuplicate) { this.isDuplicate = isDuplicate; }
 
@@ -171,6 +172,7 @@ public class Drug_NEW_CTRL implements Initializable
         Scene scene = new Scene(root);
 
         stage.setTitle("Add/Edit Pharmacology Profile");
+        stage.setResizable(false);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
         stage.show();
@@ -191,6 +193,7 @@ public class Drug_NEW_CTRL implements Initializable
         Scene scene = new Scene(root);
 
         stage.setTitle("Add/Edit Indications");
+        stage.setResizable(false);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
         stage.show();
@@ -204,12 +207,14 @@ public class Drug_NEW_CTRL implements Initializable
         Parent root = loader.load();
 
         Interaction_POPUP_CTRL controller = loader.getController();
-        controller.setWorkingCopy(workingCopy.getDrugInteractions());
+        controller.setWorkingCopy(this.workingCopy);
         controller.setEntityManager(this.entityManager);
+        controller.setIsMidTransaction(isMidTransaction);
 
         Scene scene = new Scene(root);
 
         stage.setTitle("Add/Edit Interactions");
+        stage.setResizable(false);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
         stage.show();

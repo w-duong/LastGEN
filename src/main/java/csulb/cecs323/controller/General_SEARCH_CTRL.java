@@ -139,6 +139,9 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
                 ((DrugClass_NEW_CTRL) lastScene).refreshLists();
 
                 ((DrugClass_NEW_CTRL) lastScene).setIsDuplicate(duplicateCheck.isSelected());
+
+                if (((DrugClass_NEW_CTRL) lastScene).isMidTransaction())
+                    entityManager.getTransaction().rollback();
                 ((DrugClass_NEW_CTRL) lastScene).setIsMidTransaction(true);
                 entityManager.getTransaction().begin();
                 break;
@@ -155,6 +158,9 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
                 ((Drug_NEW_CTRL) lastScene).printProfile();
 
                 ((Drug_NEW_CTRL) lastScene).setIsDuplicate(duplicateCheck.isSelected());
+
+                if (((Drug_NEW_CTRL) lastScene).isMidTransaction())
+                    entityManager.getTransaction().rollback();
                 ((Drug_NEW_CTRL) lastScene).setIsMidTransaction(true);
                 entityManager.getTransaction().begin();
                 break;

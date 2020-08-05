@@ -54,8 +54,28 @@ public class Pharmacology_POPUP_CTRL implements Initializable
 
         if (organ.trim().equals("") && enzyme.trim().equals("") && elim_route.trim().equals(""))
             return;
-        if (isEdit)
+        if (isEdit && !isMidTransaction)
+        {
             workingCopy.getPharmacology().remove(edit);
+
+            entityManager.getTransaction().begin();
+            TypedQuery query = entityManager.createNamedQuery(Pharmacology.DELETE_BY_ONE, Pharmacology.class);
+            query.setParameter("pkObject",edit);
+            query.executeUpdate();
+            entityManager.getTransaction().commit();
+
+            isEdit = false;
+        }
+        else if (isEdit && isMidTransaction)
+        {
+            workingCopy.getPharmacology().remove(edit);
+
+            TypedQuery query = entityManager.createNamedQuery(Pharmacology.DELETE_BY_ONE, Pharmacology.class);
+            query.setParameter("pkObject",edit);
+            query.executeUpdate();
+
+            isEdit = false;
+        }
 
         workingCopy.addPKProfile (organ, enzyme, elim_route);
 
@@ -84,14 +104,14 @@ public class Pharmacology_POPUP_CTRL implements Initializable
                 {
                     entityManager.getTransaction().begin();
                     TypedQuery query = entityManager.createNamedQuery(Pharmacology.DELETE_BY_ONE, Pharmacology.class);
-                    query.setParameter("usageObj",profile);
+                    query.setParameter("pkObject",profile);
                     query.executeUpdate();
                     entityManager.getTransaction().commit();
                 }
                 else
                 {
                     TypedQuery query = entityManager.createNamedQuery(Pharmacology.DELETE_BY_ONE, Pharmacology.class);
-                    query.setParameter("usageObj",profile);
+                    query.setParameter("pkObject",profile);
                     query.executeUpdate();
                 }
             }

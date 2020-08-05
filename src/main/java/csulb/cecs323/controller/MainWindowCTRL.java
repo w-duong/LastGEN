@@ -1,5 +1,6 @@
 package csulb.cecs323.controller;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -30,6 +31,11 @@ public class MainWindowCTRL
 
         // "staging"
         db_drugClass_newWindow.setTitle("Add/Edit Drug Class");
+        db_drugClass_newWindow.setResizable(false);
+        db_drugClass_newWindow.setOnCloseRequest(event->{
+            if (controller.isMidTransaction())
+                entityManager.getTransaction().rollback();
+        });
         db_drugClass_newWindow.initModality(Modality.APPLICATION_MODAL); // prevents user from moving to another Stage until done
         db_drugClass_newWindow.setScene(scene);
         db_drugClass_newWindow.show();
@@ -48,6 +54,11 @@ public class MainWindowCTRL
 
         // "staging"
         db_drug_newWindow.setTitle("Add/Edit Drug");
+        db_drug_newWindow.setResizable(false);
+        db_drug_newWindow.setOnCloseRequest(event->{
+            if (controller.isMidTransaction())
+                entityManager.getTransaction().rollback();
+        });
         db_drug_newWindow.initModality(Modality.APPLICATION_MODAL); // prevents user from moving to another Stage until done
         db_drug_newWindow.setScene(scene);
         db_drug_newWindow.show();

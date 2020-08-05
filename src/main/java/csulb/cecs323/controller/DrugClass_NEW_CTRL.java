@@ -38,6 +38,7 @@ public class DrugClass_NEW_CTRL implements Initializable
 {
     private boolean isMidTransaction = false;
     protected void setIsMidTransaction (boolean isMidTransaction) { this.isMidTransaction = isMidTransaction; }
+    protected boolean isMidTransaction () { return this.isMidTransaction; }
     private boolean isDuplicate = false;
     protected void setIsDuplicate (boolean isDuplicate) { this.isDuplicate = isDuplicate; }
 
