@@ -57,7 +57,7 @@ public class Usage_POPUP_CTRL implements Initializable
                 workingCopy.getUsages().remove(edit);
 
                 entityManager.getTransaction().begin();
-                TypedQuery query = entityManager.createNamedQuery(Usage.DELETE_BY_ONE,Usage.class).setParameter("usageObj",indication);
+                TypedQuery query = entityManager.createNamedQuery(Usage.DELETE_BY_ONE,Usage.class).setParameter("usageObj",edit);
                 query.executeUpdate();
                 entityManager.getTransaction().commit();
 
@@ -65,7 +65,7 @@ public class Usage_POPUP_CTRL implements Initializable
             }
             else if (isEdit && isMidTransaction)
             {
-                TypedQuery query = entityManager.createNamedQuery(Usage.DELETE_BY_ONE,Usage.class).setParameter("usageObj",indication);
+                TypedQuery query = entityManager.createNamedQuery(Usage.DELETE_BY_ONE,Usage.class).setParameter("usageObj",edit);
                 query.executeUpdate();
 
                 isEdit = false;

@@ -351,6 +351,8 @@ public class Drug_NEW_CTRL implements Initializable
             inputCNameField.setPromptText(workingCopy.getChemical_name());
         }
 
+        inputDescription.setText(workingCopy.getDescription());
+
         if(workingCopy.getDrugSchedule() == null)
             scheduleCBox.setValue(DEA_Class.DEA.F.toString());
         else
