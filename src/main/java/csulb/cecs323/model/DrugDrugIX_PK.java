@@ -8,6 +8,7 @@ public class DrugDrugIX_PK implements Serializable
 {
     private long base;
     private long offender;
+    @Column(length = 500)
     private String description;
 
     // CONSTRUCTORS
@@ -34,6 +35,11 @@ public class DrugDrugIX_PK implements Serializable
         }
         else
             return false;
+    }
+
+    public String fullString ()
+    {
+        return String.format ("BaseID: %d\tOffenderID: %d\tDescription: %s", base, offender, description);
     }
 
     @Override

@@ -19,7 +19,9 @@ public class Usage
     private long usid;
 
     private boolean fdaApproved;
+    @Column(length = 500)
     private String indication;
+    @Column(length = 500)
     private String dosage_range;
 
     // ASSOCIATION(S)

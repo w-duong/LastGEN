@@ -59,4 +59,10 @@ public class Pharmacology
 
         return String.format ("Organ: %-20s\tEnzyme: %-20s\tElimination: %-20s", organ, enzyme, elim);
     }
+
+    public String fullString ()
+    {
+        return String.format ("Drug: %s\tOrgan: %s\tEnzyme: %s\tElimination: %s",
+                drug.toString(), clearance_organ, clearance_enzyme, elimination_route);
+    }
 }

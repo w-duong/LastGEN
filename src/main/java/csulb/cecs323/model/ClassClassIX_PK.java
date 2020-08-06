@@ -8,6 +8,7 @@ public class ClassClassIX_PK implements Serializable
 {
     private long base;
     private long offender;
+    @Column(length = 500)
     private String description;
 
     // CONSTRUCTORS

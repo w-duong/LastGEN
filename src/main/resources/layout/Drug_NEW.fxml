@@ -42,7 +42,7 @@
                </padding></Label>
             <ScrollPane hbarPolicy="NEVER">
                <content>
-                  <TextArea prefHeight="307.0" prefWidth="389.0" wrapText="true" />
+                  <TextArea fx:id="inputDescription" onKeyPressed="#onDescriptionAltEnterKey" prefHeight="307.0" prefWidth="389.0" wrapText="true" />
                </content>
             </ScrollPane>
             <HBox prefHeight="9.0" prefWidth="389.0" spacing="5.0">
@@ -82,7 +82,7 @@
                   <Insets top="10.0" />
                </VBox.margin>
                <children>
-                  <Button mnemonicParsing="false" prefHeight="21.0" prefWidth="90.0" text="DELETE DRUG" />
+                  <Button mnemonicParsing="false" onAction="#onDeleteDrugButton" prefHeight="21.0" prefWidth="90.0" text="DELETE DRUG" />
                </children>
             </HBox>
          </children></VBox>
@@ -93,7 +93,7 @@
             <Label text="Drug Profile" />
             <ScrollPane hbarPolicy="NEVER" prefHeight="447.0" prefWidth="434.0">
                <content>
-                  <TextFlow fx:id="profileTextFlow" prefHeight="447.0" />
+                  <TextFlow fx:id="profileTextFlow" prefHeight="447.0" prefWidth="375.0" />
                </content>
             </ScrollPane>
             <ButtonBar prefHeight="40.0" prefWidth="200.0">

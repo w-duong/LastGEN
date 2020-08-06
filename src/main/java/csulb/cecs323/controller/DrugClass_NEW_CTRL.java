@@ -3,6 +3,8 @@ package csulb.cecs323.controller;
 import com.sun.javafx.image.impl.General;
 import csulb.cecs323.model.Drug;
 import csulb.cecs323.model.DrugClass;
+import impl.org.controlsfx.autocompletion.AutoCompletionTextFieldBinding;
+import impl.org.controlsfx.autocompletion.SuggestionProvider;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,14 +14,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import jdk.jshell.SourceCodeAnalysis;
 import org.controlsfx.control.textfield.TextFields;
 
 import javax.persistence.EntityManager;
@@ -62,7 +62,7 @@ public class DrugClass_NEW_CTRL implements Initializable
     @FXML
     TextField inputChildrenField;
     List<DrugClass> drugClassesTransient = new ArrayList<>();
-    ArrayList<String> autocompleteDrugClassList = new ArrayList<>();
+    SuggestionProvider<String> suggestionProvider;
 
     @FXML
     ListView<Drug> drugListView;
@@ -139,14 +139,8 @@ public class DrugClass_NEW_CTRL implements Initializable
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
         Platform.runLater(()->{
-            TypedQuery query = entityManager.createNamedQuery(DrugClass.FIND_ALL_BY_NAME, DrugClass.class).setParameter("searchString", "");
-            drugClassesTransient = query.getResultList();
+            bindSuggestionList();
 
-            for (DrugClass dc : drugClassesTransient)
-                autocompleteDrugClassList.add(dc.getName());
-
-            TextFields.bindAutoCompletion(inputParentField, autocompleteDrugClassList);
-            TextFields.bindAutoCompletion(inputChildrenField, autocompleteDrugClassList);
             inputParentField.setPromptText("Name of Drug Class to add as 'Parent'...");
             inputChildrenField.setPromptText("Name of Drug Class to add as 'Child'...");
 
@@ -164,6 +158,20 @@ public class DrugClass_NEW_CTRL implements Initializable
 
             refreshFields();
         });
+    }
+
+    public void bindSuggestionList ()
+    {
+        TypedQuery query = entityManager.createNamedQuery(DrugClass.FIND_ALL_BY_NAME, DrugClass.class).setParameter("searchString", "");
+        drugClassesTransient = query.getResultList();
+
+        suggestionProvider = SuggestionProvider.create(new ArrayList<>());
+        suggestionProvider.clearSuggestions();
+        for (DrugClass dc : drugClassesTransient)
+            suggestionProvider.addPossibleSuggestions(dc.getName());
+
+        new AutoCompletionTextFieldBinding<>(inputParentField, suggestionProvider);
+        new AutoCompletionTextFieldBinding<>(inputChildrenField, suggestionProvider);
     }
 
     public void refreshFields ()
@@ -279,6 +287,13 @@ public class DrugClass_NEW_CTRL implements Initializable
     protected void cleanUpTransaction ()
     {
         workingCopy = new DrugClass ("", "");
+
+        TypedQuery query = entityManager.createNamedQuery(DrugClass.FIND_ALL_BY_NAME, DrugClass.class).setParameter("searchString", "");
+        drugClassesTransient = query.getResultList();
+        suggestionProvider.clearSuggestions();
+        for (DrugClass dc : drugClassesTransient)
+            suggestionProvider.addPossibleSuggestions(dc.getName());
+
         refreshFields();
         refreshLists();
         resetLabels();

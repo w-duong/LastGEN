@@ -1,6 +1,8 @@
 package csulb.cecs323.controller;
 
 import csulb.cecs323.model.*;
+import impl.org.controlsfx.autocompletion.AutoCompletionTextFieldBinding;
+import impl.org.controlsfx.autocompletion.SuggestionProvider;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,8 +13,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -21,6 +26,7 @@ import javafx.stage.Stage;
 import org.controlsfx.control.textfield.TextFields;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.swing.*;
 import java.io.IOException;
@@ -50,22 +56,21 @@ public class Drug_NEW_CTRL implements Initializable
     TextField inputCNameField;
     public void onChemNameEnterKey (KeyEvent keyEvent)
     {
-        if (keyEvent.getCode().equals(KeyCode.ENTER))
+        if (keyEvent.getCode().equals(KeyCode.ENTER) && !inputCNameField.getText().trim().equals(""))
         {
             workingCopy.setChemicalName(inputCNameField.getText());
             inputCNameField.setText(null);
-            inputCNameField.setPromptText("Enter chemical name...");
+            inputCNameField.setPromptText(workingCopy.getChemical_name());
         }
     }
 
     @FXML
     TextField inputBNameField;
-    private ArrayList<String> autocompleteBNameList = new ArrayList<>();
+    private SuggestionProvider<String> autocompleteBNameList;
 
     public void onBrandNameEnterKey (KeyEvent keyEvent)
     {
-        if (keyEvent.getCode().equals(KeyCode.ENTER) && !inputBNameField.getText().isEmpty() && !inputBNameField.getText().trim().equals("")
-        && !autocompleteBNameList.contains(inputBNameField.getText()))
+        if (keyEvent.getCode().equals(KeyCode.ENTER) && !inputBNameField.getText().isEmpty() && !inputBNameField.getText().trim().equals(""))
         {
             workingCopy.addBrandName(inputBNameField.getText());
             refreshBNameAutoComplete();
@@ -89,18 +94,30 @@ public class Drug_NEW_CTRL implements Initializable
 
     protected void refreshBNameAutoComplete ()
     {
-        autocompleteBNameList.removeAll(autocompleteBNameList);
+        autocompleteBNameList.clearSuggestions();
 
         for (BrandName bns : workingCopy.getBrandNames())
-            autocompleteBNameList.add(bns.toString());
-
-        TextFields.bindAutoCompletion(inputBNameField, autocompleteBNameList);
+            autocompleteBNameList.addPossibleSuggestions(bns.toString());
     }
+
+    @FXML
+    TextArea inputDescription;
+
+    KeyCombination addDescription_shortcut = new KeyCodeCombination(KeyCode.ENTER, KeyCombination.ALT_DOWN);
+    public void onDescriptionAltEnterKey (KeyEvent keyEvent)
+    {
+        if (addDescription_shortcut.match(keyEvent) && !inputDescription.getText().trim().equals(""))
+        {
+            workingCopy.setDescription(inputDescription.getText());
+            printProfile();
+        }
+    }
+
 
     @FXML
     TextField inputPNameField;
     private List<DrugClass> drugClassesTransient;
-    private ArrayList<String> autocompletePNameList = new ArrayList<>();
+    private SuggestionProvider<String> autocompletePNameList;
 
     public void onParentNameEnterKey (KeyEvent keyEvent)
     {
@@ -172,6 +189,7 @@ public class Drug_NEW_CTRL implements Initializable
         Scene scene = new Scene(root);
 
         stage.setTitle("Add/Edit Pharmacology Profile");
+        stage.setOnCloseRequest(event->printProfile());
         stage.setResizable(false);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
@@ -193,6 +211,7 @@ public class Drug_NEW_CTRL implements Initializable
         Scene scene = new Scene(root);
 
         stage.setTitle("Add/Edit Indications");
+        stage.setOnCloseRequest(event->printProfile());
         stage.setResizable(false);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
@@ -214,6 +233,7 @@ public class Drug_NEW_CTRL implements Initializable
         Scene scene = new Scene(root);
 
         stage.setTitle("Add/Edit Interactions");
+        stage.setOnCloseRequest(event->printProfile());
         stage.setResizable(false);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
@@ -239,13 +259,18 @@ public class Drug_NEW_CTRL implements Initializable
             TypedQuery query = entityManager.createNamedQuery(DrugClass.FIND_ALL_BY_NAME, DrugClass.class).setParameter("searchString", "");
             drugClassesTransient = query.getResultList();
 
+            autocompletePNameList = SuggestionProvider.create(new ArrayList<>());
             for (DrugClass dc : drugClassesTransient)
-                autocompletePNameList.add(dc.getName());
+                autocompletePNameList.addPossibleSuggestions(dc.getName());
 
             //NOTE: may need to pull from DB here (!!)
-            refreshBNameAutoComplete();
+            autocompleteBNameList = SuggestionProvider.create(new ArrayList<>());
+            for (BrandName bns : workingCopy.getBrandNames())
+                autocompleteBNameList.addPossibleSuggestions(bns.toString());
 
+            // two different options to bind autocomplete fields (???)
             TextFields.bindAutoCompletion(inputPNameField, autocompletePNameList);
+            new AutoCompletionTextFieldBinding<>(inputBNameField, autocompleteBNameList);
         });
     }
 
@@ -287,6 +312,25 @@ public class Drug_NEW_CTRL implements Initializable
             }
             cleanUpTransaction();
         }
+    }
+
+    public void onDeleteDrugButton (ActionEvent actionEvent)
+    {
+        if (isMidTransaction)
+        {
+            entityManager.getTransaction().commit();
+            isMidTransaction = false;
+            isDuplicate = false;
+        }
+
+        entityManager.getTransaction().begin();
+
+        Query deleteQuery = entityManager.createQuery("DELETE FROM Drug dg WHERE dg = :toDelete");
+        int deletedCount = deleteQuery.setParameter("toDelete", workingCopy).executeUpdate();
+
+        entityManager.getTransaction().commit();
+
+        cleanUpTransaction();
     }
 
     protected void cleanUpTransaction ()

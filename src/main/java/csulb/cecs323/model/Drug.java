@@ -20,6 +20,7 @@ public class Drug
     private long did;
 
     private String chemical_name;
+    @Column(length = 1000)
     private String description;
 
     //<--TO DO: more attributes --> //
