@@ -25,6 +25,8 @@ import javafx.stage.Stage;
 import javax.persistence.*;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
@@ -45,6 +47,9 @@ public class LastGENApp extends Application
 
    public void loadInitialData ()
    {
+      /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      // DRUG DATA
+      /////////////////////////////////////////////////////////////////////////////////////////////////////////////
       for (DEA_Class.DEA object : INITIAL_DEA_SCHEDULE.keySet())
       {
          DEA_Class temp = new DEA_Class(object, INITIAL_DEA_SCHEDULE.get (object));
@@ -86,19 +91,15 @@ public class LastGENApp extends Application
       entityManager.persist (statin);
       entityManager.persist (metabolics);
       entityManager.persist (testClass);
-   }
 
-   public void randomQuery ()
-   {
-      TypedQuery query;
-      List<DrugClass> resultsList = null;
+      /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      // PERSON DATA
+      /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      Patient newPerson = new Patient ("William", "Duong", new GregorianCalendar(1986,02,22));
+      Address newAddress = new Address (newPerson, "home", "25292 Dayton Drive", "92630");
 
-      String searchString = "";
-      query = this.entityManager.createNamedQuery(DrugClass.FIND_ALL_BY_NAME, DrugClass.class).setParameter("searchString", searchString);
-      resultsList = query.getResultList();
-
-      for (DrugClass dc : resultsList)
-         System.out.println (dc);
+      entityManager.persist(newPerson);
+      entityManager.persist(newAddress);
    }
 
    @Override
@@ -116,11 +117,17 @@ public class LastGENApp extends Application
       EntityTransaction tx = manager.getTransaction();
       tx.begin();
 
-//      lastGEN.loadInitialData();
+      lastGEN.loadInitialData();
 
       tx.commit();
       LOGGER.fine("End of Transaction");
 
+      /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      Query query = lastGEN.entityManager.createQuery("SELECT ppl FROM Patient ppl");
+      List<Patient> results = query.getResultList();
+      for (Patient ppl : results)
+         System.out.println (ppl);
 
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
