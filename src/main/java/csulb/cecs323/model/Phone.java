@@ -17,9 +17,7 @@ public class Phone {
     private Person person;
 
     // CONSTRUCTORS
-    public Phone() {
-    }
-
+    public Phone() {}
     public Phone(Person person, String type, String number)
     {
         setPerson(person);
@@ -28,6 +26,8 @@ public class Phone {
     }
 
     // ACCESSORS
+    public String getType () {return this.type; }
+    public String getNumber() { return this.actual_number; }
 
     // MUTATORS
     public void setType (String type) { this.type = type; }

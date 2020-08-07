@@ -95,11 +95,16 @@ public class LastGENApp extends Application
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////
       // PERSON DATA
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      Patient newPerson = new Patient ("William", "Duong", new GregorianCalendar(1986,02,22));
-      Address newAddress = new Address (newPerson, "home", "25292 Dayton Drive", "92630");
+      Patient firstPerson = new Patient ("William", "Duong", new GregorianCalendar(1986,02,22));
+      Patient seconPerson = new Patient ("Jackie", "Duong", new GregorianCalendar(1988, 00, 28));
+      Address newAddress = new Address (firstPerson, "home", "25292 Dayton Drive", "92630");
+      Address anotherAdd = new Address (seconPerson, "home", "25292 Dayton Drive", "92630");
+      firstPerson.addDrugAllergy(zocor);
+      firstPerson.addDrugAllergy(lotensin);
+      seconPerson.addDrugAllergy(lotensin);
 
-      entityManager.persist(newPerson);
-      entityManager.persist(newAddress);
+      entityManager.persist(firstPerson);
+      entityManager.persist(seconPerson);
    }
 
    @Override
@@ -123,11 +128,22 @@ public class LastGENApp extends Application
       LOGGER.fine("End of Transaction");
 
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//      Query query = lastGEN.entityManager.createQuery("SELECT ppl.drugAllergyList FROM Patient ppl WHERE ppl.lastName = 'Duong'");
+//      List<Drug> results = query.getResultList();
+//      for (int i = 0; i < results.size(); ++i)
+//         System.out.println ("Person " + (i + 1) + String.format("[%s]", results.get(i)));
 
-      Query query = lastGEN.entityManager.createQuery("SELECT ppl FROM Patient ppl");
-      List<Patient> results = query.getResultList();
-      for (Patient ppl : results)
-         System.out.println (ppl);
+//      Query first = lastGEN.entityManager.createNamedQuery(Drug.FIND_ALL_BY_NAME, Drug.class).setParameter("searchString", "sim");
+//      Drug drugOne = (Drug) first.getResultList().get(0);
+//      Drug drugTwo = (Drug) first.setParameter("searchString", "bena").getResultList().get(0);
+//
+//      Query second = lastGEN.entityManager.createQuery("SELECT DISTINCT ppl FROM Patient ppl WHERE ppl.drugAllergyList = :drug1 or ppl.drugAllergyList = :drug2");
+//      second.setParameter("drug1", drugOne);
+//      second.setParameter("drug2", drugTwo);
+//      List<Object> results = second.getResultList();
+//
+//      for (Object index : results)
+//         System.out.println ("Result> " + index.toString());
 
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

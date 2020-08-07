@@ -29,6 +29,9 @@ public class Address
     }
 
     // ACCESSORS
+    public String getType () { return this.type; }
+    public String getStreet () { return this.street; }
+    public String getZipcode () { return this.zipcode; }
 
     // MUTATORS
     public void setType (String type) { this.type = type; }

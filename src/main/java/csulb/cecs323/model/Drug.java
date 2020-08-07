@@ -1,8 +1,10 @@
 package csulb.cecs323.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
 
 @Entity
 @Table (name = "drugs")
@@ -37,14 +39,18 @@ public class Drug
     @OneToMany (mappedBy = "drug", cascade = CascadeType.ALL)
     private List<Usage> usages;
     
-    @OneToMany (mappedBy = "generic", cascade = CascadeType.PERSIST)
+    @OneToMany (mappedBy = "generic", cascade = CascadeType.ALL)
     private List<BrandName> brand_names;
-    
+
+    // consider switching to Set<DrugDrugIX> (???)
     @OneToMany (mappedBy = "base", cascade = CascadeType.PERSIST)
     private List<DrugDrugIX> interxAsBase;
     
     @ManyToMany (mappedBy = "drugs")
     private List<DrugClass> classes;
+
+    @OneToMany (mappedBy = "drug", cascade = CascadeType.PERSIST)
+    private Set<RxLine> rxLines;
     
     // CONSTRUCTORS
     public Drug () {}
@@ -246,6 +252,18 @@ public class Drug
             this.classes.remove (parent);
 
             parent.removeDrug (this);
+        }
+    }
+
+    public void addRxLine (RxLine rxLine)
+    {
+        if (this.rxLines == null)
+            this.rxLines = new HashSet<>();
+
+        if (!this.rxLines.contains(rxLine))
+        {
+            this.rxLines.add(rxLine);
+            rxLine.setDrug(this);
         }
     }
 
