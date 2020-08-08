@@ -26,9 +26,11 @@
 		<class>csulb.cecs323.model.Phone</class>
 		<class>csulb.cecs323.model.Person</class>
 		<class>csulb.cecs323.model.Patient</class>
-		<class>csulb.cecs323.model.Doctor</class>
+		<class>csulb.cecs323.model.Prescriber</class>
+		<class>csulb.cecs323.model.Pharmacist</class>
 		<class>csulb.cecs323.model.Comorbidity</class>
 		<class>csulb.cecs323.model.RxLine</class>
+		<class>csulb.cecs323.model.Prescription</class>
 
 		<properties>
 

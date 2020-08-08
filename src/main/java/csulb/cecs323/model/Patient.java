@@ -24,7 +24,7 @@ public class Patient extends Person
     private List<Comorbidity> comorbidities;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.PERSIST)
-    private List<RxLine> rxLines;
+    private List<Prescription> prescriptions;
 
     // CONSTRUCTORS
     public Patient () {}
@@ -70,15 +70,15 @@ public class Patient extends Person
         }
     }
 
-    public void addRxLine (RxLine rxLine)
+    public void addPrescription (Prescription prescription)
     {
-        if (this.rxLines == null)
-            this.rxLines = new ArrayList<>();
+        if (this.prescriptions == null)
+            this.prescriptions = new ArrayList<>();
 
-        if (!this.rxLines.contains(rxLine))
+        if (!this.prescriptions.contains(prescription))
         {
-            this.rxLines.add(rxLine);
-            rxLine.setPatient(this);
+            this.prescriptions.add(prescription);
+            prescription.setPatient(this);
         }
     }
 

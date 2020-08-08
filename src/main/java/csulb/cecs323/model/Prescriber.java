@@ -1,15 +1,13 @@
 package csulb.cecs323.model;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "doctors")
+@Table(name = "prescribers")
 @DiscriminatorValue("2")
-public class Doctor extends Person
+public class Prescriber extends Person
 {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
@@ -20,11 +18,21 @@ public class Doctor extends Person
     private String specialty;
 
     // ASSOCIATION(S)
-    @OneToMany(mappedBy = "doctor", cascade = CascadeType.PERSIST)
-    private Set<RxLine> rxLines;
+    @OneToMany(mappedBy = "prescriber", cascade = CascadeType.PERSIST)
+    private Set<Prescription> prescriptions;
 
     // CONSTRUCTORS
-    public Doctor () {}
+    public Prescriber() {}
+    public Prescriber(String first, String last, String dea)
+    {
+        super(first, last);
+        setDeaNumber(dea);
+    }
+    public Prescriber(String first, String last, Address address, Phone phone, String dea)
+    {
+        super(first, last, address, phone);
+        setDeaNumber(dea);
+    }
 
     // ACCESSORS
     public long getNpiNumber () { return this.npiNumber; }
@@ -37,15 +45,15 @@ public class Doctor extends Person
     public void setSpecialty (String specialty) { this.specialty = specialty; }
 
     // MISCELLANEOUS
-    public void addRxLine (RxLine rxLine)
+    public void addPrescription (Prescription prescription)
     {
-        if (this.rxLines == null)
-            this.rxLines = new HashSet<>();
+        if (this.prescriptions == null)
+            this.prescriptions = new HashSet<>();
 
-        if (!this.rxLines.contains(rxLine))
+        if (!this.prescriptions.contains(prescription))
         {
-            this.rxLines.add(rxLine);
-            rxLine.setDoctor(this);
+            this.prescriptions.add(prescription);
+            prescription.setPrescriber(this);
         }
     }
 }
