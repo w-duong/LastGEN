@@ -1,9 +1,6 @@
 package csulb.cecs323.controller;
 
-import csulb.cecs323.model.Address;
-import csulb.cecs323.model.Patient;
-import csulb.cecs323.model.Person;
-import csulb.cecs323.model.Phone;
+import csulb.cecs323.model.*;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.WeakChangeListener;
@@ -18,11 +15,13 @@ import javax.persistence.EntityManager;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ResourceBundle;
 
 public class UserBase_NEW_CTRL implements Initializable
 {
+    private static final DateTimeFormatter datePickFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy");
     private boolean isMidTransaction = false;
     protected void setIsMidTransaction (boolean isMidTransaction) { this.isMidTransaction = isMidTransaction; }
     protected boolean isMidTransaction () { return this.isMidTransaction; }
@@ -55,7 +54,19 @@ public class UserBase_NEW_CTRL implements Initializable
         {
             workingCopy = new Patient(firstName, lastName, localDOB.atStartOfDay(ZoneId.systemDefault()));
             workingCopy.setMiddleName(middleName);
+
+            refreshNameInfo();
         }
+    }
+
+    public void refreshNameInfo ()
+    {
+        inputPatientFN.setPromptText(workingCopy.getFirstName());
+        inputPatientLN.setPromptText(workingCopy.getLastName());
+        inputPatientMN.setPromptText(workingCopy.getMiddleName());
+
+        String date = ((Patient)workingCopy).getDateOfBirth().format(datePickFormat);
+        inputPatientDOB.getEditor().setPromptText(date);
     }
 
     /*
@@ -108,13 +119,39 @@ public class UserBase_NEW_CTRL implements Initializable
     public void patientAddress_onSaveButton (ActionEvent actionEvent)
     {
         String street = inputPatientStreet.getText().trim();
+        String city = inputPatientCity.getText().trim();
         String zip = inputPatientZip.getText().trim();
+        String state = inputPatientState.getText().trim();
 
         if (workingCopy != null && !street.equals("") && !zip.equals(""))
         {
             Address newAddress = new Address (workingCopy,street, zip);
+            newAddress.setCity(city);
+            newAddress.setState(state);
+            if (patientATypeCBox.getValue() != null)
+                newAddress.setType(patientATypeCBox.getValue());
+
             patientAddressOBSList.add(newAddress);
         }
+    }
+
+    /*
+        Patient drug allergies.
+     */
+    @FXML
+    TextField patientShowDrug;
+    @FXML
+    ListView<Drug> patientAllergyListView;
+    private ObservableList<Drug> patientDrugOBSList = FXCollections.observableArrayList();
+
+    public void patient_onDrugSearchButton (ActionEvent actionEvent)
+    {
+
+    }
+
+    public void patient_onSaveAllergyButton (ActionEvent actionEvent)
+    {
+
     }
 
     @Override
