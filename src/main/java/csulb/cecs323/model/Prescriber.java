@@ -9,10 +9,6 @@ import java.util.Set;
 @DiscriminatorValue("2")
 public class Prescriber extends Person
 {
-    @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private long md_id;
-
     private long npiNumber;
     private String deaNumber;
     private String specialty;

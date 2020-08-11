@@ -22,7 +22,7 @@
               <items>
                   <MenuItem mnemonicParsing="false" onAction="#database_drug_onMenuSelect" text="Drugs..." />
                 <MenuItem mnemonicParsing="false" onAction="#database_drugClass_onMenuSelect" text="Drug Class..." />
-                  <MenuItem mnemonicParsing="false" text="Users..." />
+                  <MenuItem mnemonicParsing="false" onAction="#database_userBase_onMenuSelect" text="Users..." />
               </items>
             </Menu>
           <Menu mnemonicParsing="false" text="Help">

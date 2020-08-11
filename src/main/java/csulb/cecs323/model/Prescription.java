@@ -1,6 +1,8 @@
 package csulb.cecs323.model;
 
 import javax.persistence.*;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -9,11 +11,15 @@ import java.util.List;
 @Table (name = "prescriptions")
 public class Prescription
 {
+//    private static final SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long rx_number;
 
-    private GregorianCalendar date_written;
+//    private GregorianCalendar date_written;
+    private ZonedDateTime date_written;
 
     // ASSOCIATION(S)
     @OneToMany(mappedBy = "prescription", cascade = CascadeType.ALL)
@@ -27,7 +33,7 @@ public class Prescription
 
     // CONSTRUCTORS
     public Prescription () {}
-    public Prescription (Patient patient, Prescriber prescriber, GregorianCalendar date)
+    public Prescription (Patient patient, Prescriber prescriber, ZonedDateTime date)
     {
         setPatient(patient);
         setPrescriber(prescriber);
@@ -37,12 +43,16 @@ public class Prescription
     }
 
     // ACCESSORS
-    public GregorianCalendar getDateWritten () { return this.date_written; }
+    public long getRxNumber () { return this.rx_number; }
+    public ZonedDateTime getDateWritten () { return this.date_written; }
+    public String getPrettyDateWritten () { return this.date_written.format(formatter); }
     public Patient getPatient () { return this.patient; }
     public Prescriber getPrescriber() { return this.prescriber; }
 
+    public List<RxLine> getRxLines () { return this.rxLines; }
+
     // MUTATORS
-    public void setDateWritten (GregorianCalendar date) { this.date_written = date; }
+    public void setDateWritten (ZonedDateTime date) { this.date_written = date; }
     public void setPatient (Patient patient)
     {
         this.patient = patient;

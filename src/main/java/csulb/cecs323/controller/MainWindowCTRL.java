@@ -74,6 +74,29 @@ public class MainWindowCTRL
         db_drug_newWindow.show();
     }
 
+    public void database_userBase_onMenuSelect (ActionEvent actionEvent) throws IOException
+    {
+        Stage db_user_newWindow = new Stage();
+        URL userScene = Paths.get("./src/main/resources/layout/UserBase_NEW.fxml").toUri().toURL();
+        FXMLLoader loader = new FXMLLoader(userScene);
+        Parent root = loader.load();
+
+        UserBase_NEW_CTRL controller = loader.getController();
+        controller.setEntityManager(this.entityManager);
+        Scene scene = new Scene (root);
+
+        // "staging"
+        db_user_newWindow.setTitle("Add/Edit User");
+        db_user_newWindow.setResizable(false);
+//        db_user_newWindow.setOnCloseRequest(event->{
+//            if (controller.isMidTransaction())
+//                entityManager.getTransaction().rollback();
+//        });
+        db_user_newWindow.initModality(Modality.APPLICATION_MODAL); // prevents user from moving to another Stage until done
+        db_user_newWindow.setScene(scene);
+        db_user_newWindow.show();
+    }
+
     public void onMenuSelectClose (ActionEvent actionEvent)
     {
         Query pharmQuery = entityManager.createQuery("SELECT pgy FROM Pharmacology pgy");

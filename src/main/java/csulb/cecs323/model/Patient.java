@@ -1,9 +1,8 @@
 package csulb.cecs323.model;
 
-import csulb.cecs323.model.Person;
-
 import javax.persistence.*;
-import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Entity
@@ -11,8 +10,10 @@ import java.util.*;
 @DiscriminatorValue("1")
 public class Patient extends Person
 {
-    private static final SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
-    private GregorianCalendar dateOfBirth;
+//    private static final SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
+//    private GregorianCalendar dateOfBirth;
+    private ZonedDateTime dateOfBirth;
 
     // ASSOCIATION(S)
     /* Unidirectional: the Drug does not need to keep track of which patient is allergic to it */
@@ -28,24 +29,22 @@ public class Patient extends Person
 
     // CONSTRUCTORS
     public Patient () {}
-    public Patient (String first, String last, GregorianCalendar birth)
+    public Patient (String first, String last, ZonedDateTime birth)
     {
         super(first, last);
         setDateOfBirth(birth);
+
+        drugAllergyList = new ArrayList<>();
     }
 
     // ACCESSORS
-    public GregorianCalendar getDateOfBirth () { return this.dateOfBirth; }
-    public String getPrettyDOB ()
-    {
-        formatter.setCalendar(dateOfBirth);
-        return formatter.format(dateOfBirth.getTime());
-    }
+    public ZonedDateTime getDateOfBirth () { return this.dateOfBirth; }
+    public String getPrettyDOB () { return dateOfBirth.format(formatter); }
     public List<Drug> getDrugAllergyList () { return this.drugAllergyList; }
     public List<Comorbidity> getComorbidities () { return this.comorbidities; }
 
     // MUTATORS
-    public void setDateOfBirth (GregorianCalendar dateOfBirth) { this.dateOfBirth = dateOfBirth; }
+    public void setDateOfBirth (ZonedDateTime dateOfBirth) { this.dateOfBirth = dateOfBirth; }
 
     // MISCELLANEOUS
     public void addDrugAllergy (Drug allergy)
@@ -85,8 +84,7 @@ public class Patient extends Person
     @Override
     public String toString ()
     {
-        formatter.setCalendar(dateOfBirth);
-        String dateFormatted = formatter.format(dateOfBirth.getTime());
+        String dateFormatted = dateOfBirth.format(formatter);
 
         return super.toString() + String.format ("\tDOB: %-15s\nAllergies: %s", dateFormatted, drugAllergyList);
     }

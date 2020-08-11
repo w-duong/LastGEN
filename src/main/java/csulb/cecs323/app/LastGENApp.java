@@ -25,10 +25,11 @@ import javafx.stage.Stage;
 import javax.persistence.*;
 import java.net.URL;
 import java.nio.file.Paths;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.*;
 import java.util.logging.Logger;
 
 import static csulb.cecs323.model.DEA_Class.DEA.*;
@@ -95,16 +96,24 @@ public class LastGENApp extends Application
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////
       // PERSON DATA
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      Patient firstPerson = new Patient ("William", "Duong", new GregorianCalendar(1986,02,22));
-      Patient seconPerson = new Patient ("Jackie", "Duong", new GregorianCalendar(1988, 00, 28));
-      Address newAddress = new Address (firstPerson, "home", "25292 Dayton Drive", "92630");
+      Prescriber firstPerson = new Prescriber ("William", "Duong", "RPH64794");
+      Address newAddress = new Address (firstPerson, "office", "25292 Dayton Drive", "92630");
+
+      Pharmacist thirdPerson = new Pharmacist ("Piseth", "Sam", "RPH64794");
+
+      LocalDate birth = LocalDate.of(1988, Month.JANUARY, 28);
+      Patient seconPerson = new Patient ("Jackie", "Duong", birth.atStartOfDay(ZoneId.systemDefault()));
       Address anotherAdd = new Address (seconPerson, "home", "25292 Dayton Drive", "92630");
-      firstPerson.addDrugAllergy(zocor);
-      firstPerson.addDrugAllergy(lotensin);
       seconPerson.addDrugAllergy(lotensin);
+
+      Prescription newRx = new Prescription(seconPerson, firstPerson, ZonedDateTime.now());
+      RxLine rxLine = new RxLine(newRx, zocor, thirdPerson, 20, 30, 1);
+      newRx.addRxLine(rxLine.createFill(15));
 
       entityManager.persist(firstPerson);
       entityManager.persist(seconPerson);
+      entityManager.persist(thirdPerson);
+      entityManager.persist(newRx);
    }
 
    @Override
@@ -144,6 +153,16 @@ public class LastGENApp extends Application
 //
 //      for (Object index : results)
 //         System.out.println ("Result> " + index.toString());
+
+      Query query = lastGEN.entityManager.createQuery("SELECT rx FROM Prescription rx INNER JOIN Patient pt ON pt = rx.patient WHERE pt.lastName = 'Duong'");
+      Prescription result = (Prescription) query.getResultList().get(0);
+
+      String dateWritten = result.getPrettyDateWritten();
+      String patient = result.getPatient().toString();
+      List<RxLine> history = result.getRxLines();
+      System.out.println (dateWritten + " : " + patient);
+      for (RxLine line : history)
+         System.out.println (line + "\tRemaining: " + line.getQuantityRemaining());
 
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

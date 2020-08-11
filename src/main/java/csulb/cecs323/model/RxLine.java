@@ -1,6 +1,7 @@
 package csulb.cecs323.model;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -8,12 +9,14 @@ import java.util.GregorianCalendar;
 @Table (name = "rx_lines")
 public class RxLine
 {
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy @ HH:MM:SS");
+
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private long rx_id;
     private double quantityRemaining;
-
     private boolean isRefill = false;
+
     private String directions;
     private GregorianCalendar date_filled;
     private double quantityWritten;
@@ -28,15 +31,16 @@ public class RxLine
     @ManyToOne
     private Drug drug;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Pharmacist pharmacist;
 
     // CONSTRUCTORS
     public RxLine () {}
-    public RxLine (Drug drug, Pharmacist rph, double strength, double quantityWritten, int refills)
+    public RxLine (Prescription rx, Drug drug, Pharmacist rph, double strength, double quantityWritten, int refills)
     {
         setDrug(drug);
         setPharmacist(rph);
+        setPrescription(rx);
 
         setStrength(strength);
         setQuantityWritten(quantityWritten);
@@ -64,6 +68,11 @@ public class RxLine
     public boolean isRefill () { return this.isRefill; }
     public String getDirections () { return this.directions; }
     public GregorianCalendar getDateFilled () { return this.date_filled; }
+    public String getPrettyDateFilled ()
+    {
+        formatter.setCalendar(date_filled);
+        return formatter.format(date_filled.getTime());
+    }
     public double getQuantityWritten() {return this.quantityWritten; }
     public double getQuantityFilled() { return this.quantityFilled; }
     public double getQuantityRemaining() { return this.quantityRemaining; }
@@ -112,7 +121,7 @@ public class RxLine
             Calendar lookup = Calendar.getInstance();
             GregorianCalendar today = (GregorianCalendar) lookup;
 
-            fill = new RxLine (this.drug, this.pharmacist, this.strength, this.quantityWritten, this.refills);
+            fill = new RxLine (this.prescription, this.drug, this.pharmacist, this.strength, this.quantityWritten, this.refills);
             if (!this.isRefill)
                 fill.setIsRefill(true);
             fill.setQuantityFilled(fillAmount);
@@ -128,13 +137,17 @@ public class RxLine
             else
                 fill.setQuantityRemaining (this.quantityRemaining - fillAmount);
 
-            if (fill.quantityRemaining >= fill.quantityWritten)
-                fill.refills = (int) (fill.quantityRemaining / fill.quantityWritten);
-            else
-                fill.refills = 0;
+            fill.refills = (int) (fill.quantityRemaining / fill.quantityWritten);
         }
 
         return fill;
+    }
+
+    @Override
+    public String toString ()
+    {
+        return String.format ("RX-Number: %d\tPatient: %-30s\tPharmacist: %-30s\tQty: %-5f",
+                prescription.getRxNumber(), prescription.getPatient().getFirstName(), pharmacist.getFirstName(), this.quantityFilled);
     }
 }
 

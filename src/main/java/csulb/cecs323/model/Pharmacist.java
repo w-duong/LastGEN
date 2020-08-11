@@ -11,10 +11,6 @@ import java.util.Set;
 @DiscriminatorValue("3")
 public class Pharmacist extends Person
 {
-    @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private long rph_id;
-
     private long npiNumber;
     private String license;
     private String position;

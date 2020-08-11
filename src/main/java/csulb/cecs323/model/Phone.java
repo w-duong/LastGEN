@@ -1,5 +1,8 @@
 package csulb.cecs323.model;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+
 import javax.persistence.*;
 
 @Entity
@@ -9,6 +12,7 @@ public class Phone {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long phone_id;
 
+    private boolean isDefaultNumber;
     private String type;
     private String actual_number;
 
@@ -26,10 +30,12 @@ public class Phone {
     }
 
     // ACCESSORS
+    public boolean isDefaultNumber() { return this.isDefaultNumber; }
     public String getType () {return this.type; }
     public String getNumber() { return this.actual_number; }
 
     // MUTATORS
+    public void setIsDefault (boolean isDefaultNumber) { this.isDefaultNumber = isDefaultNumber; }
     public void setType (String type) { this.type = type; }
     public void setNumber (String number) { this.actual_number = number; }
     public void setPerson (Person person) { this.person = person; }
