@@ -31,6 +31,7 @@
 		<class>csulb.cecs323.model.Comorbidity</class>
 		<class>csulb.cecs323.model.RxLine</class>
 		<class>csulb.cecs323.model.Prescription</class>
+		<class>csulb.cecs323.model.ZonedDateTimeConverter</class>
 
 		<properties>
 

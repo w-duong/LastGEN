@@ -2,6 +2,7 @@ package csulb.cecs323.controller;
 
 import csulb.cecs323.model.Drug;
 import csulb.cecs323.model.DrugClass;
+import csulb.cecs323.model.Patient;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,14 +12,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -37,6 +36,8 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
     static final String Mode_DCAddDG = "drugClass.AddDrug";
     static final String Mode_DGEditDG = "drug.EditDrug";
     static final String Mode_IXAddDG = "interaction.AddDrug";
+    static final String Mode_USEditPT = "userBase.EditPerson";
+    static final String Mode_USAddDG = "userBase.AddDrugAllergy";
 
     private String operationSelect;
     public void setOperationSelect (String operation) { this.operationSelect = operation; }
@@ -59,9 +60,16 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
 
     @FXML
     private TextField inputSearchBar;
-
     @FXML
     private CheckBox duplicateCheck;
+    @FXML
+    private DatePicker inputPatientDOB;
+    @FXML
+    private TextField inputNPIField;
+    @FXML
+    private TextField inputLicenseField;
+    @FXML
+    private Pane addUserPane;
 
     // MODIFY (1)
     @Override
@@ -71,7 +79,10 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
         Platform.runLater(()->{
             switch (operationSelect)
             {
+                case Mode_USEditPT:
+                    addUserPane.setVisible(true);
                 case Mode_IXAddDG:
+                case Mode_USAddDG:
                     duplicateCheck.setDisable(true);
                 case Mode_DCEditDC:
                 case Mode_DGEditDG:
@@ -111,10 +122,15 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
         }
         else if (operationSelect.equals(Mode_DCAddDG) ||
                 operationSelect.equals(Mode_DGEditDG) ||
-                operationSelect.equals(Mode_IXAddDG) )
+                operationSelect.equals(Mode_IXAddDG) ||
+                operationSelect.equals(Mode_USAddDG) )
         {
             query = entityManager.createNamedQuery(Drug.FIND_ALL_BY_NAME, Drug.class).setParameter("searchString", searchString);
             resultsList.addAll(query.getResultList());
+        }
+        else if (operationSelect.equals(Mode_USEditPT))
+        {
+
         }
     }
 
@@ -168,6 +184,12 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
                 ((Interaction_POPUP_CTRL) lastScene).setOffendingDrug((Drug) resultsBuffer.get(0));
                 ((Interaction_POPUP_CTRL) lastScene).inputDrugField.setPromptText(((Drug) resultsBuffer.get(0)).getChemical_name());
                 break;
+            case Mode_USAddDG:
+                if (((UserBase_NEW_CTRL) lastScene).getWorkingCopy() instanceof Patient)
+                {
+                    ((Patient) ((UserBase_NEW_CTRL) lastScene).getWorkingCopy()).addDrugAllergy((Drug) resultsBuffer.get(0));
+                    ((UserBase_NEW_CTRL) lastScene).getPatientDrugOBSList().add((Drug) resultsBuffer.get(0));
+                }
         }
 
         Stage popUp = (Stage) inputSearchBar.getScene().getWindow();

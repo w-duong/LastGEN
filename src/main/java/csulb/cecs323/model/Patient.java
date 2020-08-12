@@ -1,6 +1,7 @@
 package csulb.cecs323.model;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -8,16 +9,29 @@ import java.util.*;
 @Entity
 @Table (name = "patients")
 @DiscriminatorValue("1")
+@NamedQueries({
+        @NamedQuery (name = Patient.FIND_ALL, query = "SELECT pt FROM Patient pt"),
+        @NamedQuery (name = Patient.FIND_ALL_BY_DOB, query = "SELECT pt FROM Patient pt WHERE pt.dateOfBirth = :ptDOB"),
+        @NamedQuery (name = Patient.FIND_ALL_BY_NAME,
+        query = "SELECT pt FROM Patient pt WHERE LOWER (pt.lastName) LIKE LOWER (CONCAT ('%', :ptLastName, '%')) AND " +
+                "LOWER (pt.firstName) LIKE LOWER (CONCAT ('%', :ptFirstName, '%'))")
+})
 public class Patient extends Person
 {
-//    private static final SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
-//    private GregorianCalendar dateOfBirth;
+
+    @Convert(converter = ZonedDateTimeConverter.class)
     private ZonedDateTime dateOfBirth;
+
+    // QUERY STRING(S)
+    public static final String FIND_ALL = "Patient.findAllPatients";
+    public static final String FIND_ALL_BY_NAME = "Patient.findByName";
+    public static final String FIND_ALL_BY_DOB = "Patient.findByDOB";
+    public static final String FIND_ALL_BY_SPEC = "Patient.findByNameDOB";
 
     // ASSOCIATION(S)
     /* Unidirectional: the Drug does not need to keep track of which patient is allergic to it */
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.ALL)
 //    @JoinColumn(name = "did", referencedColumnName = "person_id") //<---doesn't work, would be more efficient if it DID
     private List<Drug> drugAllergyList;
 
@@ -66,6 +80,14 @@ public class Patient extends Person
             this.comorbidities.add(comorbidity);
 
             comorbidity.setPatient(this);
+        }
+    }
+    public void removeComorbidity (Comorbidity comorbidity)
+    {
+        if (this.comorbidities != null && this.comorbidities.contains(comorbidity))
+        {
+            this.comorbidities.remove(comorbidity);
+            comorbidity.unsetPatient(this);
         }
     }
 
