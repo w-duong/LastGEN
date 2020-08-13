@@ -104,6 +104,7 @@ public class LastGENApp extends Application
       LocalDate birth = LocalDate.of(1988, Month.JANUARY, 28);
       Patient seconPerson = new Patient ("Jackie", "Duong", birth.atStartOfDay(ZoneId.systemDefault()));
       Address anotherAdd = new Address (seconPerson, "home", "25292 Dayton Drive", "92630");
+      Phone someNumber = new Phone (seconPerson, "Mobile", "9498132974");
       seconPerson.addDrugAllergy(lotensin);
 
       Prescription newRx = new Prescription(seconPerson, firstPerson, ZonedDateTime.now());
@@ -174,6 +175,7 @@ public class LastGENApp extends Application
 
       for (Patient pt: result)
          System.out.println (pt);
+
 
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -3,6 +3,7 @@ package csulb.cecs323.controller;
 import csulb.cecs323.model.Drug;
 import csulb.cecs323.model.DrugClass;
 import csulb.cecs323.model.Patient;
+import csulb.cecs323.model.Phone;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -148,6 +149,11 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
 
                 query = entityManager.createNamedQuery(Patient.FIND_ALL_BY_DOB, Patient.class);
                 query.setParameter("ptDOB", dob);
+            }
+            else if (last.chars().allMatch(Character::isDigit))
+            {
+                query = entityManager.createNamedQuery(Phone.FIND_BY_NUMBER, Patient.class);
+                query.setParameter("numberString",last);
             }
             else if (inputPatientDOB.getValue() != null || !inputPatientDOB.getEditor().getText().trim().equals(""))
             {

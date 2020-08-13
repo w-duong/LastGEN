@@ -81,6 +81,7 @@ abstract public class Person
 
     public String toString ()
     {
-        return String.format ("FIRST: %-10s\tLAST: %-10s\tAddress > %-40s", firstName, lastName,addresses);
+        return String.format ("FIRST: %-10s\tLAST: %-10s\tAddress > %-40s\tPhone > %s",
+                firstName, lastName, addresses, phoneList);
     }
 }
