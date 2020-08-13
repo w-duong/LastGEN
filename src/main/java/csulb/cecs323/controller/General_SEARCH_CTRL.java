@@ -26,6 +26,9 @@ import javax.persistence.TypedQuery;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -62,6 +65,10 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
     private TextField inputSearchBar;
     @FXML
     private CheckBox duplicateCheck;
+
+    /*
+        Userbase specific input fields, not applicable for Drug/DrugClass
+     */
     @FXML
     private DatePicker inputPatientDOB;
     @FXML
@@ -77,6 +84,7 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
     {
         /* NECESSARY, or values will remain NULL - such as, 'isMultipleMode' */
         Platform.runLater(()->{
+            /* Select if Userbase input fields visible, if 'Duplicate' option available, if multiple selection possible */
             switch (operationSelect)
             {
                 case Mode_USEditPT:
@@ -112,7 +120,7 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
     public void searchOperation ()
     {
         resultsList.removeAll(resultsList);
-        String searchString = inputSearchBar.getText();
+        String searchString = preparser(inputSearchBar.getText());
         TypedQuery query;
 
         if (operationSelect.equals(Mode_DCEditDC))
@@ -130,8 +138,55 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
         }
         else if (operationSelect.equals(Mode_USEditPT))
         {
+            String [] fullName = searchString.split(" ");
+            String last = fullName[0];
+            String first = (fullName.length < 2) ? "" : fullName[1];
 
+            if (last.equals("") && first.equals("") && inputPatientDOB.getValue() != null)
+            {
+                ZonedDateTime dob = inputPatientDOB.getValue().atStartOfDay(ZoneId.systemDefault());
+
+                query = entityManager.createNamedQuery(Patient.FIND_ALL_BY_DOB, Patient.class);
+                query.setParameter("ptDOB", dob);
+            }
+            else if (inputPatientDOB.getValue() != null || !inputPatientDOB.getEditor().getText().trim().equals(""))
+            {
+                ZonedDateTime dob = inputPatientDOB.getValue().atStartOfDay(ZoneId.systemDefault());
+
+                query = entityManager.createNamedQuery(Patient.FIND_ALL_BY_SPEC, Patient.class);
+                query.setParameter("ptLastName", last)
+                        .setParameter("ptFirstName", first)
+                        .setParameter("ptDOB", dob);
+            }
+            else
+            {
+                query = entityManager.createNamedQuery(Patient.FIND_ALL_BY_NAME, Patient.class);
+                query.setParameter("ptLastName", last).setParameter("ptFirstName", first);
+            }
+
+            resultsList.addAll(query.getResultList());
         }
+    }
+
+    public static String preparser (String search)
+    {
+        if (search.contains(","))
+        {
+            String temp = search.trim().replaceAll("[^-'.,a-zA-Z0-9]","");
+            String [] stack = temp.split(",");
+
+            return String.join (" ", stack);
+        }
+        else if (search.matches(".*[\\-()./].*"))
+        {
+            String temp = search.trim().replaceAll("[^0-9]", "");
+            if (temp.length() == 10 && temp.chars().allMatch(Character::isDigit))
+                return temp;
+            else
+                return search.trim();
+        }
+        else
+            return search.trim();
     }
 
     // MODIFY (3)
@@ -190,6 +245,9 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
                     ((Patient) ((UserBase_NEW_CTRL) lastScene).getWorkingCopy()).addDrugAllergy((Drug) resultsBuffer.get(0));
                     ((UserBase_NEW_CTRL) lastScene).getPatientDrugOBSList().add((Drug) resultsBuffer.get(0));
                 }
+            case Mode_USEditPT:
+                ((UserBase_NEW_CTRL) lastScene).setWorkingCopy((Patient) resultsBuffer.get(0));
+                ((UserBase_NEW_CTRL) lastScene).refreshNameInfo();
         }
 
         Stage popUp = (Stage) inputSearchBar.getScene().getWindow();

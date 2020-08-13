@@ -55,7 +55,7 @@
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" prefHeight="0.0" prefWidth="333.0" spacing="3.0">
                            <children>
-                              <Button mnemonicParsing="false" prefWidth="167.0" text="Edit" />
+                              <Button mnemonicParsing="false" onAction="#patient_onEditButton" prefWidth="167.0" text="Edit" />
                               <Button mnemonicParsing="false" onAction="#patient_onSaveButton" prefWidth="167.0" text="Save" />
                            </children>
                         </HBox>

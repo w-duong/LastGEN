@@ -14,7 +14,11 @@ import java.util.*;
         @NamedQuery (name = Patient.FIND_ALL_BY_DOB, query = "SELECT pt FROM Patient pt WHERE pt.dateOfBirth = :ptDOB"),
         @NamedQuery (name = Patient.FIND_ALL_BY_NAME,
         query = "SELECT pt FROM Patient pt WHERE LOWER (pt.lastName) LIKE LOWER (CONCAT ('%', :ptLastName, '%')) AND " +
-                "LOWER (pt.firstName) LIKE LOWER (CONCAT ('%', :ptFirstName, '%'))")
+                "LOWER (pt.firstName) LIKE LOWER (CONCAT ('%', :ptFirstName, '%'))"),
+        @NamedQuery (name = Patient.FIND_ALL_BY_SPEC,
+        query = "SELECT pt FROM Patient pt WHERE LOWER (pt.lastName) LIKE LOWER (CONCAT ('%', :ptLastName, '%')) AND " +
+                "LOWER (pt.firstName) LIKE LOWER (CONCAT ('%', :ptFirstName, '%')) AND " +
+                "pt.dateOfBirth = :ptDOB")
 })
 public class Patient extends Person
 {

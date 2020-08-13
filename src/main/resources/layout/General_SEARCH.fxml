@@ -27,7 +27,7 @@
                   <Insets />
                </VBox.margin>
                <children>
-                  <TextField fx:id="inputSearchBar" onKeyPressed="#onEnterKey" prefHeight="25.0" prefWidth="516.0" promptText="Example &gt; 'Drug Name' or 'Last Name, First Name' or '10-digit Phone Number)'">
+                  <TextField fx:id="inputSearchBar" onKeyPressed="#onEnterKey" prefHeight="25.0" prefWidth="516.0" promptText="Example &gt; 'Drug Name' or 'Last Name, First Name' or '10-digit Phone Number)' -- NO SPACES">
                      <font>
                         <Font name="System Italic" size="12.0" />
                      </font></TextField>

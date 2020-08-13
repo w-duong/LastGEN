@@ -40,6 +40,7 @@ public class UserBase_NEW_CTRL implements Initializable
 
     private Person workingCopy;
     public Person getWorkingCopy() { return this.workingCopy; }
+    public void setWorkingCopy(Person person) { this.workingCopy = person; }
 
     /*
         Patient demographics section here.
@@ -53,9 +54,11 @@ public class UserBase_NEW_CTRL implements Initializable
     @FXML
     DatePicker inputPatientDOB;
 
-    public void patient_onEditButton (ActionEvent actionEvent)
+    public void patient_onEditButton (ActionEvent actionEvent) throws IOException
     {
-
+        Stage search = General_SEARCH_CTRL.readyStage(Patient.class,this,
+                General_SEARCH_CTRL.Mode_USEditPT, "Search for Patient", this.entityManager);
+        search.show();
     }
 
     public void patient_onSaveButton (ActionEvent actionEvent)
