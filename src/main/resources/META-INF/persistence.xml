@@ -28,6 +28,7 @@
 		<class>csulb.cecs323.model.Patient</class>
 		<class>csulb.cecs323.model.Prescriber</class>
 		<class>csulb.cecs323.model.Pharmacist</class>
+		<class>csulb.cecs323.model.ProviderCertification</class>
 		<class>csulb.cecs323.model.Comorbidity</class>
 		<class>csulb.cecs323.model.RxLine</class>
 		<class>csulb.cecs323.model.Prescription</class>

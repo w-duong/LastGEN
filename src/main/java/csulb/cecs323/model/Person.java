@@ -24,6 +24,9 @@ abstract public class Person
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
     private List<Phone> phoneList;
 
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
+    private List<ProviderCertification> licenses;
+
     // CONSTRUCTORS
     public Person () {}
     public Person (String first, String last)
@@ -46,6 +49,10 @@ abstract public class Person
     public String getFirstName () { return this.firstName; }
     public String getMiddleName () { return this.middleName; }
     public String getLastName () { return this.lastName; }
+
+    public List<Phone> getPhoneList () { return this.phoneList; }
+    public List<Address> getAddresses () { return this.addresses; }
+    public List<ProviderCertification> getLicenses () { return this.licenses; }
 
     // MUTATORS
     public void setFirstName (String fname) { this.firstName = fname; }
@@ -76,6 +83,19 @@ abstract public class Person
             this.phoneList.add(phone);
 
             phone.setPerson(this);
+        }
+    }
+
+    public void addCertification (ProviderCertification license)
+    {
+        if (this.licenses == null)
+            this.licenses = new ArrayList<>();
+
+        if (!this.licenses.contains(license))
+        {
+            this.licenses.add(license);
+
+            license.setPerson(this);
         }
     }
 

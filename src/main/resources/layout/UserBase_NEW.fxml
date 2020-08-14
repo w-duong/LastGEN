@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="csulb.cecs323.controller.UserBase_NEW_CTRL">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="768.0" prefWidth="768.0" stylesheets="@../style/new_modules.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="csulb.cecs323.controller.UserBase_NEW_CTRL">
    <children>
       <VBox layoutX="5.0" layoutY="5.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
          <children>
@@ -16,237 +16,412 @@
             </Label>
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" VBox.vgrow="ALWAYS">
                <children>
-                  <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: lightgray;" styleClass="userPane" HBox.hgrow="ALWAYS" />
-                  <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
-                     <children>
-                        <Label prefHeight="26.0" prefWidth="333.0" text="Patient" />
-                        <HBox prefHeight="0.0" prefWidth="333.0" spacing="3.0">
-                           <children>
-                              <Label prefWidth="165.0" text="First Name" />
-                              <Label prefWidth="165.0" text="Last Name" />
-                           </children>
-                           <VBox.margin>
-                              <Insets top="10.0" />
-                           </VBox.margin>
-                        </HBox>
-                        <HBox prefHeight="5.0" prefWidth="333.0" spacing="3.0">
-                           <children>
-                              <TextField fx:id="inputPatientFN" HBox.hgrow="ALWAYS" />
-                              <TextField fx:id="inputPatientLN" HBox.hgrow="ALWAYS" />
-                           </children>
-                        </HBox>
-                        <HBox prefHeight="0.0" prefWidth="333.0" spacing="3.0">
-                           <children>
-                              <Label prefWidth="165.0" text="Middle Name" />
-                              <Label prefWidth="165.0" text="Date of Birth" />
-                           </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </HBox>
-                        <HBox prefHeight="0.0" prefWidth="333.0" spacing="3.0">
-                           <VBox.margin>
-                              <Insets bottom="10.0" />
-                           </VBox.margin>
-                           <children>
-                              <TextField fx:id="inputPatientMN" prefWidth="167.0" HBox.hgrow="ALWAYS" />
-                              <DatePicker fx:id="inputPatientDOB" prefHeight="25.0" prefWidth="167.0" />
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER_RIGHT" prefHeight="0.0" prefWidth="333.0" spacing="3.0">
-                           <children>
-                              <Button mnemonicParsing="false" onAction="#patient_onEditButton" prefWidth="167.0" text="Edit" />
-                              <Button mnemonicParsing="false" onAction="#patient_onSaveButton" prefWidth="167.0" text="Save" />
-                           </children>
-                        </HBox>
-                        <TabPane prefHeight="359.0" prefWidth="333.0" tabClosingPolicy="UNAVAILABLE">
-                           <VBox.margin>
-                              <Insets top="25.0" />
-                           </VBox.margin>
-                           <tabs>
-                              <Tab text="Phone">
-                                <content>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="333.0">
-                                       <children>
-                                          <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <children>
-                                                <ScrollPane hbarPolicy="NEVER" prefHeight="190.0" prefWidth="333.0">
-                                                   <content>
-                                                      <ListView fx:id="patientPNListView" prefHeight="194.0" prefWidth="321.0" />
-                                                   </content>
-                                                </ScrollPane>
-                                                <HBox spacing="3.0">
-                                                   <VBox.margin>
-                                                      <Insets top="10.0" />
-                                                   </VBox.margin>
-                                                   <children>
-                                                      <Label prefWidth="165.0" text="Phone Number" />
-                                                      <Label text="Type" />
-                                                   </children>
-                                                </HBox>
-                                                <HBox spacing="3.0">
-                                                   <children>
-                                                      <TextField fx:id="inputPatientNumber" prefWidth="165.0" HBox.hgrow="ALWAYS" />
-                                                      <ChoiceBox fx:id="patientPTypeCBox" prefWidth="165.0" />
-                                                   </children>
-                                                </HBox>
-                                                <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="171.0">
-                                                   <children>
-                                                      <Button mnemonicParsing="false" onAction="#patientPhone_onSaveButton" prefWidth="165.0" text="Save" />
-                                                   </children>
-                                                   <VBox.margin>
-                                                      <Insets top="3.0" />
-                                                   </VBox.margin>
-                                                </HBox>
-                                             </children>
-                                          </VBox>
-                                       </children>
-                                    </AnchorPane>
-                                </content>
-                              </Tab>
+                  <VBox prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightgray;" styleClass="userPane" />
+                  <Accordion prefHeight="731.0" prefWidth="131.0" HBox.hgrow="ALWAYS">
+                    <panes>
+                      <TitledPane animated="false" text="Patient">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="655.0" prefWidth="30.0">
 
-                              <Tab text="Address">
-                                 <content>
-                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="333.0">
-                                       <children>
-                                          <VBox prefHeight="359.0" prefWidth="333.0" AnchorPane.bottomAnchor="-29.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <children>
-                                                <ScrollPane hbarPolicy="NEVER" prefHeight="190.0" prefWidth="333.0">
-                                                   <content>
-                                                      <ListView fx:id="patientADListView" prefHeight="194.0" prefWidth="321.0" />
-                                                   </content>
-                                                </ScrollPane>
-                                                <Pane style="-fx-border-style: solid; -fx-border-color: silver;">
-                                                   <children>
-                                                      <HBox spacing="3.0">
-                                                         <children>
-                                                            <Label prefWidth="165.0" text="Street Address" />
-                                                            <Label text="City" />
-                                                         </children>
-                                                      </HBox>
-                                                      <HBox layoutY="17.0" spacing="3.0">
-                                                         <children>
-                                                            <TextField fx:id="inputPatientStreet" prefWidth="167.0" HBox.hgrow="ALWAYS" />
-                                                            <TextField fx:id="inputPatientCity" prefWidth="165.0" HBox.hgrow="ALWAYS" />
-                                                         </children>
-                                                      </HBox>
-                                                      <HBox layoutY="52.0" prefHeight="14.0" prefWidth="333.0" spacing="3.0">
-                                                         <children>
-                                                            <TextField fx:id="inputPatientZip" HBox.hgrow="ALWAYS" />
-                                                            <TextField />
-                                                            <ComboBox fx:id="patientATypeCBox" prefWidth="150.0" />
-                                                         </children>
-                                                      </HBox>
-                                                      <HBox layoutY="77.0" prefHeight="0.0" prefWidth="333.0" spacing="3.0">
-                                                         <children>
-                                                            <Label prefWidth="109.0" text="Zip Code" />
-                                                            <Label prefWidth="109.0" text="State" />
-                                                            <Label text="Type" />
-                                                         </children>
-                                                      </HBox>
-                                                   </children>
-                                                   <VBox.margin>
-                                                      <Insets top="10.0" />
-                                                   </VBox.margin>
-                                                </Pane>
-                                                <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="171.0">
-                                                   <children>
-                                                      <Button mnemonicParsing="false" onAction="#patientAddress_onSaveButton" prefWidth="167.0" text="Save" />
-                                                   </children>
-                                                   <VBox.margin>
-                                                      <Insets top="3.0" />
-                                                   </VBox.margin>
-                                                </HBox>
-                                             </children>
-                                          </VBox>
-                                       </children>
-                                    </AnchorPane>
-                                 </content>
-                              </Tab>
+                             <VBox layoutX="28.6" layoutY="29.6" prefHeight="636.0" prefWidth="353.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="ALWAYS">
+                                <children>
+                                   <HBox prefHeight="0.0" prefWidth="333.0" spacing="3.0">
+                                      <children>
+                                         <Label prefWidth="165.0" text="First Name" />
+                                         <Label prefWidth="165.0" text="Last Name" />
+                                      </children>
+                                      <VBox.margin>
+                                         <Insets />
+                                      </VBox.margin>
+                                   </HBox>
+                                   <HBox prefHeight="5.0" prefWidth="333.0" spacing="3.0">
+                                      <children>
+                                         <TextField fx:id="inputPatientFN" HBox.hgrow="ALWAYS" />
+                                         <TextField fx:id="inputPatientLN" HBox.hgrow="ALWAYS" />
+                                      </children>
+                                   </HBox>
+                                   <HBox prefHeight="0.0" prefWidth="333.0" spacing="3.0">
+                                      <children>
+                                         <Label prefWidth="165.0" text="Middle Name" />
+                                         <Label prefWidth="165.0" text="Date of Birth" />
+                                      </children>
+                                      <VBox.margin>
+                                         <Insets />
+                                      </VBox.margin>
+                                   </HBox>
+                                   <HBox prefHeight="0.0" prefWidth="333.0" spacing="3.0">
+                                      <VBox.margin>
+                                         <Insets bottom="10.0" />
+                                      </VBox.margin>
+                                      <children>
+                                         <TextField fx:id="inputPatientMN" prefWidth="167.0" HBox.hgrow="ALWAYS" />
+                                         <DatePicker fx:id="inputPatientDOB" prefHeight="25.0" prefWidth="167.0" />
+                                      </children>
+                                   </HBox>
+                                   <HBox alignment="CENTER_RIGHT" prefHeight="0.0" prefWidth="333.0" spacing="3.0">
+                                      <children>
+                                         <Button mnemonicParsing="false" onAction="#patient_onEditButton" prefWidth="167.0" text="Edit" />
+                                         <Button mnemonicParsing="false" onAction="#patient_onSaveButton" prefWidth="167.0" text="Save" />
+                                      </children>
+                                   </HBox>
+                                   <TabPane prefHeight="359.0" prefWidth="327.0" tabClosingPolicy="UNAVAILABLE">
+                                      <VBox.margin>
+                                         <Insets top="25.0" />
+                                      </VBox.margin>
+                                      <tabs>
+                                         <Tab text="Phone">
+                                            <content>
+                                               <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="333.0">
+                                                  <children>
+                                                     <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                        <children>
+                                                           <ScrollPane hbarPolicy="NEVER" prefHeight="190.0" prefWidth="333.0">
+                                                              <content>
+                                                                 <ListView fx:id="patientPNListView" prefHeight="194.0" prefWidth="321.0" />
+                                                              </content>
+                                                           </ScrollPane>
+                                                           <HBox spacing="3.0">
+                                                              <VBox.margin>
+                                                                 <Insets top="10.0" />
+                                                              </VBox.margin>
+                                                              <children>
+                                                                 <Label prefWidth="165.0" text="Phone Number" />
+                                                                 <Label text="Type" />
+                                                              </children>
+                                                           </HBox>
+                                                           <HBox spacing="3.0">
+                                                              <children>
+                                                                 <TextField fx:id="inputPatientNumber" prefWidth="165.0" HBox.hgrow="ALWAYS" />
+                                                                 <ChoiceBox fx:id="patientPTypeCBox" prefWidth="165.0" />
+                                                              </children>
+                                                           </HBox>
+                                                           <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="171.0">
+                                                              <children>
+                                                                 <Button mnemonicParsing="false" onAction="#patientPhone_onSaveButton" prefWidth="163.0" text="Save" />
+                                                              </children>
+                                                              <VBox.margin>
+                                                                 <Insets top="3.0" />
+                                                              </VBox.margin>
+                                                           </HBox>
+                                                        </children>
+                                                     </VBox>
+                                                  </children>
+                                               </AnchorPane>
+                                            </content>
+                                         </Tab>
 
-                              <Tab text="Drug Allergies">
-                                 <content>
-                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="333.0">
-                                       <children>
-                                          <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <children>
-                                                <ScrollPane hbarPolicy="NEVER" prefHeight="190.0" prefWidth="333.0">
-                                                   <content>
-                                                      <ListView fx:id="patientAllergyListView" onKeyPressed="#patient_onDeleteDrugKey" prefHeight="194.0" prefWidth="321.0" />
-                                                   </content>
-                                                </ScrollPane>
-                                                <HBox spacing="3.0">
-                                                   <VBox.margin>
-                                                      <Insets top="10.0" />
-                                                   </VBox.margin>
-                                                   <children>
-                                                      <Label prefWidth="165.0" text="Drug" />
-                                                   </children>
-                                                </HBox>
-                                                <HBox spacing="3.0">
-                                                   <children>
-                                                      <Button mnemonicParsing="false" onAction="#patient_onDrugSearchButton" prefWidth="335.0" text="Search..." HBox.hgrow="ALWAYS" />
-                                                   </children>
-                                                </HBox>
-                                             </children>
-                                          </VBox>
-                                       </children>
-                                    </AnchorPane>
-                                 </content>
-                              </Tab>
+                                         <Tab text="Address">
+                                            <content>
+                                               <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="333.0">
+                                                  <children>
+                                                     <VBox prefHeight="359.0" prefWidth="333.0" AnchorPane.bottomAnchor="-29.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                        <children>
+                                                           <ScrollPane hbarPolicy="NEVER" prefHeight="190.0" prefWidth="333.0">
+                                                              <content>
+                                                                 <ListView fx:id="patientADListView" prefHeight="194.0" prefWidth="321.0" />
+                                                              </content>
+                                                           </ScrollPane>
+                                                           <Pane style="-fx-border-style: solid; -fx-border-color: silver;">
+                                                              <children>
+                                                                 <HBox spacing="3.0">
+                                                                    <children>
+                                                                       <Label prefWidth="162.0" text="Street Address" />
+                                                                       <Label text="City" />
+                                                                    </children>
+                                                                 </HBox>
+                                                                 <HBox layoutY="17.0" prefHeight="25.0" prefWidth="327.0" spacing="3.0">
+                                                                    <children>
+                                                                       <TextField fx:id="inputPatientStreet" HBox.hgrow="ALWAYS" />
+                                                                       <TextField fx:id="inputPatientCity" HBox.hgrow="ALWAYS" />
+                                                                    </children>
+                                                                 </HBox>
+                                                                 <HBox layoutY="52.0" prefHeight="14.0" prefWidth="327.0" spacing="3.0">
+                                                                    <children>
+                                                                       <TextField fx:id="inputPatientZip" HBox.hgrow="ALWAYS" />
+                                                                       <TextField />
+                                                                       <ComboBox fx:id="patientATypeCBox" prefWidth="150.0" />
+                                                                    </children>
+                                                                 </HBox>
+                                                                 <HBox layoutY="77.0" prefHeight="0.0" prefWidth="327.0" spacing="3.0">
+                                                                    <children>
+                                                                       <Label prefWidth="107.0" text="Zip Code" />
+                                                                       <Label prefWidth="107.0" text="State" />
+                                                                       <Label text="Type" />
+                                                                    </children>
+                                                                 </HBox>
+                                                              </children>
+                                                              <VBox.margin>
+                                                                 <Insets top="10.0" />
+                                                              </VBox.margin>
+                                                           </Pane>
+                                                           <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="171.0">
+                                                              <children>
+                                                                 <Button mnemonicParsing="false" onAction="#patientAddress_onSaveButton" prefWidth="163.0" text="Save" />
+                                                              </children>
+                                                              <VBox.margin>
+                                                                 <Insets top="3.0" />
+                                                              </VBox.margin>
+                                                           </HBox>
+                                                        </children>
+                                                     </VBox>
+                                                  </children>
+                                               </AnchorPane>
+                                            </content>
+                                         </Tab>
 
-                              <Tab text="Comorbidity">
-                                 <content>
-                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="333.0">
-                                       <children>
-                                          <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <children>
-                                                <ScrollPane hbarPolicy="NEVER" prefHeight="190.0" prefWidth="333.0">
-                                                   <content>
-                                                      <ListView fx:id="patientCOMListView" prefHeight="194.0" prefWidth="321.0" />
-                                                   </content>
-                                                </ScrollPane>
-                                                <HBox spacing="5.0">
-                                                   <VBox.margin>
-                                                      <Insets top="10.0" />
-                                                   </VBox.margin>
-                                                   <children>
-                                                      <Label prefWidth="165.0" text="State Name" />
-                                                      <Label prefWidth="165.0" text="Stage" />
-                                                   </children>
-                                                </HBox>
-                                                <HBox spacing="3.0">
-                                                   <children>
-                                                      <TextField fx:id="inputPatientCOMName" prefWidth="165.0" HBox.hgrow="ALWAYS" />
-                                                      <TextField fx:id="inputPatientCOMStage" prefWidth="165.0" />
-                                                   </children>
-                                                </HBox>
-                                                <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="171.0" spacing="3.0">
-                                                   <children>
-                                                      <DatePicker fx:id="inputPatientCOMDate" prefWidth="167.0" />
-                                                      <Button mnemonicParsing="false" onAction="#patientComorbidity_onSaveButton" prefWidth="165.0" text="Save" />
-                                                   </children>
-                                                   <VBox.margin>
-                                                      <Insets top="3.0" />
-                                                   </VBox.margin>
-                                                </HBox>
-                                                <HBox prefHeight="0.0" prefWidth="335.0">
-                                                   <children>
-                                                      <Label text="Diagnose Date" />
-                                                   </children>
-                                                </HBox>
-                                             </children>
-                                          </VBox>
-                                       </children>
-                                    </AnchorPane>
-                                 </content>
-                              </Tab>
+                                         <Tab text="Drug Allergies">
+                                            <content>
+                                               <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="333.0">
+                                                  <children>
+                                                     <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                        <children>
+                                                           <ScrollPane hbarPolicy="NEVER" prefHeight="190.0" prefWidth="333.0">
+                                                              <content>
+                                                                 <ListView fx:id="patientAllergyListView" onKeyPressed="#patient_onDeleteDrugKey" prefHeight="194.0" prefWidth="321.0" />
+                                                              </content>
+                                                           </ScrollPane>
+                                                           <HBox spacing="3.0">
+                                                              <VBox.margin>
+                                                                 <Insets top="10.0" />
+                                                              </VBox.margin>
+                                                              <children>
+                                                                 <Label prefWidth="165.0" text="Drug" />
+                                                              </children>
+                                                           </HBox>
+                                                           <HBox spacing="3.0">
+                                                              <children>
+                                                                 <Button mnemonicParsing="false" onAction="#patient_onDrugSearchButton" prefWidth="335.0" text="Search..." HBox.hgrow="ALWAYS" />
+                                                              </children>
+                                                           </HBox>
+                                                        </children>
+                                                     </VBox>
+                                                  </children>
+                                               </AnchorPane>
+                                            </content>
+                                         </Tab>
 
-                           </tabs>
-                        </TabPane>
-                     </children>
-                  </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: lightgray;" HBox.hgrow="ALWAYS" />
+                                         <Tab text="Comorbidity">
+                                            <content>
+                                               <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="333.0">
+                                                  <children>
+                                                     <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                        <children>
+                                                           <ScrollPane hbarPolicy="NEVER" prefHeight="190.0" prefWidth="333.0">
+                                                              <content>
+                                                                 <ListView fx:id="patientCOMListView" prefHeight="194.0" prefWidth="321.0" />
+                                                              </content>
+                                                           </ScrollPane>
+                                                           <HBox spacing="5.0">
+                                                              <VBox.margin>
+                                                                 <Insets top="10.0" />
+                                                              </VBox.margin>
+                                                              <children>
+                                                                 <Label prefWidth="165.0" text="State Name" />
+                                                                 <Label prefWidth="165.0" text="Stage" />
+                                                              </children>
+                                                           </HBox>
+                                                           <HBox spacing="3.0">
+                                                              <children>
+                                                                 <TextField fx:id="inputPatientCOMName" prefWidth="165.0" HBox.hgrow="ALWAYS" />
+                                                                 <TextField fx:id="inputPatientCOMStage" prefWidth="165.0" />
+                                                              </children>
+                                                           </HBox>
+                                                           <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="171.0" spacing="3.0">
+                                                              <children>
+                                                                 <DatePicker fx:id="inputPatientCOMDate" prefWidth="167.0" />
+                                                                 <Button mnemonicParsing="false" onAction="#patientComorbidity_onSaveButton" prefWidth="165.0" text="Save" />
+                                                              </children>
+                                                              <VBox.margin>
+                                                                 <Insets top="3.0" />
+                                                              </VBox.margin>
+                                                           </HBox>
+                                                           <HBox prefHeight="0.0" prefWidth="335.0">
+                                                              <children>
+                                                                 <Label text="Diagnose Date" />
+                                                              </children>
+                                                           </HBox>
+                                                        </children>
+                                                     </VBox>
+                                                  </children>
+                                               </AnchorPane>
+                                            </content>
+                                         </Tab>
+
+                                      </tabs>
+                                   </TabPane>
+                                </children>
+                             </VBox>
+
+                          </AnchorPane>
+                        </content>
+                      </TitledPane>
+                      <TitledPane animated="false" text="Prescriber">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <VBox layoutX="87.0" layoutY="128.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+                                       <children>
+                                          <HBox prefHeight="0.0" prefWidth="333.0" spacing="3.0">
+                                             <children>
+                                                <Label prefWidth="165.0" text="First Name" />
+                                                <Label prefWidth="165.0" text="Last Name" />
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
+                                          </HBox>
+                                          <HBox prefHeight="5.0" prefWidth="333.0" spacing="3.0">
+                                             <children>
+                                                <TextField fx:id="inputPrescriberFN" HBox.hgrow="ALWAYS" />
+                                                <TextField fx:id="inputPrescriberLN" HBox.hgrow="ALWAYS" />
+                                             </children>
+                                          </HBox>
+                                          <HBox prefHeight="0.0" prefWidth="333.0" spacing="3.0">
+                                             <children>
+                                                <Label prefWidth="165.0" text="Middle Name" />
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
+                                          </HBox>
+                                          <HBox prefHeight="0.0" prefWidth="333.0" spacing="3.0">
+                                             <VBox.margin>
+                                                <Insets bottom="10.0" />
+                                             </VBox.margin>
+                                             <children>
+                                                <TextField fx:id="inputPrescriberMN" prefWidth="163.0" />
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER_RIGHT" prefHeight="0.0" prefWidth="333.0" spacing="3.0">
+                                             <children>
+                                                <Button mnemonicParsing="false" prefWidth="167.0" text="Edit" />
+                                                <Button mnemonicParsing="false" prefWidth="167.0" text="Save" />
+                                             </children>
+                                          </HBox>
+                                          <TabPane prefHeight="359.0" prefWidth="327.0" tabClosingPolicy="UNAVAILABLE">
+                                            <tabs>
+                                               <Tab text="Phone">
+                                                  <content>
+                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="333.0">
+                                                        <children>
+                                                           <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                              <children>
+                                                                 <ScrollPane hbarPolicy="NEVER" prefHeight="190.0" prefWidth="333.0">
+                                                                    <content>
+                                                                       <ListView fx:id="prescriberPNListView" prefHeight="194.0" prefWidth="321.0" />
+                                                                    </content>
+                                                                 </ScrollPane>
+                                                                 <HBox spacing="3.0">
+                                                                    <VBox.margin>
+                                                                       <Insets top="10.0" />
+                                                                    </VBox.margin>
+                                                                    <children>
+                                                                       <Label prefWidth="165.0" text="Phone Number" />
+                                                                       <Label text="Type" />
+                                                                    </children>
+                                                                 </HBox>
+                                                                 <HBox spacing="3.0">
+                                                                    <children>
+                                                                       <TextField fx:id="inputPrescriberPNumber" prefWidth="165.0" HBox.hgrow="ALWAYS" />
+                                                                       <ChoiceBox fx:id="prescriberPTypeCBox" prefWidth="165.0" />
+                                                                    </children>
+                                                                 </HBox>
+                                                                 <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="171.0">
+                                                                    <children>
+                                                                       <Button mnemonicParsing="false" prefWidth="163.0" text="Save" />
+                                                                    </children>
+                                                                    <VBox.margin>
+                                                                       <Insets top="3.0" />
+                                                                    </VBox.margin>
+                                                                 </HBox>
+                                                              </children>
+                                                           </VBox>
+                                                        </children>
+                                                     </AnchorPane>
+                                                  </content>
+                                               </Tab>
+
+                                               <Tab text="Address">
+                                                  <content>
+                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="333.0">
+                                                        <children>
+                                                           <VBox prefHeight="359.0" prefWidth="333.0" AnchorPane.bottomAnchor="-29.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                              <children>
+                                                                 <ScrollPane hbarPolicy="NEVER" prefHeight="190.0" prefWidth="333.0">
+                                                                    <content>
+                                                                       <ListView fx:id="prescriberADListView" prefHeight="194.0" prefWidth="321.0" />
+                                                                    </content>
+                                                                 </ScrollPane>
+                                                                 <Pane style="-fx-border-style: solid; -fx-border-color: silver;">
+                                                                    <children>
+                                                                       <HBox spacing="3.0">
+                                                                          <children>
+                                                                             <Label prefWidth="162.0" text="Street Address" />
+                                                                             <Label text="City" />
+                                                                          </children>
+                                                                       </HBox>
+                                                                       <HBox layoutY="17.0" prefWidth="327.0" spacing="3.0">
+                                                                          <children>
+                                                                             <TextField fx:id="inputPrescriberStreet" prefWidth="167.0" HBox.hgrow="ALWAYS" />
+                                                                             <TextField fx:id="inputPrescriberCity" prefWidth="165.0" HBox.hgrow="ALWAYS" />
+                                                                          </children>
+                                                                       </HBox>
+                                                                       <HBox layoutY="52.0" prefHeight="14.0" prefWidth="327.0" spacing="3.0">
+                                                                          <children>
+                                                                             <TextField fx:id="inputPrescriberZip" HBox.hgrow="ALWAYS" />
+                                                                             <TextField fx:id="inputPrescriberState" />
+                                                                             <ComboBox fx:id="prescriberATypeCBox" prefWidth="150.0" />
+                                                                          </children>
+                                                                       </HBox>
+                                                                       <HBox layoutY="77.0" prefHeight="0.0" prefWidth="327.0" spacing="3.0">
+                                                                          <children>
+                                                                             <Label prefWidth="107.0" text="Zip Code" />
+                                                                             <Label prefWidth="107.0" text="State" />
+                                                                             <Label text="Type" />
+                                                                          </children>
+                                                                       </HBox>
+                                                                    </children>
+                                                                    <VBox.margin>
+                                                                       <Insets top="10.0" />
+                                                                    </VBox.margin>
+                                                                 </Pane>
+                                                                 <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="171.0">
+                                                                    <children>
+                                                                       <Button mnemonicParsing="false" prefWidth="163.0" text="Save" />
+                                                                    </children>
+                                                                    <VBox.margin>
+                                                                       <Insets top="3.0" />
+                                                                    </VBox.margin>
+                                                                 </HBox>
+                                                              </children>
+                                                           </VBox>
+                                                        </children>
+                                                     </AnchorPane>
+                                                  </content>
+                                               </Tab>
+                                            </tabs>
+                                             <VBox.margin>
+                                                <Insets top="25.0" />
+                                             </VBox.margin>
+                                          </TabPane>
+
+
+
+                                       </children>
+
+                                    </VBox>
+                                 </children></AnchorPane>
+                        </content>
+                      </TitledPane>
+                      <TitledPane animated="false" text="Operator">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        </content>
+                      </TitledPane>
+                    </panes>
+                  </Accordion>
+                  <VBox prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightgray;" />
                </children>
             </HBox>
          </children>

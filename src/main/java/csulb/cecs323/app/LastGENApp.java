@@ -96,10 +96,18 @@ public class LastGENApp extends Application
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////
       // PERSON DATA
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      Prescriber firstPerson = new Prescriber ("William", "Duong", "RPH64794");
+      ProviderCertification temp = new ProviderCertification();
+      temp.setType("DEA");
+      temp.setNumber("RPG12345");
+      temp.setIssuer("DEA");
+      Prescriber firstPerson = new Prescriber ("William", "Duong", temp);
       Address newAddress = new Address (firstPerson, "office", "25292 Dayton Drive", "92630");
 
-      Pharmacist thirdPerson = new Pharmacist ("Piseth", "Sam", "RPH64794");
+      ProviderCertification temp2 = new ProviderCertification();
+      temp2.setType("State License");
+      temp2.setNumber("RPH64794");
+      temp2.setIssuer("California");
+      Pharmacist thirdPerson = new Pharmacist ("Piseth", "Sam", temp2);
 
       LocalDate birth = LocalDate.of(1988, Month.JANUARY, 28);
       Patient seconPerson = new Patient ("Jackie", "Duong", birth.atStartOfDay(ZoneId.systemDefault()));
@@ -155,26 +163,26 @@ public class LastGENApp extends Application
 //      for (Object index : results)
 //         System.out.println ("Result> " + index.toString());
 
-//      Query query = lastGEN.entityManager.createQuery("SELECT rx FROM Prescription rx INNER JOIN Patient pt ON pt = rx.patient WHERE pt.lastName = 'Duong'");
-//      Prescription result = (Prescription) query.getResultList().get(0);
-//
-//      String dateWritten = result.getPrettyDateWritten();
-//      String patient = result.getPatient().toString();
-//      List<RxLine> history = result.getRxLines();
-//      System.out.println (dateWritten + " : " + patient);
-//      for (RxLine line : history)
-//         System.out.println (line + "\tRemaining: " + line.getQuantityRemaining());
+      Query query = lastGEN.entityManager.createQuery("SELECT rx FROM Prescription rx INNER JOIN Patient pt ON pt = rx.patient WHERE pt.lastName = 'Duong'");
+      Prescription result = (Prescription) query.getResultList().get(0);
+
+      String dateWritten = result.getPrettyDateWritten();
+      String patient = result.getPatient().toString();
+      List<RxLine> history = result.getRxLines();
+      System.out.println (dateWritten + " : " + patient);
+      for (RxLine line : history)
+         System.out.println (line + "\tRemaining: " + line.getQuantityRemaining());
 
 //      TypedQuery<Patient> query = lastGEN.entityManager.createNamedQuery(Patient.FIND_ALL_BY_NAME, Patient.class);
 //      query.setParameter("ptLastName", "uon").setParameter("ptFirstName", "ac");
 //      List<Patient> result = query.getResultList();
 
-      TypedQuery<Patient> query = lastGEN.entityManager.createNamedQuery(Patient.FIND_ALL_BY_DOB, Patient.class);
-      query.setParameter("ptDOB", LocalDate.of(1988, 1, 28).atStartOfDay(ZoneId.systemDefault()));
-      List<Patient> result = query.getResultList();
-
-      for (Patient pt: result)
-         System.out.println (pt);
+//      TypedQuery<Patient> query = lastGEN.entityManager.createNamedQuery(Patient.FIND_ALL_BY_DOB, Patient.class);
+//      query.setParameter("ptDOB", LocalDate.of(1988, 1, 28).atStartOfDay(ZoneId.systemDefault()));
+//      List<Patient> result = query.getResultList();
+//
+//      for (Patient pt: result)
+//         System.out.println (pt);
 
 
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////

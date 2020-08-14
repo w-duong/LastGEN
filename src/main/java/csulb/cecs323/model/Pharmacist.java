@@ -11,8 +11,6 @@ import java.util.Set;
 @DiscriminatorValue("3")
 public class Pharmacist extends Person
 {
-    private long npiNumber;
-    private String license;
     private String position;
 
     // ASSOCIATION(S)
@@ -21,25 +19,21 @@ public class Pharmacist extends Person
 
     // CONSTRUCTORS
     public Pharmacist () {}
-    public Pharmacist (String first, String last, String license)
+    public Pharmacist (String first, String last, ProviderCertification license)
     {
         super(first, last);
-        setLicense(license);
+        super.addCertification(license);
     }
-    public Pharmacist (String first, String last, Address address, Phone phone, String license)
+    public Pharmacist (String first, String last, Address address, Phone phone, String license, String state)
     {
         super(first, last, address, phone);
-        setLicense(license);
+        ProviderCertification newCert = new ProviderCertification(this, "State License", license, state);
     }
 
     // ACCESSORS
-    public long getNpiNumber () { return this.npiNumber; }
-    public String getLicense () { return this.license; }
     public String getPosition () { return this.position; }
 
     // MUTATORS
-    public void setNpiNumber (long npiNumber) { this.npiNumber = npiNumber; }
-    public void setLicense (String license) { this.license = license; }
     public void setPosition (String position) { this.position = position; }
 
     // MISCELLANEOUS

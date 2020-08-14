@@ -2,6 +2,7 @@ package csulb.cecs323.model;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -9,8 +10,6 @@ import java.util.Set;
 @DiscriminatorValue("2")
 public class Prescriber extends Person
 {
-    private long npiNumber;
-    private String deaNumber;
     private String specialty;
 
     // ASSOCIATION(S)
@@ -19,25 +18,21 @@ public class Prescriber extends Person
 
     // CONSTRUCTORS
     public Prescriber() {}
-    public Prescriber(String first, String last, String dea)
+    public Prescriber(String first, String last, ProviderCertification certification)
     {
         super(first, last);
-        setDeaNumber(dea);
+        super.addCertification(certification);
     }
     public Prescriber(String first, String last, Address address, Phone phone, String dea)
     {
         super(first, last, address, phone);
-        setDeaNumber(dea);
+        ProviderCertification newDea = new ProviderCertification(this, "DEA", dea, "DEA");
     }
 
     // ACCESSORS
-    public long getNpiNumber () { return this.npiNumber; }
-    public String getDeaNumber () { return this.deaNumber; }
     public String getSpecialty () { return this.specialty; }
 
     // MUTATORS
-    public void setNpiNumber (long npiNumber) { this.npiNumber = npiNumber; }
-    public void setDeaNumber (String deaNumber) { this.deaNumber = deaNumber; }
     public void setSpecialty (String specialty) { this.specialty = specialty; }
 
     // MISCELLANEOUS

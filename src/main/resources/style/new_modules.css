@@ -15,3 +15,7 @@
     -fx-border-width: 1;
     -fx-border-style: solid;
 }
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: null;
+}
