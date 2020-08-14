@@ -61,7 +61,17 @@ public class UserBase_NEW_CTRL implements Initializable
         search.show();
     }
 
-    public void patient_onSaveButton (ActionEvent actionEvent)
+    public void patient_onFinalSaveButton (ActionEvent actionEvent)
+    {
+
+    }
+
+    public void patient_onFinalDeleteButton (ActionEvent actionEvent)
+    {
+
+    }
+
+    public void patient_onUpdateButton (ActionEvent actionEvent)
     {
         String firstName = inputPatientFN.getText().trim();
         String middleName = inputPatientMN.getText().trim();
@@ -349,28 +359,3 @@ public class UserBase_NEW_CTRL implements Initializable
         }
     }
 }
-
-/* CUSTOM LISTCELL CLASS, DEPRECATED
-
-
-    private class PhoneObject extends HBox
-    {
-        private CheckBox defaultChoice = new CheckBox();
-        private Label listedNumber = new Label();
-
-        public PhoneObject () {}
-        public PhoneObject (String number, boolean defaulted)
-        {
-            this.setSpacing(10);
-            defaultChoice.setSelected(defaulted);
-            listedNumber.setText(number);
-
-            this.getChildren().addAll(defaultChoice, listedNumber);
-        }
-
-        public void setDefaultNumber () { defaultChoice.setSelected(true); }
-        public void unsetDefaultNumber () { defaultChoice.setSelected(false); }
-
-        public void setListedNumber (String number) { listedNumber.setText(number); }
-    }
- */
