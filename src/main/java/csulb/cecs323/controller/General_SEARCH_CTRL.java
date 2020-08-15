@@ -141,67 +141,16 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
         }
         else if (operationSelect.equals(Mode_USEditPT))
         {
-            String [] fullName = searchString.split(" ");
-            String last = fullName[0];
-            String first = (fullName.length < 2) ? "" : fullName[1];
-
-            if (last.equals("") && first.equals("") && inputPatientDOB.getValue() != null)
-            {
-                ZonedDateTime dob = inputPatientDOB.getValue().atStartOfDay(ZoneId.systemDefault());
-
-                query = entityManager.createNamedQuery(Patient.FIND_ALL_BY_DOB, Patient.class);
-                query.setParameter("ptDOB", dob);
-            }
-            else if (last.chars().allMatch(Character::isDigit))
-            {
-                query = entityManager.createNamedQuery(Phone.FIND_BY_NUMBER, Patient.class);
-                query.setParameter("numberString",last);
-            }
-            else if (inputPatientDOB.getValue() != null || !inputPatientDOB.getEditor().getText().trim().equals(""))
-            {
-                ZonedDateTime dob = inputPatientDOB.getValue().atStartOfDay(ZoneId.systemDefault());
-
-                query = entityManager.createNamedQuery(Patient.FIND_ALL_BY_SPEC, Patient.class);
-                query.setParameter("ptLastName", last)
-                        .setParameter("ptFirstName", first)
-                        .setParameter("ptDOB", dob);
-            }
-            else
-            {
-                query = entityManager.createNamedQuery(Patient.FIND_ALL_BY_NAME, Patient.class);
-                query.setParameter("ptLastName", last).setParameter("ptFirstName", first);
-            }
-
+            query = doPatientSearch(searchString);
             resultsList.addAll(query.getResultList());
         }
         else if (operationSelect.equals(Mode_USEditMD) || operationSelect.equals(Mode_USEditOP))
         {
-            String [] fullName = searchString.split(" ");
-            String last = fullName[0];
-            String first = (fullName.length < 2) ? "" : fullName[1];
-
-            String providerCert = (!inputNPIField.getText().trim().equals("")) ? inputNPIField.getText().trim() :
-                    (!inputLicenseField.getText().trim().equals("")) ? inputLicenseField.getText().trim() : "";
-
-            if (last.equals("") && first.equals("") && !providerCert.equals(""))
-            {
-                query = entityManager.createNamedQuery(ProviderCertification.FIND_ALL_BY_ACTUAL, Prescriber.class);
-                query.setParameter("providerLicenseNum", providerCert);
-            }
-            else if (last.chars().allMatch(Character::isDigit))
-            {
-                query = entityManager.createNamedQuery(Phone.FIND_BY_NUMBER, Patient.class);
-                query.setParameter("numberString",last);
-            }
-            else
-            {
-                query = entityManager.createNamedQuery(Prescriber.FIND_BY_NAME, Prescriber.class);
-                query.setParameter("mdLastName", last).setParameter("mdFirstName", first);
-            }
-
+            query = doPrescriberSearch(searchString);
             resultsList.addAll(query.getResultList());
         }
     }
+
 
     public static String preparser (String search)
     {
@@ -313,6 +262,9 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
         popUp.close();
     }
 
+    /*
+        Static method to generate Search stage from other modules.
+     */
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public static <DataType, SceneType> Stage readyStage
     (DataType conOne, SceneType conTwo, String operation, String title, EntityManager manager) throws IOException
@@ -336,5 +288,78 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
         preset.setScene(scene);
 
         return preset;
+    }
+
+    /*
+        Person subclass-specific search methods here.
+     */
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public TypedQuery doPatientSearch (String searchString)
+    {
+        TypedQuery query;
+
+        String [] fullName = searchString.split(" ");
+        String last = fullName[0];
+        String first = (fullName.length < 2) ? "" : fullName[1];
+
+        if (last.equals("") && first.equals("") && inputPatientDOB.getValue() != null)
+        {
+            ZonedDateTime dob = inputPatientDOB.getValue().atStartOfDay(ZoneId.systemDefault());
+
+            query = entityManager.createNamedQuery(Patient.FIND_ALL_BY_DOB, Patient.class);
+            query.setParameter("ptDOB", dob);
+        }
+        else if (last.chars().allMatch(Character::isDigit))
+        {
+            query = entityManager.createNamedQuery(Phone.FIND_BY_NUMBER, Patient.class);
+            query.setParameter("numberString",last);
+        }
+        else if (inputPatientDOB.getValue() != null || !inputPatientDOB.getEditor().getText().trim().equals(""))
+        {
+            ZonedDateTime dob = inputPatientDOB.getValue().atStartOfDay(ZoneId.systemDefault());
+
+            query = entityManager.createNamedQuery(Patient.FIND_ALL_BY_SPEC, Patient.class);
+            query.setParameter("ptLastName", last)
+                    .setParameter("ptFirstName", first)
+                    .setParameter("ptDOB", dob);
+        }
+        else
+        {
+            query = entityManager.createNamedQuery(Patient.FIND_ALL_BY_NAME, Patient.class);
+            query.setParameter("ptLastName", last).setParameter("ptFirstName", first);
+        }
+
+        return query;
+    }
+
+    public TypedQuery doPrescriberSearch (String searchString)
+    {
+        TypedQuery query;
+
+        String [] fullName = searchString.split(" ");
+        String last = fullName[0];
+        String first = (fullName.length < 2) ? "" : fullName[1];
+
+        String providerCert = (!inputNPIField.getText().trim().equals("")) ? inputNPIField.getText().trim() :
+                (!inputLicenseField.getText().trim().equals("")) ? inputLicenseField.getText().trim() : "";
+
+        if (last.equals("") && first.equals("") && !providerCert.equals(""))
+        {
+            query = entityManager.createNamedQuery(ProviderCertification.FIND_ALL_BY_ACTUAL, Prescriber.class);
+            query.setParameter("providerLicenseNum", providerCert);
+        }
+        else if (last.chars().allMatch(Character::isDigit))
+        {
+            query = entityManager.createNamedQuery(Phone.FIND_BY_NUMBER, Patient.class);
+            query.setParameter("numberString",last);
+        }
+        else
+        {
+            query = entityManager.createNamedQuery(Prescriber.FIND_BY_NAME, Prescriber.class);
+            query.setParameter("mdLastName", last).setParameter("mdFirstName", first);
+        }
+
+        return query;
     }
 }
