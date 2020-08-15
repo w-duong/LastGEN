@@ -5,8 +5,16 @@ import javax.persistence.*;
 @Entity
 @Table(name = "provider_certifications",
         uniqueConstraints = @UniqueConstraint(columnNames = {"issuer","actual_number"}))
+@NamedQueries({
+        @NamedQuery(name = ProviderCertification.FIND_ALL_BY_ACTUAL,
+        query = "SELECT pr FROM ProviderCertification pc INNER JOIN pc.person pr " +
+                "WHERE pc.actual_number LIKE CONCAT('%',:providerLicenseNum,'%')")
+})
 public class ProviderCertification
 {
+    // QUERY STRING(S)
+    public static final String FIND_ALL_BY_ACTUAL = "Provider.findByLicenseNumber";
+
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private long pc_id;

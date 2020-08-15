@@ -1,9 +1,6 @@
 package csulb.cecs323.controller;
 
-import csulb.cecs323.model.Drug;
-import csulb.cecs323.model.DrugClass;
-import csulb.cecs323.model.Patient;
-import csulb.cecs323.model.Phone;
+import csulb.cecs323.model.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -40,7 +37,9 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
     static final String Mode_DCAddDG = "drugClass.AddDrug";
     static final String Mode_DGEditDG = "drug.EditDrug";
     static final String Mode_IXAddDG = "interaction.AddDrug";
-    static final String Mode_USEditPT = "userBase.EditPerson";
+    static final String Mode_USEditPT = "userBase.EditPatient";
+    static final String Mode_USEditMD = "userBase.EditPrescriber";
+    static final String Mode_USEditOP = "userBase.EditOperator";
     static final String Mode_USAddDG = "userBase.AddDrugAllergy";
 
     private String operationSelect;
@@ -85,9 +84,12 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
     {
         /* NECESSARY, or values will remain NULL - such as, 'isMultipleMode' */
         Platform.runLater(()->{
-            /* Select if Userbase input fields visible, if 'Duplicate' option available, if multiple selection possible */
+            /* Select if Userbase input fields visible + if 'Duplicate' option available + if multiple selection possible */
             switch (operationSelect)
             {
+                case Mode_USEditMD:
+                case Mode_USEditOP:
+                    inputPatientDOB.setDisable(true);
                 case Mode_USEditPT:
                     addUserPane.setVisible(true);
                 case Mode_IXAddDG:
@@ -122,7 +124,7 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
     {
         resultsList.removeAll(resultsList);
         String searchString = preparser(inputSearchBar.getText());
-        TypedQuery query;
+        TypedQuery query = null;
 
         if (operationSelect.equals(Mode_DCEditDC))
         {
@@ -168,6 +170,33 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
             {
                 query = entityManager.createNamedQuery(Patient.FIND_ALL_BY_NAME, Patient.class);
                 query.setParameter("ptLastName", last).setParameter("ptFirstName", first);
+            }
+
+            resultsList.addAll(query.getResultList());
+        }
+        else if (operationSelect.equals(Mode_USEditMD) || operationSelect.equals(Mode_USEditOP))
+        {
+            String [] fullName = searchString.split(" ");
+            String last = fullName[0];
+            String first = (fullName.length < 2) ? "" : fullName[1];
+
+            String providerCert = (!inputNPIField.getText().trim().equals("")) ? inputNPIField.getText().trim() :
+                    (!inputLicenseField.getText().trim().equals("")) ? inputLicenseField.getText().trim() : "";
+
+            if (last.equals("") && first.equals("") && !providerCert.equals(""))
+            {
+                query = entityManager.createNamedQuery(ProviderCertification.FIND_ALL_BY_ACTUAL, Prescriber.class);
+                query.setParameter("providerLicenseNum", providerCert);
+            }
+            else if (last.chars().allMatch(Character::isDigit))
+            {
+                query = entityManager.createNamedQuery(Phone.FIND_BY_NUMBER, Patient.class);
+                query.setParameter("numberString",last);
+            }
+            else
+            {
+                query = entityManager.createNamedQuery(Prescriber.FIND_BY_NAME, Prescriber.class);
+                query.setParameter("mdLastName", last).setParameter("mdFirstName", first);
             }
 
             resultsList.addAll(query.getResultList());
@@ -253,7 +282,12 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
                 }
             case Mode_USEditPT:
                 ((UserBase_NEW_CTRL) lastScene).setWorkingCopy((Patient) resultsBuffer.get(0));
-                ((UserBase_NEW_CTRL) lastScene).refreshNameInfo();
+                ((UserBase_NEW_CTRL) lastScene).refreshNameInfo(1);
+
+                if (((UserBase_NEW_CTRL) lastScene).isMidTransaction())
+                    entityManager.getTransaction().rollback();;
+                ((UserBase_NEW_CTRL) lastScene).setIsMidTransaction(true);
+                entityManager.getTransaction().begin();
         }
 
         Stage popUp = (Stage) inputSearchBar.getScene().getWindow();

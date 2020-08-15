@@ -7,9 +7,17 @@ import java.util.Set;
 
 @Entity
 @Table(name = "prescribers")
+@NamedQueries({
+        @NamedQuery(name = Prescriber.FIND_BY_NAME,
+                    query = "SELECT md FROM Prescriber md WHERE LOWER (md.lastName) LIKE LOWER (CONCAT('%',:mdLastName,'%')) AND " +
+                            "LOWER (md.firstName) LIKE LOWER (CONCAT('%',:mdFirstName,'%'))")
+})
 @DiscriminatorValue("2")
 public class Prescriber extends Person
 {
+    // QUERY STRING(S)
+    public static final String FIND_BY_NAME = "Prescriber.findByName";
+
     private String specialty;
 
     // ASSOCIATION(S)
@@ -18,6 +26,11 @@ public class Prescriber extends Person
 
     // CONSTRUCTORS
     public Prescriber() {}
+    public Prescriber(String first, String last, String specialty)
+    {
+        super(first, last);
+        setSpecialty(specialty);
+    }
     public Prescriber(String first, String last, ProviderCertification certification)
     {
         super(first, last);

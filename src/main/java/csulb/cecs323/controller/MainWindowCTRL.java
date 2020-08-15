@@ -88,10 +88,10 @@ public class MainWindowCTRL
         // "staging"
         db_user_newWindow.setTitle("Add/Edit User");
         db_user_newWindow.setResizable(false);
-//        db_user_newWindow.setOnCloseRequest(event->{
-//            if (controller.isMidTransaction())
-//                entityManager.getTransaction().rollback();
-//        });
+        db_user_newWindow.setOnCloseRequest(event->{
+            if (controller.isMidTransaction())
+                entityManager.getTransaction().rollback();
+        });
         db_user_newWindow.initModality(Modality.APPLICATION_MODAL); // prevents user from moving to another Stage until done
         db_user_newWindow.setScene(scene);
         db_user_newWindow.show();

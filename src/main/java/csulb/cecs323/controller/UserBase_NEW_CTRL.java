@@ -1,5 +1,6 @@
 package csulb.cecs323.controller;
 
+import com.sun.javafx.image.impl.General;
 import csulb.cecs323.model.*;
 import impl.org.controlsfx.autocompletion.AutoCompletionTextFieldBinding;
 import impl.org.controlsfx.autocompletion.SuggestionProvider;
@@ -38,28 +39,13 @@ public class UserBase_NEW_CTRL implements Initializable
     private EntityManager entityManager;
     public void setEntityManager(EntityManager entityManager) { this.entityManager = entityManager; }
 
-    private Person workingCopy;
+    private Person workingCopy = null;
     public Person getWorkingCopy() { return this.workingCopy; }
     public void setWorkingCopy(Person person) { this.workingCopy = person; }
 
     /*
-        Patient demographics section here.
+        Template, generic actions for all UserBase classes.
      */
-    @FXML
-    TextField inputPatientFN;
-    @FXML
-    TextField inputPatientLN;
-    @FXML
-    TextField inputPatientMN;
-    @FXML
-    DatePicker inputPatientDOB;
-
-    public void patient_onEditButton (ActionEvent actionEvent) throws IOException
-    {
-        Stage search = General_SEARCH_CTRL.readyStage(Patient.class,this,
-                General_SEARCH_CTRL.Mode_USEditPT, "Search for Patient", this.entityManager);
-        search.show();
-    }
 
     public void patient_onFinalSaveButton (ActionEvent actionEvent)
     {
@@ -71,95 +57,252 @@ public class UserBase_NEW_CTRL implements Initializable
 
     }
 
-    public void patient_onUpdateButton (ActionEvent actionEvent)
+    public void onSavePersonAction (int discriminatorValue)
     {
-        String firstName = inputPatientFN.getText().trim();
-        String middleName = inputPatientMN.getText().trim();
-        String lastName = inputPatientLN.getText().trim();
-        LocalDate localDOB = inputPatientDOB.getValue();
+        String fullIdentity = workingCopy.getFirstName().trim() + workingCopy.getLastName().trim();
+        boolean isSecondaryGood = false;
 
-        if (!firstName.equals("") && !lastName.equals("") && localDOB != null)
+        switch (discriminatorValue)
         {
-            workingCopy = new Patient(firstName, lastName, localDOB.atStartOfDay(ZoneId.systemDefault()));
-            workingCopy.setMiddleName(middleName);
+            case 1:
+                isSecondaryGood = !((Patient)workingCopy).getPrettyDOB().equals("");
+                break;
+            case 2:
+            case 3:
+                isSecondaryGood = !workingCopy.getLicenses().isEmpty();
+        }
 
-            refreshNameInfo();
+        if (!fullIdentity.equals("") && isSecondaryGood)
+        {
+            if (isMidTransaction)
+            {
+                entityManager.persist(workingCopy);
+                entityManager.getTransaction().commit();
+                isMidTransaction = false;
+            }
+            else
+            {
+                entityManager.getTransaction().begin();
+                entityManager.persist(workingCopy);
+                entityManager.getTransaction().commit();
+            }
         }
     }
 
-    public void refreshNameInfo ()
-    {
-        inputPatientFN.setPromptText(workingCopy.getFirstName());
-        inputPatientLN.setPromptText(workingCopy.getLastName());
-        inputPatientMN.setPromptText(workingCopy.getMiddleName());
+    /*
+        Person class demographics section here.
+     */
+    @FXML
+    TextField inputPatientFN, inputPrescriberFN, inputOperatorFN;
+    @FXML
+    TextField inputPatientLN, inputPrescriberLN, inputOperatorLN;
+    @FXML
+    TextField inputPatientMN, inputPrescriberMN, inputOperatorMN;
+    @FXML
+    TextField inputPrescriberSpecialty, inputOperatorPosition;
+    @FXML
+    DatePicker inputPatientDOB;
 
-        String date = ((Patient)workingCopy).getDateOfBirth().format(datePickFormat);
-        inputPatientDOB.getEditor().setPromptText(date);
+    public void patient_onEditButton (ActionEvent actionEvent) throws IOException
+    {
+        Stage search = General_SEARCH_CTRL.readyStage(Patient.class,this,
+                General_SEARCH_CTRL.Mode_USEditPT, "Search for Patient", this.entityManager);
+        search.show();
+    }
+
+    public void prescriber_onEditButton (ActionEvent actionEvent) throws IOException
+    {
+        Stage search = General_SEARCH_CTRL.readyStage(Prescriber.class, this,
+                General_SEARCH_CTRL.Mode_USEditMD, "Search for Prescriber", this.entityManager);
+        search.show();
+    }
+
+    public void patient_onUpdateButton (ActionEvent actionEvent)
+    {
+        onUpdateDemographicsAction(1);
+        refreshNameInfo(1);
+    }
+    public void prescriber_onUpdateButton (ActionEvent actionEvent)
+    {
+        onUpdateDemographicsAction(2);
+        refreshNameInfo(2);
+    }
+    public void pharmacist_onUpdateButton (ActionEvent actionEvent)
+    {
+        onUpdateDemographicsAction(3);
+        refreshNameInfo(3);
+    }
+
+    public void onUpdateDemographicsAction (int discriminatorValue)
+    {
+        String firstName = (discriminatorValue == 1) ? inputPatientFN.getText().trim() :
+                        (discriminatorValue == 2) ? inputPrescriberFN.getText().trim() :
+                        (discriminatorValue == 3) ? inputOperatorFN.getText().trim() : "";
+
+        String lastName = (discriminatorValue == 1) ? inputPatientLN.getText().trim() :
+                        (discriminatorValue == 2) ? inputPrescriberLN.getText().trim() :
+                        (discriminatorValue == 3) ? inputOperatorLN.getText().trim() : "";
+
+        String middleName = (discriminatorValue == 1) ? inputPatientMN.getText().trim() :
+                        (discriminatorValue == 2) ? inputPrescriberMN.getText().trim() :
+                        (discriminatorValue == 3) ? inputOperatorMN.getText().trim() : "";
+
+        String miscField = ""; LocalDate localDOB = null;
+        if (discriminatorValue == 1)
+            localDOB = inputPatientDOB.getValue();
+        else
+            miscField = (discriminatorValue == 2) ? inputPrescriberSpecialty.getText().trim() :
+                (discriminatorValue == 3) ? inputOperatorPosition.getText().trim() : "";
+
+        if (!firstName.equals("") && !lastName.equals("") && (localDOB != null || !miscField.equals("")))
+        {
+            workingCopy = (discriminatorValue == 1) ? new Patient(firstName, lastName, localDOB.atStartOfDay(ZoneId.systemDefault())) :
+                    (discriminatorValue == 2) ? new Prescriber (firstName, lastName, miscField) :
+                    (discriminatorValue == 3) ? new Pharmacist (firstName, lastName, miscField) : null;
+
+            workingCopy.setMiddleName(middleName);
+        }
+    }
+
+    public void refreshNameInfo (int discriminatorValue)
+    {
+        switch(discriminatorValue)
+        {
+            case 1:
+                inputPatientFN.setPromptText(workingCopy.getFirstName());
+                inputPatientLN.setPromptText(workingCopy.getLastName());
+                inputPatientMN.setPromptText(workingCopy.getMiddleName());
+
+                String date = ((Patient)workingCopy).getDateOfBirth().format(datePickFormat);
+                inputPatientDOB.getEditor().setPromptText(date);
+                break;
+            case 2:
+                inputPrescriberFN.setPromptText(workingCopy.getFirstName());
+                inputPrescriberLN.setPromptText(workingCopy.getLastName());
+                inputPrescriberMN.setPromptText(workingCopy.getMiddleName());
+                inputPrescriberSpecialty.setPromptText(((Prescriber)workingCopy).getSpecialty());
+                break;
+            case 3:
+                inputOperatorFN.setPromptText(workingCopy.getFirstName());
+                inputOperatorLN.setPromptText(workingCopy.getLastName());
+                inputOperatorMN.setPromptText(workingCopy.getMiddleName());
+                inputOperatorPosition.setPromptText(((Pharmacist)workingCopy).getPosition());
+        }
     }
 
     /*
-        Patient phone number records.
+        Person phone number records.
      */
     @FXML
-    TextField inputPatientNumber;
+    TextField inputPatientNumber, inputPrescriberPNumber, inputOperatorPNumber;
     @FXML
-    ListView<Phone> patientPNListView;
+    ListView<Phone> patientPNListView, prescriberPNListView, operatorPNListView;
+
     private final ObservableList<Phone> patientPhoneOBSList = FXCollections.observableArrayList();
+    private final ObservableList<Phone> prescriberPhoneOBSList = FXCollections.observableArrayList();
+    private final ObservableList<Phone> operatorPhoneOBSList = FXCollections.observableArrayList();
+
     private final ToggleGroup patientPhoneTG = new ToggleGroup();
+    private final ToggleGroup prescriberPhoneTG = new ToggleGroup();
+    private final ToggleGroup operatorPhoneTG = new ToggleGroup();
 
     @FXML
-    ChoiceBox<String> patientPTypeCBox;
-    private ObservableList<String> phoneTypes = FXCollections.observableArrayList("Mobile", "Fax", "Home", "Page", "Business");
+    ChoiceBox<String> patientPTypeCBox, prescriberPTypeCBox, operatorPTypeCBox;
+    private final ObservableList<String> phoneTypes = FXCollections.observableArrayList("Mobile", "Fax", "Home", "Page", "Business");
 
-    public void patientPhone_onSaveButton (ActionEvent actionEvent)
+    public void patientPhone_onSaveButton (ActionEvent actionEvent) { onSavePhoneAction(1); }
+    public void prescriberPhone_onSaveButton (ActionEvent actionEvent) { onSavePersonAction(2); }
+    public void operatorPhone_onSaveButton (ActionEvent actionEvent) { onSavePhoneAction(3); }
+
+    public void onSavePhoneAction (int discriminatorValue)
     {
-        String type = patientPTypeCBox.getValue();
-        String phone = inputPatientNumber.getText().trim();
+        String type = (discriminatorValue == 1) ? patientPTypeCBox.getValue() :
+                        (discriminatorValue == 2) ? prescriberPTypeCBox.getValue() :
+                        (discriminatorValue == 3) ? operatorPTypeCBox.getValue() : null;
+        String phone = (discriminatorValue == 1) ? inputPatientNumber.getText().trim() :
+                        (discriminatorValue == 2) ? inputPrescriberPNumber.getText().trim() :
+                        (discriminatorValue == 3) ? inputOperatorPNumber.getText().trim() : "";
 
         if (workingCopy != null && type != null && !phone.equals(""))
         {
             Phone newNumber = new Phone(workingCopy, type, phone);
-            patientPhoneOBSList.add(newNumber);
+
+            if (discriminatorValue == 1)
+                patientPhoneOBSList.add(newNumber);
+            else if (discriminatorValue == 2)
+                prescriberPhoneOBSList.add(newNumber);
+            else
+                operatorPhoneOBSList.add(newNumber);
         }
     }
 
     /*
-        Patient address records.
+        Person address records.
      */
     @FXML
-    TextField inputPatientStreet;
+    TextField inputPatientStreet, inputPrescriberStreet, inputOperatorStreet;
     @FXML
-    TextField inputPatientCity;
+    TextField inputPatientCity, inputPrescriberCity, inputOperatorCity;
     @FXML
-    TextField inputPatientZip;
+    TextField inputPatientZip, inputPrescriberZip, inputOperatorZip;
     @FXML
-    TextField inputPatientState;
+    TextField inputPatientState, inputPrescriberState, inputOperatorState;
 
     @FXML
-    ComboBox<String> patientATypeCBox;
+    ComboBox<String> patientATypeCBox, prescriberATypeCBox, operatorATypeCBox;
     private final ObservableList<String> addressTypes = FXCollections.observableArrayList("Home", "Business", "Work", "Transient");
 
     @FXML
-    ListView<Address> patientADListView;
-    private ObservableList<Address> patientAddressOBSList = FXCollections.observableArrayList();
-    private final ToggleGroup patientAddressTG = new ToggleGroup();
+    ListView<Address> patientADListView, prescriberADListView, operatorADListView;
+    private final ObservableList<Address> patientAddressOBSList = FXCollections.observableArrayList();
+    private final ObservableList<Address> prescriberAddressOBSList = FXCollections.observableArrayList();
+    private final ObservableList<Address> operatorAddressOBSList = FXCollections.observableArrayList();
 
-    public void patientAddress_onSaveButton (ActionEvent actionEvent)
+    private final ToggleGroup patientAddressTG = new ToggleGroup();
+    private final ToggleGroup prescriberAddressTG = new ToggleGroup();
+    private final ToggleGroup operatorAddressTG = new ToggleGroup();
+
+    public void patientAddress_onSaveButton (ActionEvent actionEvent) { onSaveAddressAction(1); }
+    public void prescriberAddress_onSaveButton (ActionEvent actionEvent) { onSaveAddressAction(2); }
+    public void operatorAddress_onSaveButton (ActionEvent actionEvent) { onSaveAddressAction(3); }
+
+    public void onSaveAddressAction (int discriminatorValue)
     {
-        String street = inputPatientStreet.getText().trim();
-        String city = inputPatientCity.getText().trim();
-        String zip = inputPatientZip.getText().trim();
-        String state = inputPatientState.getText().trim();
+        String street = null, city = null, zip = null, state = null, type = null;
+
+        switch (discriminatorValue)
+        {
+            case 1:
+                street = inputPatientStreet.getText().trim();
+                city = inputPatientCity.getText().trim();
+                zip = inputPatientZip.getText().trim();
+                state = inputPatientState.getText().trim();
+                type = patientATypeCBox.getValue();
+                break;
+            case 2:
+                street = inputPrescriberStreet.getText().trim();
+                city = inputPrescriberCity.getText().trim();
+                zip = inputPrescriberZip.getText().trim();
+                state = inputPrescriberState.getText().trim();
+                type = prescriberATypeCBox.getValue();
+                break;
+            case 3:
+                street = inputOperatorStreet.getText().trim();
+                city = inputOperatorCity.getText().trim();
+                zip = inputOperatorZip.getText().trim();
+                state = inputOperatorState.getText().trim();
+                type = operatorATypeCBox.getValue();
+        }
 
         if (workingCopy != null && !street.equals("") && !zip.equals(""))
         {
-            Address newAddress = new Address (workingCopy,street, zip);
-            newAddress.setCity(city);
-            newAddress.setState(state);
-            if (patientATypeCBox.getValue() != null)
-                newAddress.setType(patientATypeCBox.getValue());
-
-            patientAddressOBSList.add(newAddress);
+            Address newAddress = new Address (workingCopy, type, street, zip, city, state);
+            if (discriminatorValue == 1)
+                patientAddressOBSList.add(newAddress);
+            else if (discriminatorValue == 2)
+                prescriberAddressOBSList.add(newAddress);
+            else
+                operatorAddressOBSList.add(newAddress);
         }
     }
 
@@ -168,7 +311,7 @@ public class UserBase_NEW_CTRL implements Initializable
      */
     @FXML
     ListView<Drug> patientAllergyListView;
-    private ObservableList<Drug> patientDrugOBSList = FXCollections.observableArrayList();
+    private final ObservableList<Drug> patientDrugOBSList = FXCollections.observableArrayList();
     public ObservableList<Drug> getPatientDrugOBSList () { return this.patientDrugOBSList; }
 
     public void patient_onDrugSearchButton (ActionEvent actionEvent) throws IOException
@@ -194,7 +337,7 @@ public class UserBase_NEW_CTRL implements Initializable
 
     @FXML
     ListView<Comorbidity> patientCOMListView;
-    private ObservableList<Comorbidity> patientCOMOBSList = FXCollections.observableArrayList();
+    private final ObservableList<Comorbidity> patientCOMOBSList = FXCollections.observableArrayList();
 
     @FXML
     TextField inputPatientCOMName;
@@ -247,13 +390,29 @@ public class UserBase_NEW_CTRL implements Initializable
 
             /* Preset combo boxes */
             patientPTypeCBox.setItems(phoneTypes);
+            prescriberPTypeCBox.setItems(phoneTypes);
+            operatorPTypeCBox.setItems(phoneTypes);
+
             patientATypeCBox.setItems(addressTypes);
+            prescriberATypeCBox.setItems(addressTypes);
+            operatorATypeCBox.setItems(addressTypes);
 
             /* Custom ListView with Radio buttons */
             patientPNListView.setItems(patientPhoneOBSList);
+            prescriberPNListView.setItems(prescriberPhoneOBSList);
+            operatorPNListView.setItems(operatorPhoneOBSList);
+
             patientADListView.setItems(patientAddressOBSList);
+            prescriberADListView.setItems(prescriberAddressOBSList);
+            operatorADListView.setItems(operatorAddressOBSList);
+
             patientPNListView.setCellFactory(listView->new RadioListCellPhone(patientPhoneTG));
+            prescriberPNListView.setCellFactory(listView->new RadioListCellPhone(prescriberPhoneTG));
+            operatorPNListView.setCellFactory(listView->new RadioListCellPhone(operatorPhoneTG));
+
             patientADListView.setCellFactory(listView->new RadioListCellAddress(patientAddressTG));
+            prescriberADListView.setCellFactory(listView->new RadioListCellAddress(prescriberAddressTG));
+            operatorADListView.setCellFactory(listView->new RadioListCellAddress(operatorAddressTG));
 
             patientAllergyListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
             patientAllergyListView.setItems(patientDrugOBSList);
@@ -262,6 +421,15 @@ public class UserBase_NEW_CTRL implements Initializable
             bidirectionalDateBind(inputPatientDOB);
             bidirectionalDateBind(inputPatientCOMDate);
         });
+    }
+
+    public void onCancelButton (ActionEvent actionEvent)
+    {
+        if(isMidTransaction)
+            entityManager.getTransaction().rollback();
+
+        Stage popUp = (Stage) inputPatientFN.getScene().getWindow();
+        popUp.close();
     }
 
     private void bidirectionalDateBind (DatePicker datePicker)

@@ -36,6 +36,15 @@ public class Address
         setStreet(street);
         setZipcode(zipcode);
     }
+    public Address (Person person, String type, String street, String zipcode, String city, String state)
+    {
+        setPerson(person);
+        setType(type);
+        setStreet(street);
+        setZipcode(zipcode);
+        setCity(city);
+        setState(state);
+    }
 
     // ACCESSORS
     public boolean isDefaultAddress () { return this.isDefaultAddress; }

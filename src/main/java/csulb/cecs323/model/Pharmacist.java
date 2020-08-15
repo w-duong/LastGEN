@@ -19,6 +19,11 @@ public class Pharmacist extends Person
 
     // CONSTRUCTORS
     public Pharmacist () {}
+    public Pharmacist (String first, String last, String position)
+    {
+        super(first, last);
+        setPosition(position);
+    }
     public Pharmacist (String first, String last, ProviderCertification license)
     {
         super(first, last);

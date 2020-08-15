@@ -216,7 +216,7 @@
                                                                  <Insets top="10.0" />
                                                               </VBox.margin>
                                                               <children>
-                                                                 <Label prefWidth="165.0" text="State Name" />
+                                                                 <Label prefWidth="165.0" text="Medical Condition" />
                                                                  <Label prefWidth="165.0" text="Stage" />
                                                               </children>
                                                            </HBox>
@@ -303,8 +303,8 @@
                                           </HBox>
                                           <HBox alignment="CENTER_RIGHT" prefHeight="0.0" prefWidth="333.0" spacing="3.0">
                                              <children>
-                                                <Button mnemonicParsing="false" prefWidth="167.0" text="Edit" />
-                                                <Button mnemonicParsing="false" prefWidth="167.0" text="Save" />
+                                                <Button mnemonicParsing="false" onAction="#prescriber_onEditButton" prefWidth="167.0" text="Edit" />
+                                                <Button mnemonicParsing="false" onAction="#prescriber_onUpdateButton" prefWidth="167.0" text="Update" />
                                              </children>
                                           </HBox>
                                           <TabPane prefHeight="359.0" prefWidth="327.0" tabClosingPolicy="UNAVAILABLE">
@@ -337,7 +337,7 @@
                                                                  </HBox>
                                                                  <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="171.0">
                                                                     <children>
-                                                                       <Button mnemonicParsing="false" prefWidth="163.0" text="Save" />
+                                                                       <Button mnemonicParsing="false" prefWidth="163.0" text="Add" />
                                                                     </children>
                                                                     <VBox.margin>
                                                                        <Insets top="3.0" />
@@ -396,7 +396,7 @@
                                                                  </Pane>
                                                                  <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="171.0">
                                                                     <children>
-                                                                       <Button mnemonicParsing="false" prefWidth="163.0" text="Save" />
+                                                                       <Button mnemonicParsing="false" onAction="#prescriberAddress_onSaveButton" prefWidth="163.0" text="Save" />
                                                                     </children>
                                                                     <VBox.margin>
                                                                        <Insets top="3.0" />
@@ -511,7 +511,7 @@
                                       <HBox alignment="CENTER_RIGHT" prefHeight="0.0" prefWidth="333.0" spacing="3.0">
                                          <children>
                                             <Button mnemonicParsing="false" prefWidth="167.0" text="Edit" />
-                                            <Button mnemonicParsing="false" prefWidth="167.0" text="Save" />
+                                            <Button mnemonicParsing="false" onAction="#pharmacist_onUpdateButton" prefWidth="167.0" text="Update" />
                                          </children>
                                       </HBox>
                                       <TabPane prefHeight="359.0" prefWidth="327.0" tabClosingPolicy="UNAVAILABLE">
@@ -544,7 +544,7 @@
                                                               </HBox>
                                                               <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="171.0">
                                                                  <children>
-                                                                    <Button mnemonicParsing="false" prefWidth="163.0" text="Save" />
+                                                                    <Button mnemonicParsing="false" prefWidth="163.0" text="Add" />
                                                                  </children>
                                                                  <VBox.margin>
                                                                     <Insets top="3.0" />
@@ -603,7 +603,7 @@
                                                               </Pane>
                                                               <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="171.0">
                                                                  <children>
-                                                                    <Button mnemonicParsing="false" prefWidth="163.0" text="Save" />
+                                                                    <Button mnemonicParsing="false" onAction="#operatorAddress_onSaveButton" prefWidth="163.0" text="Save" />
                                                                  </children>
                                                                  <VBox.margin>
                                                                     <Insets top="3.0" />
