@@ -1,6 +1,5 @@
 package csulb.cecs323.controller;
 
-import com.sun.javafx.image.impl.General;
 import csulb.cecs323.model.*;
 import impl.org.controlsfx.autocompletion.AutoCompletionTextFieldBinding;
 import impl.org.controlsfx.autocompletion.SuggestionProvider;
@@ -47,10 +46,7 @@ public class UserBase_NEW_CTRL implements Initializable
         Template, generic actions for all UserBase classes.
      */
 
-    public void patient_onFinalSaveButton (ActionEvent actionEvent)
-    {
-
-    }
+    public void patient_onFinalSaveButton (ActionEvent actionEvent) { onSavePersonAction(1); }
 
     public void patient_onFinalDeleteButton (ActionEvent actionEvent)
     {
@@ -156,10 +152,24 @@ public class UserBase_NEW_CTRL implements Initializable
 
         if (!firstName.equals("") && !lastName.equals("") && (localDOB != null || !miscField.equals("")))
         {
-            workingCopy = (discriminatorValue == 1) ? new Patient(firstName, lastName, localDOB.atStartOfDay(ZoneId.systemDefault())) :
-                    (discriminatorValue == 2) ? new Prescriber (firstName, lastName, miscField) :
-                    (discriminatorValue == 3) ? new Pharmacist (firstName, lastName, miscField) : null;
+            if (!isMidTransaction)
+            {
+                workingCopy = (discriminatorValue == 1) ? new Patient(firstName, lastName, localDOB) :
+                        (discriminatorValue == 2) ? new Prescriber (firstName, lastName, miscField) :
+                        (discriminatorValue == 3) ? new Pharmacist (firstName, lastName, miscField) : null;
+            }
+            else
+            {
+                workingCopy.setFirstName(firstName);
+                workingCopy.setLastName(lastName);
 
+                if (discriminatorValue == 1)
+                    ((Patient)workingCopy).setDateOfBirth(localDOB);
+                else if (discriminatorValue == 2)
+                    ((Prescriber)workingCopy).setSpecialty(miscField);
+                else
+                    ((Pharmacist)workingCopy).setPosition(miscField);
+            }
             workingCopy.setMiddleName(middleName);
         }
     }
@@ -169,24 +179,24 @@ public class UserBase_NEW_CTRL implements Initializable
         switch(discriminatorValue)
         {
             case 1:
-                inputPatientFN.setPromptText(workingCopy.getFirstName());
-                inputPatientLN.setPromptText(workingCopy.getLastName());
-                inputPatientMN.setPromptText(workingCopy.getMiddleName());
+                inputPatientFN.setText(workingCopy.getFirstName());
+                inputPatientLN.setText(workingCopy.getLastName());
+                inputPatientMN.setText(workingCopy.getMiddleName());
 
                 String date = ((Patient)workingCopy).getDateOfBirth().format(datePickFormat);
-                inputPatientDOB.getEditor().setPromptText(date);
+                inputPatientDOB.getEditor().setText(date);
                 break;
             case 2:
-                inputPrescriberFN.setPromptText(workingCopy.getFirstName());
-                inputPrescriberLN.setPromptText(workingCopy.getLastName());
-                inputPrescriberMN.setPromptText(workingCopy.getMiddleName());
+                inputPrescriberFN.setText(workingCopy.getFirstName());
+                inputPrescriberLN.setText(workingCopy.getLastName());
+                inputPrescriberMN.setText(workingCopy.getMiddleName());
                 inputPrescriberSpecialty.setPromptText(((Prescriber)workingCopy).getSpecialty());
                 break;
             case 3:
-                inputOperatorFN.setPromptText(workingCopy.getFirstName());
-                inputOperatorLN.setPromptText(workingCopy.getLastName());
-                inputOperatorMN.setPromptText(workingCopy.getMiddleName());
-                inputOperatorPosition.setPromptText(((Pharmacist)workingCopy).getPosition());
+                inputOperatorFN.setText(workingCopy.getFirstName());
+                inputOperatorLN.setText(workingCopy.getLastName());
+                inputOperatorMN.setText(workingCopy.getMiddleName());
+                inputOperatorPosition.setText(((Pharmacist)workingCopy).getPosition());
         }
     }
 
@@ -234,6 +244,16 @@ public class UserBase_NEW_CTRL implements Initializable
             else
                 operatorPhoneOBSList.add(newNumber);
         }
+    }
+
+    public void refreshPhoneList (int discriminatorValue)
+    {
+        if (discriminatorValue == 1)
+            patientPhoneOBSList.setAll(workingCopy.getPhoneList());
+        else if (discriminatorValue == 2)
+            prescriberPhoneOBSList.setAll(workingCopy.getPhoneList());
+        else
+            operatorPhoneOBSList.setAll(workingCopy.getPhoneList());
     }
 
     /*
@@ -306,6 +326,17 @@ public class UserBase_NEW_CTRL implements Initializable
         }
     }
 
+    public void refreshAddressList (int discriminatorValue)
+    {
+        if (discriminatorValue == 1)
+            patientAddressOBSList.setAll(workingCopy.getAddresses());
+        else if (discriminatorValue == 2)
+            prescriberAddressOBSList.setAll(workingCopy.getAddresses());
+        else
+            operatorAddressOBSList.setAll(workingCopy.getAddresses());
+    }
+
+
     /*
         Patient drug allergies.
      */
@@ -329,6 +360,8 @@ public class UserBase_NEW_CTRL implements Initializable
             patientDrugOBSList.removeAll(patientAllergyListView.getSelectionModel().getSelectedItems());
         }
     }
+
+    public void refreshDrugAllergyList () { patientDrugOBSList.setAll(((Patient) workingCopy).getDrugAllergyList()); }
 
     /*
         Patient comorbidity records.
@@ -366,6 +399,18 @@ public class UserBase_NEW_CTRL implements Initializable
         }
     }
 
+    /*
+        Prescriber/Operator certification records.
+     */
+    @FXML
+    ListView<ProviderCertification> prescriberLCListView, operatorLCListView;
+    private final ObservableList<ProviderCertification> prescriberLCOBSList = FXCollections.observableArrayList();
+    private final ObservableList<ProviderCertification> operatorLCOBSList = FXCollections.observableArrayList();
+
+    @FXML
+    TextField inputPrescriberLNumber, inputPrescriberLType, inputPrescriberLIssuer;
+    @FXML
+    TextField inputOperatorLNumber, inputOperatorLType, inputOperatorLIssuer;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
@@ -416,6 +461,13 @@ public class UserBase_NEW_CTRL implements Initializable
 
             patientAllergyListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
             patientAllergyListView.setItems(patientDrugOBSList);
+
+            /* Miscellaneous ListView bindings */
+            patientAllergyListView.setItems(patientDrugOBSList);
+            patientCOMListView.setItems(patientCOMOBSList);
+
+            prescriberLCListView.setItems(prescriberLCOBSList);
+            operatorLCListView.setItems(operatorLCOBSList);
 
             /* Bi-directional binding of Date in Text Field of DatePicker to Calendar object */
             bidirectionalDateBind(inputPatientDOB);
@@ -478,7 +530,7 @@ public class UserBase_NEW_CTRL implements Initializable
                 setGraphic(null);
                 radioButton.setToggleGroup(null);
             } else {
-                radioButton.setText(obj.getNumber());
+                radioButton.setText(obj.toString());
                 radioButton.setSelected(isSelected());
                 obj.setIsDefault(isSelected());
                 System.out.println (obj.getNumber() + " > " + obj.isDefaultNumber());

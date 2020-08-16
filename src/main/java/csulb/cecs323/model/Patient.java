@@ -1,8 +1,7 @@
 package csulb.cecs323.model;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.time.ZonedDateTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -24,8 +23,9 @@ public class Patient extends Person
 {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
 
-    @Convert(converter = ZonedDateTimeConverter.class)
-    private ZonedDateTime dateOfBirth;
+//    @Convert(converter = ZonedDateTimeConverter.class)
+//    private ZonedDateTime dateOfBirth;
+    private LocalDate dateOfBirth;
 
     // QUERY STRING(S)
     public static final String FIND_ALL = "Patient.findAllPatients";
@@ -47,7 +47,7 @@ public class Patient extends Person
 
     // CONSTRUCTORS
     public Patient () {}
-    public Patient (String first, String last, ZonedDateTime birth)
+    public Patient (String first, String last, LocalDate birth)
     {
         super(first, last);
         setDateOfBirth(birth);
@@ -56,13 +56,13 @@ public class Patient extends Person
     }
 
     // ACCESSORS
-    public ZonedDateTime getDateOfBirth () { return this.dateOfBirth; }
+    public LocalDate getDateOfBirth () { return this.dateOfBirth; }
     public String getPrettyDOB () { return dateOfBirth.format(formatter); }
     public List<Drug> getDrugAllergyList () { return this.drugAllergyList; }
     public List<Comorbidity> getComorbidities () { return this.comorbidities; }
 
     // MUTATORS
-    public void setDateOfBirth (ZonedDateTime dateOfBirth) { this.dateOfBirth = dateOfBirth; }
+    public void setDateOfBirth (LocalDate dateOfBirth) { this.dateOfBirth = dateOfBirth; }
 
     // MISCELLANEOUS
     public void addDrugAllergy (Drug allergy)

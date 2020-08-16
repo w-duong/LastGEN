@@ -227,11 +227,13 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
                 if (((UserBase_NEW_CTRL) lastScene).getWorkingCopy() instanceof Patient)
                 {
                     ((Patient) ((UserBase_NEW_CTRL) lastScene).getWorkingCopy()).addDrugAllergy((Drug) resultsBuffer.get(0));
-                    ((UserBase_NEW_CTRL) lastScene).getPatientDrugOBSList().add((Drug) resultsBuffer.get(0));
+                    ((UserBase_NEW_CTRL) lastScene).refreshDrugAllergyList();
                 }
             case Mode_USEditPT:
                 ((UserBase_NEW_CTRL) lastScene).setWorkingCopy((Patient) resultsBuffer.get(0));
                 ((UserBase_NEW_CTRL) lastScene).refreshNameInfo(1);
+                ((UserBase_NEW_CTRL) lastScene).refreshPhoneList(1);
+                ((UserBase_NEW_CTRL) lastScene).refreshAddressList(1);
 
                 if (((UserBase_NEW_CTRL) lastScene).isMidTransaction())
                     entityManager.getTransaction().rollback();;
@@ -305,10 +307,8 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
 
         if (last.equals("") && first.equals("") && inputPatientDOB.getValue() != null)
         {
-            ZonedDateTime dob = inputPatientDOB.getValue().atStartOfDay(ZoneId.systemDefault());
-
             query = entityManager.createNamedQuery(Patient.FIND_ALL_BY_DOB, Patient.class);
-            query.setParameter("ptDOB", dob);
+            query.setParameter("ptDOB", inputPatientDOB.getValue());
         }
         else if (last.chars().allMatch(Character::isDigit))
         {
@@ -317,12 +317,10 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
         }
         else if (inputPatientDOB.getValue() != null || !inputPatientDOB.getEditor().getText().trim().equals(""))
         {
-            ZonedDateTime dob = inputPatientDOB.getValue().atStartOfDay(ZoneId.systemDefault());
-
             query = entityManager.createNamedQuery(Patient.FIND_ALL_BY_SPEC, Patient.class);
             query.setParameter("ptLastName", last)
                     .setParameter("ptFirstName", first)
-                    .setParameter("ptDOB", dob);
+                    .setParameter("ptDOB", inputPatientDOB.getValue());
         }
         else
         {

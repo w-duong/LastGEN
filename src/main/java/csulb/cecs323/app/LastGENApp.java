@@ -16,7 +16,6 @@ import csulb.cecs323.controller.MainWindowCTRL;
 import csulb.cecs323.model.*;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -25,10 +24,7 @@ import javafx.stage.Stage;
 import javax.persistence.*;
 import java.net.URL;
 import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.Month;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -110,12 +106,12 @@ public class LastGENApp extends Application
       Pharmacist thirdPerson = new Pharmacist ("Piseth", "Sam", temp2);
 
       LocalDate birth = LocalDate.of(1988, Month.JANUARY, 28);
-      Patient seconPerson = new Patient ("Jackie", "Duong", birth.atStartOfDay(ZoneId.systemDefault()));
+      Patient seconPerson = new Patient ("Jackie", "Duong", birth);
       Address anotherAdd = new Address (seconPerson, "home", "25292 Dayton Drive", "92630");
       Phone someNumber = new Phone (seconPerson, "Mobile", "9498132974");
       seconPerson.addDrugAllergy(lotensin);
 
-      Prescription newRx = new Prescription(seconPerson, firstPerson, ZonedDateTime.now());
+      Prescription newRx = new Prescription(seconPerson, firstPerson, LocalDateTime.now());
       RxLine rxLine = new RxLine(newRx, zocor, thirdPerson, 20, 30, 1);
       newRx.addRxLine(rxLine.createFill(15));
 
@@ -140,7 +136,7 @@ public class LastGENApp extends Application
       EntityTransaction tx = manager.getTransaction();
       tx.begin();
 
-      lastGEN.loadInitialData();
+//      lastGEN.loadInitialData();
 
       tx.commit();
       LOGGER.fine("End of Transaction");
@@ -163,22 +159,22 @@ public class LastGENApp extends Application
 //      for (Object index : results)
 //         System.out.println ("Result> " + index.toString());
 
-      Query query = lastGEN.entityManager.createQuery("SELECT rx FROM Prescription rx INNER JOIN Patient pt ON pt = rx.patient WHERE pt.lastName = 'Duong'");
-      Prescription result = (Prescription) query.getResultList().get(0);
-
-      String dateWritten = result.getPrettyDateWritten();
-      String patient = result.getPatient().toString();
-      List<RxLine> history = result.getRxLines();
-      System.out.println (dateWritten + " : " + patient);
-      for (RxLine line : history)
-         System.out.println (line + "\tRemaining: " + line.getQuantityRemaining());
+//      Query query = lastGEN.entityManager.createQuery("SELECT rx FROM Prescription rx INNER JOIN Patient pt ON pt = rx.patient WHERE pt.lastName = 'Duong'");
+//      Prescription result = (Prescription) query.getResultList().get(0);
+//
+//      String dateWritten = result.getPrettyDateWritten();
+//      String patient = result.getPatient().toString();
+//      List<RxLine> history = result.getRxLines();
+//      System.out.println (dateWritten + " : " + patient);
+//      for (RxLine line : history)
+//         System.out.println (line + "\tRemaining: " + line.getQuantityRemaining());
 
 //      TypedQuery<Patient> query = lastGEN.entityManager.createNamedQuery(Patient.FIND_ALL_BY_NAME, Patient.class);
 //      query.setParameter("ptLastName", "uon").setParameter("ptFirstName", "ac");
 //      List<Patient> result = query.getResultList();
 
 //      TypedQuery<Patient> query = lastGEN.entityManager.createNamedQuery(Patient.FIND_ALL_BY_DOB, Patient.class);
-//      query.setParameter("ptDOB", LocalDate.of(1988, 1, 28).atStartOfDay(ZoneId.systemDefault()));
+//      query.setParameter("ptDOB", LocalDate.of(1988,1,28));
 //      List<Patient> result = query.getResultList();
 //
 //      for (Patient pt: result)
