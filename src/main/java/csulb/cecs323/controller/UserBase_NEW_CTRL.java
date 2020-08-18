@@ -107,26 +107,16 @@ public class UserBase_NEW_CTRL implements Initializable
 
     public void onDeletePersonAction (int discriminatorValue)
     {
-        int deleteStatus;
-        Query query = entityManager.createQuery("DELETE FROM Person pn WHERE pn = :pnEntity");
-        query.setParameter("pnEntity", workingCopy);
-
-        for (int i = 0; i < workingCopy.getPhoneList().size(); ++i)
-            workingCopy.getPhoneList().remove(workingCopy.getPhoneList().get(i));
-
-        for (int i = 0; i < workingCopy.getAddresses().size(); ++i)
-            workingCopy.getAddresses().remove(workingCopy.getAddresses().get(i));
-
         if (isMidTransaction)
         {
-            deleteStatus = query.executeUpdate();
+            entityManager.remove(workingCopy);
             entityManager.getTransaction().commit();
             isMidTransaction = false;
         }
         else
         {
             entityManager.getTransaction().begin();
-            deleteStatus = query.executeUpdate();
+            entityManager.remove(workingCopy);
             entityManager.getTransaction().commit();
         }
 
