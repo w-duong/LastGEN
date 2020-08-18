@@ -234,6 +234,8 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
                 ((UserBase_NEW_CTRL) lastScene).refreshNameInfo(1);
                 ((UserBase_NEW_CTRL) lastScene).refreshPhoneList(1);
                 ((UserBase_NEW_CTRL) lastScene).refreshAddressList(1);
+                ((UserBase_NEW_CTRL) lastScene).refreshDrugAllergyList();
+                ((UserBase_NEW_CTRL) lastScene).refreshComorbidityList();
 
                 if (((UserBase_NEW_CTRL) lastScene).isMidTransaction())
                     entityManager.getTransaction().rollback();;

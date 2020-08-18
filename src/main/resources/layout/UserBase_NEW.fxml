@@ -250,7 +250,7 @@
                                       </tabs>
                                    </TabPane>
                                        <Button mnemonicParsing="false" onAction="#patient_onFinalSaveButton" prefWidth="327.0" text="SAVE to Database" />
-                                       <Button mnemonicParsing="false" prefWidth="327.0" text="DELETE from Database">
+                                       <Button mnemonicParsing="false" onAction="#patient_onFinalDeleteButton" prefWidth="327.0" text="DELETE from Database">
                                           <VBox.margin>
                                              <Insets top="5.0" />
                                           </VBox.margin>

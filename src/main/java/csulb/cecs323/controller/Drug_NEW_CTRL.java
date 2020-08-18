@@ -316,19 +316,30 @@ public class Drug_NEW_CTRL implements Initializable
 
     public void onDeleteDrugButton (ActionEvent actionEvent)
     {
+        int deleteStatus;
+        Query deleteQuery = entityManager.createQuery("DELETE FROM Drug dg WHERE dg = :toDelete");
+        int deletedCount = deleteQuery.setParameter("toDelete", workingCopy).executeUpdate();
+
+        for (int i = 0; i < workingCopy.getBrandNames().size(); ++i)
+            workingCopy.getBrandNames().remove(workingCopy.getBrandNames().get(i));
+        for (int j = 0; j < workingCopy.getPharmacology().size(); ++j)
+            workingCopy.getPharmacology().remove(workingCopy.getPharmacology().get(j));
+        for (int k = 0; k < workingCopy.getUsages().size(); ++k)
+            workingCopy.getUsages().remove(workingCopy.getUsages().get(k));
+
         if (isMidTransaction)
         {
+            deleteStatus = deleteQuery.executeUpdate();
             entityManager.getTransaction().commit();
             isMidTransaction = false;
             isDuplicate = false;
         }
-
-        entityManager.getTransaction().begin();
-
-        Query deleteQuery = entityManager.createQuery("DELETE FROM Drug dg WHERE dg = :toDelete");
-        int deletedCount = deleteQuery.setParameter("toDelete", workingCopy).executeUpdate();
-
-        entityManager.getTransaction().commit();
+        else
+        {
+            entityManager.getTransaction().begin();
+            deleteStatus = deleteQuery.executeUpdate();
+            entityManager.getTransaction().commit();
+        }
 
         cleanUpTransaction();
     }

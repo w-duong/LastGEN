@@ -47,10 +47,30 @@ public class UserBase_NEW_CTRL implements Initializable
      */
 
     public void patient_onFinalSaveButton (ActionEvent actionEvent) { onSavePersonAction(1); }
+    public void patient_onFinalDeleteButton (ActionEvent actionEvent) { onDeletePersonAction(1); }
 
-    public void patient_onFinalDeleteButton (ActionEvent actionEvent)
+    public void cleanUpPatient ()
     {
+        workingCopy = null;
 
+        inputPatientFN.setText(null); inputPatientLN.setText(null); inputPatientMN.setText(null);
+        inputPatientDOB.getEditor().setText(null);
+
+        patientPhoneOBSList.removeAll(patientPhoneOBSList);
+        patientAddressOBSList.removeAll(patientAddressOBSList);
+        patientDrugOBSList.removeAll(patientDrugOBSList);
+        patientCOMOBSList.removeAll(patientCOMOBSList);
+    }
+
+    public void cleanUpPrescriber ()
+    {
+        workingCopy = null;
+
+        inputPrescriberFN.setText(null); inputPrescriberLN.setText(null); inputPrescriberMN.setText(null);
+        inputPrescriberSpecialty.setText(null);
+
+        prescriberPhoneOBSList.removeAll(prescriberPhoneOBSList);
+        prescriberAddressOBSList.removeAll(prescriberAddressOBSList);
     }
 
     public void onSavePersonAction (int discriminatorValue)
@@ -83,6 +103,35 @@ public class UserBase_NEW_CTRL implements Initializable
                 entityManager.getTransaction().commit();
             }
         }
+    }
+
+    public void onDeletePersonAction (int discriminatorValue)
+    {
+        int deleteStatus;
+        Query query = entityManager.createQuery("DELETE FROM Person pn WHERE pn = :pnEntity");
+        query.setParameter("pnEntity", workingCopy);
+
+        for (int i = 0; i < workingCopy.getPhoneList().size(); ++i)
+            workingCopy.getPhoneList().remove(workingCopy.getPhoneList().get(i));
+
+        for (int i = 0; i < workingCopy.getAddresses().size(); ++i)
+            workingCopy.getAddresses().remove(workingCopy.getAddresses().get(i));
+
+        if (isMidTransaction)
+        {
+            deleteStatus = query.executeUpdate();
+            entityManager.getTransaction().commit();
+            isMidTransaction = false;
+        }
+        else
+        {
+            entityManager.getTransaction().begin();
+            deleteStatus = query.executeUpdate();
+            entityManager.getTransaction().commit();
+        }
+
+        if (discriminatorValue == 1)
+            cleanUpPatient();
     }
 
     /*
@@ -399,6 +448,8 @@ public class UserBase_NEW_CTRL implements Initializable
         }
     }
 
+    public void refreshComorbidityList () { patientCOMOBSList.setAll(((Patient) workingCopy).getComorbidities()); }
+
     /*
         Prescriber/Operator certification records.
      */
@@ -451,13 +502,13 @@ public class UserBase_NEW_CTRL implements Initializable
             prescriberADListView.setItems(prescriberAddressOBSList);
             operatorADListView.setItems(operatorAddressOBSList);
 
-            patientPNListView.setCellFactory(listView->new RadioListCellPhone(patientPhoneTG));
-            prescriberPNListView.setCellFactory(listView->new RadioListCellPhone(prescriberPhoneTG));
-            operatorPNListView.setCellFactory(listView->new RadioListCellPhone(operatorPhoneTG));
+            patientPNListView.setCellFactory(listView-> new RadioListCellPhone(patientPhoneTG));
+            prescriberPNListView.setCellFactory(listView-> new RadioListCellPhone(prescriberPhoneTG));
+            operatorPNListView.setCellFactory(listView-> new RadioListCellPhone(operatorPhoneTG));
 
-            patientADListView.setCellFactory(listView->new RadioListCellAddress(patientAddressTG));
-            prescriberADListView.setCellFactory(listView->new RadioListCellAddress(prescriberAddressTG));
-            operatorADListView.setCellFactory(listView->new RadioListCellAddress(operatorAddressTG));
+            patientADListView.setCellFactory(listView-> new RadioListCellAddress(patientAddressTG));
+            prescriberADListView.setCellFactory(listView-> new RadioListCellAddress(prescriberAddressTG));
+            operatorADListView.setCellFactory(listView-> new RadioListCellAddress(operatorAddressTG));
 
             patientAllergyListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
             patientAllergyListView.setItems(patientDrugOBSList);
@@ -499,7 +550,7 @@ public class UserBase_NEW_CTRL implements Initializable
         });
     }
 
-    private class RadioListCellPhone extends ListCell<Phone>
+    private static class RadioListCellPhone extends ListCell<Phone>
     {
         RadioButton radioButton;
         ChangeListener<Boolean> radioListener = (src, ov, nv) -> radioChanged(nv);
@@ -539,7 +590,7 @@ public class UserBase_NEW_CTRL implements Initializable
         }
     }
 
-    private class RadioListCellAddress extends ListCell<Address>
+    private static class RadioListCellAddress extends ListCell<Address>
     {
         RadioButton radioButton;
         ChangeListener<Boolean> radioListener = (src, ov, nv) -> radioChanged(nv);

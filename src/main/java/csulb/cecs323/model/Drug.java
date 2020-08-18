@@ -33,17 +33,17 @@ public class Drug
     @ManyToOne (cascade = CascadeType.PERSIST)
     private DEA_Class schedule;
 
-    @OneToMany (mappedBy = "drug", cascade = CascadeType.ALL)
+    @OneToMany (mappedBy = "drug", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pharmacology> PK_profiles;
 
-    @OneToMany (mappedBy = "drug", cascade = CascadeType.ALL)
+    @OneToMany (mappedBy = "drug", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Usage> usages;
     
-    @OneToMany (mappedBy = "generic", cascade = CascadeType.ALL)
+    @OneToMany (mappedBy = "generic", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BrandName> brand_names;
 
     // consider switching to Set<DrugDrugIX> (???)
-    @OneToMany (mappedBy = "base", cascade = CascadeType.PERSIST)
+    @OneToMany (mappedBy = "base", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<DrugDrugIX> interxAsBase;
     
     @ManyToMany (mappedBy = "drugs")
