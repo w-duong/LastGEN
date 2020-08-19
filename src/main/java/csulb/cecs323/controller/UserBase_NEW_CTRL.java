@@ -285,6 +285,16 @@ public class UserBase_NEW_CTRL implements Initializable
         }
     }
 
+    public void patientPhone_onDeleteKey (KeyEvent keyEvent)
+    {
+        if (keyEvent.getCode().equals(KeyCode.DELETE))
+            if (patientPNListView.getSelectionModel().getSelectedItem() != null)
+            {
+                workingCopy.getPhoneList().remove(patientPNListView.getSelectionModel().getSelectedItem());
+                refreshPhoneList(1);
+            }
+    }
+
     public void refreshPhoneList (int discriminatorValue)
     {
         if (discriminatorValue == 1)
@@ -436,6 +446,10 @@ public class UserBase_NEW_CTRL implements Initializable
 
             patientCOMOBSList.add(newDisease);
         }
+
+        inputPatientCOMName.setText("");
+        inputPatientCOMStage.setText("");
+        inputPatientCOMDate.getEditor().setText(null);
     }
 
     public void refreshComorbidityList () { patientCOMOBSList.setAll(((Patient) workingCopy).getComorbidities()); }
@@ -452,6 +466,29 @@ public class UserBase_NEW_CTRL implements Initializable
     TextField inputPrescriberLNumber, inputPrescriberLType, inputPrescriberLIssuer;
     @FXML
     TextField inputOperatorLNumber, inputOperatorLType, inputOperatorLIssuer;
+
+    public void prescriber_onAddCertificationButton (ActionEvent actionEvent) { onAddCertificationAction(2); }
+    public void operator_onAddCertificationButton (ActionEvent actionEvent) { onAddCertificationAction(3); }
+
+    public void onAddCertificationAction (int discriminatorValue)
+    {
+        String number = (discriminatorValue == 2) ? inputPrescriberLNumber.getText() :
+                (discriminatorValue == 3) ? inputOperatorLNumber.getText() : "";
+        String type = (discriminatorValue == 2) ? inputPrescriberLType.getText() :
+                (discriminatorValue == 3) ? inputOperatorLType.getText() : "";
+        String issuer = (discriminatorValue == 2) ? inputPrescriberLIssuer.getText() :
+                (discriminatorValue == 3) ? inputOperatorLIssuer.getText() : "";
+
+        if (!number.equals("") && !type.equals("") && !issuer.equals(""))
+        {
+            ProviderCertification newLIC = new ProviderCertification(workingCopy, type, number, issuer);
+
+            if (discriminatorValue == 2)
+                prescriberLCOBSList.add(newLIC);
+            else
+                operatorLCOBSList.add(newLIC);
+        }
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)

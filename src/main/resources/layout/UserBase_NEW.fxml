@@ -77,7 +77,7 @@
                                                         <children>
                                                            <ScrollPane hbarPolicy="NEVER" prefHeight="190.0" prefWidth="333.0">
                                                               <content>
-                                                                 <ListView fx:id="patientPNListView" prefHeight="194.0" prefWidth="321.0" />
+                                                                 <ListView fx:id="patientPNListView" onKeyPressed="#patientPhone_onDeleteKey" prefHeight="194.0" prefWidth="321.0" />
                                                               </content>
                                                            </ScrollPane>
                                                            <HBox spacing="3.0">
@@ -443,7 +443,7 @@
                                                                  <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="171.0" spacing="3.0">
                                                                     <children>
                                                                         <TextField fx:id="inputPrescriberLIssuer" prefWidth="162.0" HBox.hgrow="ALWAYS" />
-                                                                       <Button mnemonicParsing="false" prefWidth="162.0" text="Save" />
+                                                                       <Button mnemonicParsing="false" onAction="#prescriber_onAddCertificationButton" prefWidth="162.0" text="Add" />
                                                                     </children>
                                                                     <VBox.margin>
                                                                        <Insets />
@@ -650,7 +650,7 @@
                                                               <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="171.0" spacing="3.0">
                                                                  <children>
                                                                     <TextField fx:id="inputOperatorLIssuer" prefWidth="162.0" HBox.hgrow="ALWAYS" />
-                                                                    <Button mnemonicParsing="false" prefWidth="162.0" text="Save" />
+                                                                    <Button mnemonicParsing="false" onAction="#operator_onAddCertificationButton" prefWidth="162.0" text="Add" />
                                                                  </children>
                                                                  <VBox.margin>
                                                                     <Insets />
