@@ -110,8 +110,21 @@ public class Patient extends Person
     @Override
     public String toString ()
     {
-        String dateFormatted = dateOfBirth.format(formatter);
+        String defaultPhone = "", defaultAddress = "";
+        for (Phone number : this.getPhoneList())
+            if (number.isDefaultNumber())
+                defaultPhone = number.getPrettyNumber();
+        for (Address street : this.getAddresses())
+            if (street.isDefaultAddress())
+                defaultAddress = street.toString();
 
+        return (String.format ("FULL NAME: %-30s\tADDRESS: %-40s\tPHONE: %-15s",
+                this.getFirstName() + " " + this.getLastName(), defaultAddress, defaultPhone));
+    }
+
+    public String fullString()
+    {
+        String dateFormatted = dateOfBirth.format(formatter);
         return super.toString() + String.format ("\tDOB: %-15s\nAllergies: %s", dateFormatted, drugAllergyList);
     }
 }

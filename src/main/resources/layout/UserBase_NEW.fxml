@@ -118,7 +118,7 @@
                                                         <children>
                                                            <ScrollPane hbarPolicy="NEVER" prefHeight="190.0" prefWidth="333.0">
                                                               <content>
-                                                                 <ListView fx:id="patientADListView" prefHeight="194.0" prefWidth="321.0" />
+                                                                 <ListView fx:id="patientADListView" onKeyPressed="#patientAddress_onDeleteKey" prefHeight="194.0" prefWidth="321.0" />
                                                               </content>
                                                            </ScrollPane>
                                                            <Pane style="-fx-border-style: solid; -fx-border-color: silver;">
@@ -317,7 +317,7 @@
                                                               <children>
                                                                  <ScrollPane hbarPolicy="NEVER" prefHeight="190.0" prefWidth="333.0">
                                                                     <content>
-                                                                       <ListView fx:id="prescriberPNListView" prefHeight="194.0" prefWidth="321.0" />
+                                                                       <ListView fx:id="prescriberPNListView" onKeyPressed="#prescriberPhone_onDeleteKey" prefHeight="194.0" prefWidth="321.0" />
                                                                     </content>
                                                                  </ScrollPane>
                                                                  <HBox spacing="3.0">
@@ -358,7 +358,7 @@
                                                               <children>
                                                                  <ScrollPane hbarPolicy="NEVER" prefHeight="190.0" prefWidth="333.0">
                                                                     <content>
-                                                                       <ListView fx:id="prescriberADListView" prefHeight="194.0" prefWidth="321.0" />
+                                                                       <ListView fx:id="prescriberADListView" onKeyPressed="#prescriberAddress_onDeleteKey" prefHeight="194.0" prefWidth="321.0" />
                                                                     </content>
                                                                  </ScrollPane>
                                                                  <Pane style="-fx-border-style: solid; -fx-border-color: silver;">
@@ -524,7 +524,7 @@
                                                            <children>
                                                               <ScrollPane hbarPolicy="NEVER" prefHeight="190.0" prefWidth="333.0">
                                                                  <content>
-                                                                    <ListView fx:id="operatorPNListView" prefHeight="194.0" prefWidth="321.0" />
+                                                                    <ListView fx:id="operatorPNListView" onKeyPressed="#operatorPhone_onDeleteKey" prefHeight="194.0" prefWidth="321.0" />
                                                                  </content>
                                                               </ScrollPane>
                                                               <HBox spacing="3.0">
@@ -565,7 +565,7 @@
                                                            <children>
                                                               <ScrollPane hbarPolicy="NEVER" prefHeight="190.0" prefWidth="333.0">
                                                                  <content>
-                                                                    <ListView fx:id="operatorADListView" prefHeight="194.0" prefWidth="321.0" />
+                                                                    <ListView fx:id="operatorADListView" onKeyPressed="#operatorAddress_onDeleteKey" prefHeight="194.0" prefWidth="321.0" />
                                                                  </content>
                                                               </ScrollPane>
                                                               <Pane style="-fx-border-style: solid; -fx-border-color: silver;">

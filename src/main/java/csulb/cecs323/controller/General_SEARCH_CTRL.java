@@ -229,6 +229,7 @@ public class General_SEARCH_CTRL<DataType, SceneType> implements Initializable
                     ((Patient) ((UserBase_NEW_CTRL) lastScene).getWorkingCopy()).addDrugAllergy((Drug) resultsBuffer.get(0));
                     ((UserBase_NEW_CTRL) lastScene).refreshDrugAllergyList();
                 }
+                break;
             case Mode_USEditPT:
                 ((UserBase_NEW_CTRL) lastScene).setWorkingCopy((Patient) resultsBuffer.get(0));
                 ((UserBase_NEW_CTRL) lastScene).refreshNameInfo(1);

@@ -43,7 +43,7 @@ public class Phone
     public String getNumber() { return this.actual_number; }
     public String getPrettyNumber ()
     {
-        return String.format ("(%s)%s-%s", actual_number.substring(0,3),
+        return String.format ("(%s) %s-%s", actual_number.substring(0,3),
                 actual_number.substring(3,6), actual_number.substring(6,10));
     }
 

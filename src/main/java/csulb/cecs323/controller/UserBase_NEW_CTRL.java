@@ -295,6 +295,26 @@ public class UserBase_NEW_CTRL implements Initializable
             }
     }
 
+    public void prescriberPhone_onDeleteKey (KeyEvent keyEvent)
+    {
+        if (keyEvent.getCode().equals(KeyCode.DELETE))
+            if (prescriberPNListView.getSelectionModel().getSelectedItem() != null)
+            {
+                workingCopy.getPhoneList().remove(prescriberPNListView.getSelectionModel().getSelectedItem());
+                refreshPhoneList(2);
+            }
+    }
+
+    public void operatorPhone_onDeleteKey (KeyEvent keyEvent)
+    {
+        if (keyEvent.getCode().equals(KeyCode.DELETE))
+            if (operatorPNListView.getSelectionModel().getSelectedItem() != null)
+            {
+                workingCopy.getPhoneList().remove(operatorPNListView.getSelectionModel().getSelectedItem());
+                refreshPhoneList(3);
+            }
+    }
+
     public void refreshPhoneList (int discriminatorValue)
     {
         if (discriminatorValue == 1)
@@ -373,6 +393,36 @@ public class UserBase_NEW_CTRL implements Initializable
             else
                 operatorAddressOBSList.add(newAddress);
         }
+    }
+
+    public void patientAddress_onDeleteKey (KeyEvent keyEvent)
+    {
+        if (keyEvent.getCode().equals(KeyCode.DELETE))
+            if (patientADListView.getSelectionModel().getSelectedItem() != null)
+            {
+                workingCopy.getAddresses().remove(patientADListView.getSelectionModel().getSelectedItem());
+                refreshAddressList(1);
+            }
+    }
+
+    public void prescriberAddress_onDeleteKey (KeyEvent keyEvent)
+    {
+        if (keyEvent.getCode().equals(KeyCode.DELETE))
+            if (prescriberADListView.getSelectionModel().getSelectedItem() != null)
+            {
+                workingCopy.getAddresses().remove(prescriberADListView.getSelectionModel().getSelectedItem());
+                refreshAddressList(2);
+            }
+    }
+
+    public void operatorAddress_onDeleteKey (KeyEvent keyEvent)
+    {
+        if (keyEvent.getCode().equals(KeyCode.DELETE))
+            if (operatorADListView.getSelectionModel().getSelectedItem() != null)
+            {
+                workingCopy.getAddresses().remove(operatorADListView.getSelectionModel().getSelectedItem());
+                refreshAddressList(3);
+            }
     }
 
     public void refreshAddressList (int discriminatorValue)
@@ -488,6 +538,14 @@ public class UserBase_NEW_CTRL implements Initializable
             else
                 operatorLCOBSList.add(newLIC);
         }
+    }
+
+    public void refreshCertificationsList (int discriminatorValue)
+    {
+        if (discriminatorValue == 2)
+            prescriberLCOBSList.setAll(((Prescriber) workingCopy).getLicenses());
+        else
+            operatorLCOBSList.setAll(((Pharmacist) workingCopy).getLicenses());
     }
 
     @Override
